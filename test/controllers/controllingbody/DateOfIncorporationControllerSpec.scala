@@ -22,7 +22,7 @@ import models.{BusinessType, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.{verify, verifyNoInteractions, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodyDateOfIncorporationPage, ControllingBodySubmittedPage}
 import play.api.i18n.Messages
@@ -49,7 +49,7 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
 
   lazy val dateOfIncorporationRoute = controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad().url
 
-  override val emptyUserAnswers = UserAnswers(userAnswersId)
+  private val validUserAnswers = emptyUserAnswers.set(ControllingBodyBusinessTypePage, BusinessType.Corporatebody).success.value
 
   def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, dateOfIncorporationRoute)
@@ -66,7 +66,7 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
 
       running(application) {
         val result = route(application, getRequest()).value
@@ -80,7 +80,7 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ControllingBodyDateOfIncorporationPage, validAnswer).success.value
+      val userAnswers = validUserAnswers.set(ControllingBodyDateOfIncorporationPage, validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -101,7 +101,7 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(validUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -117,6 +117,19 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
     }
 
     Seq(BusinessType.Corporatebody, BusinessType.LimitedLiabilityPartnership).foreach { businessType =>
+      s"must return OK for a GET when the business type is $businessType" in {
+        val answers = emptyUserAnswers.set(ControllingBodyBusinessTypePage, businessType).success.value
+        val application = applicationBuilder(userAnswers = Some(answers)).build()
+
+        running(application) {
+          val result = route(application, getRequest()).value
+          val view = application.injector.instanceOf[DateOfIncorporationView]
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form)(getRequest(), messages(application)).toString
+        }
+      }
+
       s"must redirect a new $businessType to company registration number when a valid date is submitted" in {
         val mockSessionRepository = mock[SessionRepository]
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
@@ -137,7 +150,7 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
 
       val request =
         FakeRequest(POST, dateOfIncorporationRoute)
@@ -157,7 +170,7 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request with the invalid date error when invalid fields are submitted with a missing year" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
 
       val invalidData = Map("value.day" -> "$$", "value.month" -> "me", "value.year" -> "")
 
@@ -178,40 +191,55 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must render an empty form for a GET if no existing data is found" in {
+    "must redirect to System Error for a GET when no session exists" in {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val result = route(application, getRequest()).value
-        val view = application.injector.instanceOf[DateOfIncorporationView]
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form)(getRequest(), messages(application)).toString
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
       }
     }
 
-    "must save the date and redirect for a POST if no existing data is found" in {
+    "must redirect to System Error without saving for a POST when no session exists" in {
       val mockSessionRepository = mock[SessionRepository]
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
       val application = applicationBuilder(userAnswers = None)
-        .overrides(
-          bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-          bind[SessionRepository].toInstance(mockSessionRepository)
-        )
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
       running(application) {
         val result = route(application, postRequest()).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
-        val savedAnswers = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(mockSessionRepository).set(savedAnswers.capture())
-        savedAnswers.getValue.id mustEqual userAnswersId
-        savedAnswers.getValue.get(ControllingBodyDateOfIncorporationPage).value mustEqual validAnswer
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+        verifyNoInteractions(mockSessionRepository)
       }
     }
+
+    Seq(None, Some(BusinessType.Soleproprietor), Some(BusinessType.Partnership), Some(BusinessType.Unincorporatedbody))
+      .foreach { businessType =>
+        s"must reject GET and POST requests without saving when the business type is $businessType" in {
+          val mockSessionRepository = mock[SessionRepository]
+          val answers = emptyUserAnswers.setIfDefined(ControllingBodyBusinessTypePage, businessType).success.value
+          val application = applicationBuilder(userAnswers = Some(answers))
+            .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+            .build()
+
+          running(application) {
+            val invalidRequest = FakeRequest(POST, dateOfIncorporationRoute).withFormUrlEncodedBody("value.day" -> "invalid")
+            Seq(
+              route(application, getRequest()).value,
+              route(application, postRequest()).value,
+              route(application, invalidRequest).value
+            ).foreach { result =>
+              status(result) mustEqual SEE_OTHER
+              redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+            }
+            verifyNoInteractions(mockSessionRepository)
+          }
+        }
+      }
 
     Seq(
       ("a new date", None, false, true),
@@ -221,8 +249,8 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
     ).foreach { case (description, previousDate, previouslyChanged, expectedChanged) =>
       s"set the submitted and change flags correctly for $description" in {
         val initialAnswers = previousDate
-          .fold(emptyUserAnswers) { date =>
-            emptyUserAnswers.set(ControllingBodyDateOfIncorporationPage, date).success.value
+          .fold(validUserAnswers) { date =>
+            validUserAnswers.set(ControllingBodyDateOfIncorporationPage, date).success.value
           }
           .set(ControllingBodyChangesPage, previouslyChanged)
           .success

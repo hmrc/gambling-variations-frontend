@@ -1280,7 +1280,42 @@ class NavigatorSpec extends SpecBase {
           controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
       }
 
-      "first-time controlling body incorporation" - {
+      "add-flow controlling body incorporation" - {
+        // Use the numeric business-type format stored by the controllers.
+        given play.api.libs.json.Format[BusinessType] = BusinessType.format
+
+        Seq(None, Some(BusinessType.Soleproprietor), Some(BusinessType.Partnership), Some(BusinessType.Unincorporatedbody))
+          .foreach { businessType =>
+            s"should reject onward date-of-incorporation navigation when the business type is $businessType" in {
+              val answers = emptyAnswers.setIfDefined(ControllingBodyBusinessTypePage, businessType).success.value
+
+              navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, answers) mustBe
+                routes.SystemErrorController.onPageLoad()
+            }
+          }
+
+        Seq(
+          None,
+          Some(BusinessType.Soleproprietor),
+          Some(BusinessType.Partnership),
+          Some(BusinessType.Unincorporatedbody),
+          Some(BusinessType.LimitedLiabilityPartnership)
+        )
+          .foreach { businessType =>
+            s"should reject navigation from the corporate-body UK incorporation question when the business type is $businessType" in {
+              val answers = emptyAnswers
+                .setIfDefined(ControllingBodyBusinessTypePage, businessType)
+                .success
+                .value
+                .set(ControllingBodyIsUkIncorporatedPage, "1")
+                .success
+                .value
+
+              navigator.nextPage(ControllingBodyIsUkIncorporatedPage, NormalMode, answers) mustBe
+                routes.SystemErrorController.onPageLoad()
+            }
+          }
+
         Seq(
           "1" -> controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad(),
           "0" -> controllers.controllingbody.routes.ControllingBodyCountryOfIncorporationController.onPageLoad()
@@ -1389,7 +1424,7 @@ class NavigatorSpec extends SpecBase {
           (ControllingBodyCrnPage, "1", controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()),
           (ControllingBodyForeignCorpRefPage, "0", controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad())
         ).foreach { case (page, incorporatedInUk, destination) =>
-          s"should preserve the existing body's destination from $page with UK incorporation $incorporatedInUk" in {
+          s"should continue the add flow from $page with UK incorporation $incorporatedInUk even when a partner number exists" in {
             val answers = emptyAnswers
               .set(ControllingBodyBusinessTypePage, Corporatebody)
               .success
@@ -1398,21 +1433,6 @@ class NavigatorSpec extends SpecBase {
               .success
               .value
               .set(ControllingBodyBusinessPartnerNumberPage, "1234567890")
-              .success
-              .value
-
-            navigator.nextPage(page, NormalMode, answers) mustBe routes.IndexController.onPageLoad()
-          }
-
-          s"should allow first-time navigation from $page with UK incorporation $incorporatedInUk when the partner number is blank" in {
-            val answers = emptyAnswers
-              .set(ControllingBodyBusinessTypePage, Corporatebody)
-              .success
-              .value
-              .set(ControllingBodyIsUkIncorporatedPage, incorporatedInUk)
-              .success
-              .value
-              .set(ControllingBodyBusinessPartnerNumberPage, "  ")
               .success
               .value
 

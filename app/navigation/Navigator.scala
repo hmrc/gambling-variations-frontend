@@ -63,15 +63,20 @@ class Navigator @Inject() () {
     case ControllingBodyDateOfBirthPage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyDateOfIncorporationPage =>
-      // DTR-9544: first-time controlling body setup; CB-CYA navigation is covered by follow-up tickets.
+      // DTR-9544: add flow; CB-CYA navigation is covered by follow-up tickets.
       answers =>
-        firstTimeControllingBodyRoute(answers)(controllers.controllingbody.routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad())
+        val isCorporateBodyOrLlp =
+          answers
+            .get(ControllingBodyBusinessTypePage)
+            .exists(businessType => businessType == Corporatebody || businessType == LimitedLiabilityPartnership)
+        if (isCorporateBodyOrLlp) controllers.controllingbody.routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
+        else routes.SystemErrorController.onPageLoad()
     case ControllingBodyIsUkIncorporatedPage =>
-      answers => firstTimeControllingBodyRoute(answers)(navigateControllingBodyIsUkIncorporatedPage(answers))
+      answers => navigateControllingBodyIsUkIncorporatedPage(answers)
     case ControllingBodyCountryOfIncorporationPage =>
-      answers => firstTimeControllingBodyRoute(answers)(controllers.controllingbody.routes.ControllingBodyForeignCorpRefController.onPageLoad())
+      _ => controllers.controllingbody.routes.ControllingBodyForeignCorpRefController.onPageLoad()
     case ControllingBodyCrnPage | ControllingBodyForeignCorpRefPage =>
-      answers => firstTimeControllingBodyRoute(answers)(controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad())
+      _ => controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
     case ControllingBodySameAsRepYesNoPage =>
       userAnswers => navigateControllingBodySameAsRepYesNoPage(userAnswers)
     case ControllingBodyNotProvidedYesNoPage =>
@@ -615,23 +620,12 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  private def firstTimeControllingBodyRoute(answers: UserAnswers)(destination: => Call): Call =
-    if (answers.get(ControllingBodyBusinessPartnerNumberPage).exists(_.trim.nonEmpty)) {
-      // Preserve the existing destination until navigation to and from CB-CYA is specified.
-      routes.IndexController.onPageLoad()
-    } else {
-      destination
-    }
-
   private def navigateControllingBodyIsUkIncorporatedPage(userAnswers: UserAnswers): Call =
-    userAnswers
-      .get(ControllingBodyIsUkIncorporatedPage)
-      .map {
-        case "1" => controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
-        case "0" => controllers.controllingbody.routes.ControllingBodyCountryOfIncorporationController.onPageLoad()
-        case _   => routes.SystemErrorController.onPageLoad()
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
+    (userAnswers.get(ControllingBodyBusinessTypePage), userAnswers.get(ControllingBodyIsUkIncorporatedPage)) match {
+      case (Some(Corporatebody), Some("1")) => controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+      case (Some(Corporatebody), Some("0")) => controllers.controllingbody.routes.ControllingBodyCountryOfIncorporationController.onPageLoad()
+      case _                                => routes.SystemErrorController.onPageLoad()
+    }
 }
 
 private def navigateControllingBodySameAsRepYesNoPage(answers: UserAnswers): Call =
