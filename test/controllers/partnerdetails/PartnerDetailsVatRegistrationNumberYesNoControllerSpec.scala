@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import forms.partnerdetails.VatRegistrationNumberYesNoFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}

@@ -51,10 +51,11 @@
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages("partnerDetailsAddNino.heading")).withCssClass("govuk-visually-hidden")
+                label = LabelViewModel(Empty)
             )
             .withWidth(Fixed10)
             .withHint(HintViewModel(messages("partnerDetailsAddNino.hint")))
+            .withCssClass("govuk-label")
         )
 
         @govukButton(

@@ -50,12 +50,11 @@
         @govukInput(
             InputViewModel(
                 field = form("partnerDetailsVatRegistrationNumber"),
-                label = LabelViewModel(messages("partnerDetailsVatRegistrationNumber.heading")).withCssClass("govuk-visually-hidden")
+                label = LabelViewModel(Empty)
             )
             .withWidth(Fixed10)
-            .withHint(HintViewModel(messages("partnerDetailsVatRegistrationNumber.hint"))
-            )
-            .withCssClass("govuk-input--width-10")
+            .withHint(HintViewModel(messages("partnerDetailsVatRegistrationNumber.hint")))
+            .withCssClass("govuk-label")
         )
 
         @govukButton(

@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import base.SpecBase
 import connectors.GamblingConnector
-import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl, FakeAgentAuthorisedAction, FakeDataRetrievalAction}
+import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl, FakeAgentAuthorisedAction, FakeAuthenticatedAction, FakeDataRetrievalAction}
 import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
 import models.{BusinessDetails, NormalMode, RegistrationStatus, UserAnswers}
@@ -584,6 +584,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
         mock[SessionRepository],
         mock[Navigator],
         new FakeAgentAuthorisedAction(cc.parsers),
+        new FakeAuthenticatedAction(cc.parsers),
         new FakeDataRetrievalAction(None),
         mock[BusinessDetailsDataRequiredAction],
         mock[CancelRegistrationDateFormProvider],

@@ -244,8 +244,15 @@ case class CheckPartnerDetailsViewModel(
       yesNoRow("nino.add", addNino, routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(index).url)
     else None
 
-  private def ninoRow(implicit messages: Messages): Option[SummaryListRow] =
-    if (postScreenerDisplayCondition(addNino)) Option.when(is(Soleproprietor)) {
+  private def ninoRow(implicit messages: Messages): Option[SummaryListRow] = {
+    val isSoleProprietor = is(Soleproprietor)
+
+    val renderingCondition = (addNino match {
+      case Some(true) | None => true
+      case _                 => false
+    }) && isSoleProprietor
+
+    Option.when(renderingCondition) {
       val label = labelFor("nino")
       val hiddenLabel = hiddenLabelFor("nino")
 
@@ -263,7 +270,7 @@ case class CheckPartnerDetailsViewModel(
 
       optionalRow(label, nino.map(Text(_)), actions, change)
     }
-    else None
+  }
 
   // --- Incorporated in the UK rows ---
 
@@ -337,6 +344,7 @@ case class CheckPartnerDetailsViewModel(
     if (postScreenerDisplayCondition(addVatRegistrationNumber)) {
       val label = labelFor("vatRegistrationNumber")
       val hiddenLabel = hiddenLabelFor("vatRegistrationNumber")
+
       val change = changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, hiddenLabel)
       val remove =
         removeAction(routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, hiddenLabel)
@@ -446,6 +454,10 @@ case class CheckPartnerDetailsViewModel(
       // Due to join or leave: details can't be changed online, so no add link
       case None if dueToJoinOrLeave =>
         createSummaryListRow(label, Text(messages("partnerDetailsCheckYourAnswers.noData")), Nil)
+
+      // If the mandatory field is missing for an existing partner we should show not provided
+      case None if !isNewPartnerFlow =>
+        createSummaryListRow(label, Text(messages("site.notProvided")), Nil)
 
       case None =>
         val addText = messages(s"partnerDetailsCheckYourAnswers.$key.add")
@@ -581,8 +593,8 @@ object CheckPartnerDetailsViewModel {
       emailAddress              = userAnswers.get(PartnerDetailsCorrespondenceEmailAddressPage(index)),
       isNewPartnerFlow          = isNewPartnerFlow,
       maybeSubmitted            = isSubmitted,
-      isDueToLeave              = userAnswers.get(PartnerDetailsIsFutureLeaveDatePage(index)).contains(1),
-      isDueToJoin               = userAnswers.get(PartnerDetailsIsFutureJoinDatePage(index)).contains(1),
+      isDueToLeave              = userAnswers.get(PartnerDetailsIsFutureLeaveDatePage(index)).contains(true),
+      isDueToJoin               = userAnswers.get(PartnerDetailsIsFutureJoinDatePage(index)).contains(true),
       isMissingMandatoryDetails = PartnerMandatoryDetails.isMissing(userAnswers, index),
       hasChanges                = userAnswers.get(PartnerDetailsHasClickedOnChangeOrRemovePage(index.toString)), // existing partners only
       hasAnsweredAllQuestions   = userAnswers.get(PartnerDetailsHasAnsweredAllQuestionsPage(index.toString.toInt)).contains(true)

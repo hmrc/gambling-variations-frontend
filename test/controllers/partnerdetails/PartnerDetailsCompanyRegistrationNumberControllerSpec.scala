@@ -186,6 +186,9 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
             .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
             .success
             .value
+            .remove(PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1))
+            .success
+            .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswersForGet)).build()
 
