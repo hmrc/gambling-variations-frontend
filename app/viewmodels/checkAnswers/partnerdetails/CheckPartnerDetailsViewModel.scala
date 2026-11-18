@@ -244,8 +244,15 @@ case class CheckPartnerDetailsViewModel(
       yesNoRow("nino.add", addNino, routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(index).url)
     else None
 
-  private def ninoRow(implicit messages: Messages): Option[SummaryListRow] =
-    if (postScreenerDisplayCondition(addNino)) Option.when(is(Soleproprietor)) {
+  private def ninoRow(implicit messages: Messages): Option[SummaryListRow] = {
+    val isSoleProprietor = is(Soleproprietor)
+
+    val renderingCondition = (addNino match {
+      case Some(true) | None => true
+      case _                 => false
+    }) && isSoleProprietor
+
+    Option.when(renderingCondition) {
       val label = labelFor("nino")
       val hiddenLabel = hiddenLabelFor("nino")
 
@@ -263,7 +270,7 @@ case class CheckPartnerDetailsViewModel(
 
       optionalRow(label, nino.map(Text(_)), actions, change)
     }
-    else None
+  }
 
   // --- Incorporated in the UK rows ---
 
@@ -337,6 +344,7 @@ case class CheckPartnerDetailsViewModel(
     if (postScreenerDisplayCondition(addVatRegistrationNumber)) {
       val label = labelFor("vatRegistrationNumber")
       val hiddenLabel = hiddenLabelFor("vatRegistrationNumber")
+
       val change = changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, hiddenLabel)
       val remove =
         removeAction(routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, hiddenLabel)
