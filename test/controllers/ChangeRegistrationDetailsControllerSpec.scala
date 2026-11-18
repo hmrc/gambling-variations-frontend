@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import connectors.GamblingConnector
 import models.controllingbody.ControllingBodyDetails
-import controllers.actions.{BusinessDetailsDataRequiredAction, FakeAgentAuthorisedAction, FakeDataRetrievalAction}
+import controllers.actions.{BusinessDetailsDataRequiredAction, FakeAgentAuthorisedAction, FakeAuthenticatedAction, FakeDataRetrievalAction}
 import models.{BusinessType, UserAnswers}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
@@ -284,6 +284,7 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
       val controller = new ChangeRegistrationDetailsController(
         cc.messagesApi,
         new FakeAgentAuthorisedAction(cc.parsers),
+        new FakeAuthenticatedAction(cc.parsers),
         new FakeDataRetrievalAction(None),
         mock[BusinessDetailsDataRequiredAction],
         mock[config.FrontendAppConfig],

@@ -20,6 +20,7 @@ import base.SpecBase
 import play.api.mvc.*
 import play.api.test.Helpers.*
 import play.api.test.{FakeRequest, Helpers}
+import services.{AgentClientAuthResult, AgentClientAuthService}
 import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
@@ -37,6 +38,26 @@ class AuthorisedActionSpec extends SpecBase {
   }
 
   val bodyParser: BodyParsers.Default = BodyParsers.Default(Helpers.stubPlayBodyParsers)
+
+  private def agentAuth(result: AgentClientAuthResult): AgentClientAuthService =
+    new AgentClientAuthService(null) {
+      override def authoriseClient(regNumber: String)(using hc: HeaderCarrier): Future[AgentClientAuthResult] =
+        Future.successful(result)
+    }
+
+  private val defaultAgentAuth: AgentClientAuthService = agentAuth(AgentClientAuthResult.Authorised)
+
+  private def authConnectorReturning(affinityGroup: Option[AffinityGroup], enrolments: Enrolments): AuthConnector = {
+    val m: AuthConnector = mock[AuthConnector]
+    (m
+      .authorise(_: Predicate, _: Retrieval[Option[AffinityGroup] ~ Enrolments])(using _: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *, *)
+      .returning(Future.successful(`~`(affinityGroup, enrolments)))
+    m
+  }
+
+  private val mgdAgentEnrolments: Enrolments =
+    Enrolments(Set(Enrolment("HMRC-MGD-AGNT", Seq(EnrolmentIdentifier("HMRCMGDAGENTREF", "XWA00003000000")), "Activated")))
 
   "AuthorisedAction" - {
     "create AuthorisedRequest when user has an Organisation affinity group" in {
@@ -59,7 +80,7 @@ class AuthorisedActionSpec extends SpecBase {
           )
         )
       val authorisedAction =
-        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, bodyParser)
+        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, defaultAgentAuth, bodyParser)
 
       val controller = new Harness(authorisedAction)
       val result = controller.onPageLoad(FakeRequest("GET", "/test"))
@@ -67,62 +88,18 @@ class AuthorisedActionSpec extends SpecBase {
       contentAsString(result) mustBe "1234567890"
     }
 
-    "create AuthorisedRequest when user has an Agent affinity group" in {
-      val mockAuthConnector: AuthConnector = mock[AuthConnector]
-
-      (mockAuthConnector
-        .authorise(_: Predicate, _: Retrieval[Option[AffinityGroup] ~ Enrolments])(using
-          _: HeaderCarrier,
-          _: ExecutionContext
-        ))
-        .expects(*, *, *, *)
-        .returning(
-          Future.successful(
-            `~`(
-              Some(AffinityGroup.Agent),
-              Enrolments(
-                Set(Enrolment("HMRC-MGD-AGNT", Seq(EnrolmentIdentifier("HMRCMGDAGENTREF", "1234567890")), "Activated"))
-              )
-            )
-          )
-        )
-
+    "create AuthorisedRequest for an agent authorised for the client, using the client regNum from session" in {
       val authorisedAction =
-        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, bodyParser)
+        new DefaultAuthorisedAction(authConnectorReturning(Some(AffinityGroup.Agent), mgdAgentEnrolments),
+                                    testFrontendAppConfig,
+                                    defaultAgentAuth,
+                                    bodyParser
+                                   )
 
       val controller = new Harness(authorisedAction)
-      val result = controller.onPageLoad(FakeRequest("GET", "/test"))
+      val result = controller.onPageLoad(FakeRequest("GET", "/test").withSession(AuthorisedAction.sessionRegNumberKey -> "XGM00003122200"))
       status(result) mustBe OK
-      contentAsString(result) mustBe ""
-    }
-
-    "create AuthorisedRequest with the session regNumber when an agent has selected a client" in {
-      val mockAuthConnector: AuthConnector = mock[AuthConnector]
-
-      (mockAuthConnector
-        .authorise(_: Predicate, _: Retrieval[Option[AffinityGroup] ~ Enrolments])(using
-          _: HeaderCarrier,
-          _: ExecutionContext
-        ))
-        .expects(*, *, *, *)
-        .returning(
-          Future.successful(
-            `~`(
-              Some(AffinityGroup.Agent),
-              Enrolments(
-                Set(Enrolment("HMRC-MGD-AGNT", Seq(EnrolmentIdentifier("HMRCMGDAGENTREF", "1234567890")), "Activated"))
-              )
-            )
-          )
-        )
-
-      val authorisedAction =
-        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, bodyParser)
-
-      val controller = new Harness(authorisedAction)
-      val result = controller.onPageLoad(FakeRequest("GET", "/test").withSession("mgdRegNum" -> "client123"))
-      status(result) mustBe OK
-      contentAsString(result) mustBe "client123"
+      contentAsString(result) mustBe "XGM00003122200"
     }
 
     "redirect to access denied page when user has no affinity group" in {
@@ -144,7 +121,7 @@ class AuthorisedActionSpec extends SpecBase {
         )
 
       val authorisedAction =
-        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, bodyParser)
+        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, defaultAgentAuth, bodyParser)
 
       val controller = new Harness(authorisedAction)
       val result = controller.onPageLoad(FakeRequest("GET", "/test"))
@@ -173,7 +150,7 @@ class AuthorisedActionSpec extends SpecBase {
         )
 
       val authorisedAction =
-        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, bodyParser)
+        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, defaultAgentAuth, bodyParser)
 
       val controller = new Harness(authorisedAction)
       val result = controller.onPageLoad(FakeRequest("GET", "/test"))
@@ -202,7 +179,7 @@ class AuthorisedActionSpec extends SpecBase {
         )
 
       val authorisedAction =
-        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, bodyParser)
+        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, defaultAgentAuth, bodyParser)
 
       val controller = new Harness(authorisedAction)
       val result = controller.onPageLoad(FakeRequest("GET", "/test"))
@@ -233,7 +210,7 @@ class AuthorisedActionSpec extends SpecBase {
         )
 
       val authorisedAction =
-        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, bodyParser)
+        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, defaultAgentAuth, bodyParser)
 
       val controller = new Harness(authorisedAction)
       val result = controller.onPageLoad(FakeRequest("GET", "/test"))
@@ -264,7 +241,7 @@ class AuthorisedActionSpec extends SpecBase {
         )
 
       val authorisedAction =
-        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, bodyParser)
+        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, defaultAgentAuth, bodyParser)
 
       val controller = new Harness(authorisedAction)
       val result = controller.onPageLoad(FakeRequest("GET", "/test"))
@@ -295,7 +272,7 @@ class AuthorisedActionSpec extends SpecBase {
         )
 
       val authorisedAction =
-        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, bodyParser)
+        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, defaultAgentAuth, bodyParser)
 
       val controller = new Harness(authorisedAction)
       val result = controller.onPageLoad(FakeRequest("GET", "/test"))
@@ -326,7 +303,7 @@ class AuthorisedActionSpec extends SpecBase {
         )
 
       val authorisedAction =
-        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, bodyParser)
+        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, defaultAgentAuth, bodyParser)
 
       val controller = new Harness(authorisedAction)
       val result = controller.onPageLoad(FakeRequest("GET", "/test"))
@@ -348,13 +325,65 @@ class AuthorisedActionSpec extends SpecBase {
         .returning(Future.failed(new NoActiveSession("No session") {}))
 
       val authorisedAction =
-        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, bodyParser)
+        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, defaultAgentAuth, bodyParser)
 
       val controller = new Harness(authorisedAction)
       val result = controller.onPageLoad(FakeRequest("GET", "/test"))
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result).value must startWith(testFrontendAppConfig.loginUrl)
+    }
+
+    "redirect to access denied page for an agent who does not hold the client (NotAuthorised)" in {
+      val authorisedAction =
+        new DefaultAuthorisedAction(
+          authConnectorReturning(Some(AffinityGroup.Agent), mgdAgentEnrolments),
+          testFrontendAppConfig,
+          agentAuth(AgentClientAuthResult.NotAuthorised),
+          bodyParser
+        )
+
+      val controller = new Harness(authorisedAction)
+      val result = controller.onPageLoad(FakeRequest("GET", "/test").withSession(AuthorisedAction.sessionRegNumberKey -> "XGM00003122200"))
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(
+        controllers.routes.AccessDeniedController.onPageLoad().url
+      )
+    }
+
+    "redirect to access denied page for an agent with no client regNum in session" in {
+      val authorisedAction =
+        new DefaultAuthorisedAction(authConnectorReturning(Some(AffinityGroup.Agent), mgdAgentEnrolments),
+                                    testFrontendAppConfig,
+                                    defaultAgentAuth,
+                                    bodyParser
+                                   )
+
+      val controller = new Harness(authorisedAction)
+      val result = controller.onPageLoad(FakeRequest("GET", "/test"))
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(
+        controllers.routes.AccessDeniedController.onPageLoad().url
+      )
+    }
+
+    Seq(AgentClientAuthResult.NotReady, AgentClientAuthResult.Failed).foreach { authResult =>
+      s"redirect an agent to the journey recovery page (not access denied) when the client list result is $authResult" in {
+        val authorisedAction =
+          new DefaultAuthorisedAction(
+            authConnectorReturning(Some(AffinityGroup.Agent), mgdAgentEnrolments),
+            testFrontendAppConfig,
+            agentAuth(authResult),
+            bodyParser
+          )
+
+        val controller = new Harness(authorisedAction)
+        val result = controller.onPageLoad(FakeRequest("GET", "/test").withSession(AuthorisedAction.sessionRegNumberKey -> "XGM00003122200"))
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result) mustBe Some(
+          controllers.routes.JourneyRecoveryController.onPageLoad().url
+        )
+      }
     }
 
   }
