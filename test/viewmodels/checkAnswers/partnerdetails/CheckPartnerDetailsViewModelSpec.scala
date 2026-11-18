@@ -408,7 +408,7 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
         rowFor(viewModel.businessDetailsSummaryList, "nino") mustBe None
       }
 
-      //The skipped screener is an edge case that triggers when we switch from any BT to Sole Proprietor
+      // The skipped screener is an edge case that triggers when we switch from any BT to Sole Proprietor
       "show the NINO row when the screener has been skipped" in {
 
         val viewModel =
