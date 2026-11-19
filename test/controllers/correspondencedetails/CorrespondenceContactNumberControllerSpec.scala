@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.ContactNumberFormProvider
 import models.{ContactNumber, NormalMode, UserAnswers}
@@ -25,7 +25,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceContactNumberPage, CorrespondenceDetailsChangesPage}
+import pages.correspondencedetails.{CorrespondenceContactNumberPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSection}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -44,30 +44,27 @@ class CorrespondenceContactNumberControllerSpec extends SpecBase with MockitoSug
   val form = formProvider("correspondenceContactNumber")
 
   val data = Json.obj(
-    CorrespondenceContactNumberPage.toString -> Json.obj(
-      "phoneNumber"       -> "01632 960 001",
-      "mobilePhoneNumber" -> "07700900000"
-    ),
-    "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+    "correspondenceDetailsSection" -> Json.obj(
+      CorrespondenceContactNumberPage.toString -> Json.obj(
+        "phoneNumber"       -> "01632 960 001",
+        "mobilePhoneNumber" -> "07700900000"
+      )
+    )
   )
 
-  val noAnswers = Json.obj("correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+  val noAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   lazy val correspondenceContactNumberRoute =
     controllers.correspondencedetails.routes.CorrespondenceContactNumberController.onPageLoad().url
 
-  val userAnswers =
-    UserAnswers(
-      userAnswersId,
-      data
-    )
+  val userAnswers = LoadedSectionDetails(userAnswersId, data, CorrespondenceDetailsSection)
 
   "CorrespondenceContact Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers))).build()
+        applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
 
@@ -120,7 +117,7 @@ class CorrespondenceContactNumberControllerSpec extends SpecBase with MockitoSug
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers)))
+        applicationBuilder(Some(noAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -213,7 +210,7 @@ class CorrespondenceContactNumberControllerSpec extends SpecBase with MockitoSug
     "must return Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers))).build()
+        applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
 

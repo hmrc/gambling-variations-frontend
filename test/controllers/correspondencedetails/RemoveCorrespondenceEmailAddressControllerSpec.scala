@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.correspondencedetails.RemoveCorrespondenceEmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
@@ -24,9 +24,9 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, RemoveCorrespondenceEmailAddressPage}
+import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSection, CorrespondenceEmailPage, RemoveCorrespondenceEmailAddressPage}
 import play.api.inject.bind
-import play.api.libs.json.Json
+import play.api.libs.json.{JsNull, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -44,26 +44,13 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
 
   private val correspondenceEmail = "test@example.com"
 
-  private val baseAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        "correspondenceDetailsSection" -> Json.obj(
-          "mgdRegNum" -> userAnswersId
-        ),
-        "correspondenceEmail" -> correspondenceEmail
-      )
-    )
+  private val baseAnswers = LoadedSectionDetails(
+    userAnswersId,
+    Json.obj("correspondenceDetailsSection" -> Json.obj("correspondenceEmail" -> correspondenceEmail)),
+    CorrespondenceDetailsSection
+  )
 
-  private val answersWithSectionOnly =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        "correspondenceDetailsSection" -> Json.obj(
-          "mgdRegNum" -> userAnswersId
-        )
-      )
-    )
+  private val answersWithSectionOnly = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "RemoveCorrespondenceEmailAddressController" - {
 
@@ -162,13 +149,53 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, controllers.correspondencedetails.routes.RemoveCorrespondenceEmailAddressController.onSubmit().url)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody("value" -> "true")
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
         savedAnswersCaptor.getValue.get(RemoveCorrespondenceEmailAddressPage).value mustEqual true
+      }
+    }
+
+    "must assert the removal, so the email address loaded from backend does not show again" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor =
+        ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, controllers.correspondencedetails.routes.RemoveCorrespondenceEmailAddressController.onSubmit().url)
+            .withFormUrlEncodedBody("value" -> "true")
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers =
+          savedAnswersCaptor.getValue
+
+        savedAnswers.get(CorrespondenceEmailPage) mustBe None
+        savedAnswers.original.get[String](CorrespondenceEmailPage.path).value mustEqual correspondenceEmail
+        savedAnswers.changes(CorrespondenceDetailsSection) mustBe Json.obj(
+          "correspondenceDetailsSection" -> Json.obj(CorrespondenceEmailPage.toString -> JsNull)
+        )
       }
     }
 
@@ -193,7 +220,9 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
         savedAnswersCaptor.getValue.get(RemoveCorrespondenceEmailAddressPage).value mustEqual true
+        savedAnswersCaptor.getValue.get(CorrespondenceEmailPage) mustBe None
         savedAnswersCaptor.getValue.get(CorrespondenceDetailsChangesPage).value mustEqual true
       }
     }

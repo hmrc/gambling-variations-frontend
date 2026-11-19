@@ -16,13 +16,14 @@
 
 package controllers.actions
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import connectors.GamblingConnector
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{Address, ContactNumber, CorrespondenceDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
+import pages.correspondencedetails.CorrespondenceDetailsSection
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.libs.json.Json
 import play.api.mvc.Results.*
@@ -31,15 +32,18 @@ import play.api.test.FakeRequest
 import repositories.SessionRepository
 import uk.gov.hmrc.http.UpstreamErrorResponse
 
+import java.time.{Clock, Instant, ZoneOffset}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
 
   import CorrespondenceDetailsDataRequiredActionSpec.*
+  val now: Instant = Instant.parse("2026-11-18T14:30:00Z")
+  val clock: Clock = Clock.fixed(now, ZoneOffset.UTC)
 
   class Harness(sessionRepository: SessionRepository, gamblingConnector: GamblingConnector)
-      extends CorrespondenceDetailsDataRequiredActionImpl(sessionRepository, gamblingConnector) {
+      extends CorrespondenceDetailsDataRequiredActionImpl(sessionRepository, gamblingConnector, clock) {
     def callRefine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = refine(request)
   }
 
@@ -55,27 +59,27 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
         when(sessionRepository.set(any())) thenReturn Future(true)
         when(gamblingConnector.getCorrespondenceDetails(any())(any())) thenReturn Future(correspondenceDetailsUk)
         val action = new Harness(sessionRepository, gamblingConnector)
-
         val data = Json.obj(
-          "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> "XWM00000001770"),
-          "correspondenceName"           -> "ABC ltd",
-          "correspondenceAdditionalName" -> "XX",
-          "iomOrCiFlag"                  -> true,
-          "correspondenceAddressUk" -> Json.obj(
-            "address1" -> "add1",
-            "address2" -> "add2",
-            "address3" -> "add3",
-            "address4" -> "add4",
-            "postcode" -> "NE11NE",
-            "country"  -> "UK"
-          ),
-          "correspondenceAdditionalInformation" -> "Upstairs",
-          "correspondenceContactNumber" -> Json.obj(
-            "phoneNumber"       -> "0123456789",
-            "mobilePhoneNumber" -> "0123456780"
-          ),
-          "correspondenceFaxNumber" -> "0123456799",
-          "correspondenceEmail"     -> "abc@email.com"
+          "correspondenceDetailsSection" -> Json.obj(
+            "correspondenceName"           -> "ABC ltd",
+            "correspondenceAdditionalName" -> "XX",
+            "iomOrCiFlag"                  -> true,
+            "correspondenceAddressUk" -> Json.obj(
+              "address1" -> "add1",
+              "address2" -> "add2",
+              "address3" -> "add3",
+              "address4" -> "add4",
+              "postcode" -> "NE11NE",
+              "country"  -> "UK"
+            ),
+            "correspondenceAdditionalInformation" -> "Upstairs",
+            "correspondenceContactNumber" -> Json.obj(
+              "phoneNumber"       -> "0123456789",
+              "mobilePhoneNumber" -> "0123456780"
+            ),
+            "correspondenceFaxNumber" -> "0123456799",
+            "correspondenceEmail"     -> "abc@email.com"
+          )
         )
 
         val result: Either[Result, DataRequest[AnyContent]] =
@@ -83,11 +87,16 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
 
         val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
 
-        result.map { req =>
-          req.request mustBe expected.request
-          req.userAnswers.data mustBe expected.userAnswers.data
-          req.userAnswers.id mustBe expected.userAnswers.id
-        }
+        val req = result.toOption.value
+        req.request mustBe expected.request
+        req.userAnswers.data mustBe expected.userAnswers.data
+        req.userAnswers.id mustBe expected.userAnswers.id
+
+        // Loaded as original answers, nothing asserted, section marked loaded.
+        req.userAnswers.original.data mustBe data
+        req.userAnswers.modified.data mustBe Json.obj()
+        req.userAnswers.original.loaded mustBe Map(CorrespondenceDetailsSection.key -> now)
+
         verify(sessionRepository, times(1)).set(any())
         verify(gamblingConnector, times(1)).getCorrespondenceDetails(any())(any())
       }
@@ -109,7 +118,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
           verify(gamblingConnector, times(1)).getCorrespondenceDetails(any())(any())
         }
 
-        "getMgdTradeDetails throws an exception" in {
+        "getCorrespondenceDetails throws an exception" in {
 
           val request = FakeRequest()
           val sessionRepository = mock[SessionRepository]
@@ -140,16 +149,12 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
           val gamblingConnector = mock[GamblingConnector]
           val action = new Harness(sessionRepository, gamblingConnector)
 
-          val data = Json.obj(
-            "correspondenceDetailsSection" -> Json.obj(
-              "mgdRegNum" -> "ABC12345678901"
-            )
-          )
+          val loaded = LoadedSectionDetails(mgdRegNum, Json.obj(), CorrespondenceDetailsSection)
 
           val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(UserAnswers(mgdRegNum, data)))).futureValue
+            action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(loaded))).futureValue
 
-          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
+          val expected = DataRequest(request, mgdRegNum, loaded)
 
           result.map { req =>
             req.request mustBe expected.request
@@ -157,7 +162,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
             req.userAnswers.id mustBe expected.userAnswers.id
           }
           verify(sessionRepository, never).set(any())
-          verify(gamblingConnector, never).getMgdTradeDetails(any())(any())
+          verify(gamblingConnector, never).getCorrespondenceDetails(any())(any())
 
         }
         "with call to backend" in {
@@ -173,24 +178,25 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
             "businessNameSection" -> Json.obj(
               "mgdRegNum" -> "ABC12345678901"
             ),
-            "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> "XWM00000001770"),
-            "correspondenceName"           -> "ABC ltd",
-            "correspondenceAdditionalName" -> "XX",
-            "correspondenceAddressNonUk" -> Json.obj(
-              "address1" -> "add1",
-              "address2" -> "add2",
-              "address3" -> "add3",
-              "address4" -> "add4",
-              "country"  -> "Spain"
-            ),
-            "correspondenceAdditionalInformation" -> "Upstairs",
-            "iomOrCiFlag"                         -> true,
-            "correspondenceContactNumber" -> Json.obj(
-              "phoneNumber"       -> "0123456789",
-              "mobilePhoneNumber" -> "0123456780"
-            ),
-            "correspondenceFaxNumber" -> "0123456799",
-            "correspondenceEmail"     -> "abc@email.com"
+            "correspondenceDetailsSection" -> Json.obj(
+              "correspondenceName"           -> "ABC ltd",
+              "correspondenceAdditionalName" -> "XX",
+              "correspondenceAddressNonUk" -> Json.obj(
+                "address1" -> "add1",
+                "address2" -> "add2",
+                "address3" -> "add3",
+                "address4" -> "add4",
+                "country"  -> "Spain"
+              ),
+              "correspondenceAdditionalInformation" -> "Upstairs",
+              "iomOrCiFlag"                         -> true,
+              "correspondenceContactNumber" -> Json.obj(
+                "phoneNumber"       -> "0123456789",
+                "mobilePhoneNumber" -> "0123456780"
+              ),
+              "correspondenceFaxNumber" -> "0123456799",
+              "correspondenceEmail"     -> "abc@email.com"
+            )
           )
 
           val existingUserAnswers = UserAnswers(mgdRegNum,
@@ -206,14 +212,14 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
 
           val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, updatedSessionData))
 
-          result.map { req =>
-            req.request mustBe expected.request
-            req.userAnswers.data mustBe expected.userAnswers.data
-            req.userAnswers.id mustBe expected.userAnswers.id
-          }
+          val req = result.toOption.value
+          req.request mustBe expected.request
+          req.userAnswers.data mustBe expected.userAnswers.data
+          req.userAnswers.id mustBe expected.userAnswers.id
+          req.userAnswers.original.loaded mustBe Map(CorrespondenceDetailsSection.key -> now)
+
           verify(sessionRepository, times(1)).set(any())
           verify(gamblingConnector, times(1)).getCorrespondenceDetails(any())(any())
-
         }
       }
 

@@ -21,7 +21,7 @@ import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{CorrespondenceDetails, UserAnswers}
 import pages.*
-import pages.correspondencedetails.{CorrespondenceAdditionalInformationPage, CorrespondenceAdditionalNamePage, CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceContactNumberPage, CorrespondenceDetailsSectionPage, CorrespondenceEmailPage, CorrespondenceFaxNumberPage, CorrespondenceNamePage}
+import pages.correspondencedetails.{CorrespondenceAdditionalInformationPage, CorrespondenceAdditionalNamePage, CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceContactNumberPage, CorrespondenceDetailsSection, CorrespondenceEmailPage, CorrespondenceFaxNumberPage, CorrespondenceNamePage}
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -29,6 +29,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
+import java.time.{Clock, Instant}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -36,7 +37,8 @@ import scala.util.control.NonFatal
 
 class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
-  val gamblingConnector: GamblingConnector
+  val gamblingConnector: GamblingConnector,
+  clock: Clock
 )(implicit val executionContext: ExecutionContext)
     extends CorrespondenceDetailsDataRequiredAction
     with Logging {
@@ -53,11 +55,11 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(CorrespondenceDetailsSectionPage) map { _ =>
-          logger.info(s"MgdRegNum found for Correspondence Details with id ${userAnswers.id}")
+        if (userAnswers.isLoaded(CorrespondenceDetailsSection)) {
+          logger.info(s"Correspondence Details already loaded for id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
-        } getOrElse {
+        } else {
           logger.info(s"User Answers found with id ${userAnswers.id}")
 
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
@@ -89,21 +91,21 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
 
   private def setCorrespondenceDetails(correspondenceDetails: CorrespondenceDetails, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Correspondence Details")
+    val loadedAnswers = answers.withSectionLoaded(CorrespondenceDetailsSection, Instant.now(clock))
     for {
-      updatedAnswers <- answers.set(CorrespondenceDetailsSectionPage, correspondenceDetails.mgdRegNumber)
-      updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceNamePage, correspondenceDetails.nameLine1)
-      updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceAdditionalNamePage, correspondenceDetails.nameLine2)
+      updatedAnswers <- loadedAnswers.setOriginalIfDefined(CorrespondenceNamePage, correspondenceDetails.nameLine1)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(CorrespondenceAdditionalNamePage, correspondenceDetails.nameLine2)
       updatedAnswers <- {
         correspondenceDetails.correspondenceAddress.flatMap(_.postcode) match {
-          case Some(_) => updatedAnswers.setIfDefined(CorrespondenceAddressUkPage, correspondenceDetails.correspondenceAddress)
-          case None    => updatedAnswers.setIfDefined(CorrespondenceAddressNonUkPage, correspondenceDetails.correspondenceAddress)
+          case Some(_) => updatedAnswers.setOriginalIfDefined(CorrespondenceAddressUkPage, correspondenceDetails.correspondenceAddress)
+          case None    => updatedAnswers.setOriginalIfDefined(CorrespondenceAddressNonUkPage, correspondenceDetails.correspondenceAddress)
         }
       }
-      updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceAdditionalInformationPage, correspondenceDetails.additionalInformation)
-      updatedAnswers <- updatedAnswers.setIfDefined(IsleMOrChannelFlagPage, correspondenceDetails.iomOrCiFlag)
-      updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceContactNumberPage, correspondenceDetails.contactNumber)
-      updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceFaxNumberPage, correspondenceDetails.faxNumber)
-      updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceEmailPage, correspondenceDetails.emailAddr)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(CorrespondenceAdditionalInformationPage, correspondenceDetails.additionalInformation)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(IsleMOrChannelFlagPage, correspondenceDetails.iomOrCiFlag)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(CorrespondenceContactNumberPage, correspondenceDetails.contactNumber)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(CorrespondenceFaxNumberPage, correspondenceDetails.faxNumber)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(CorrespondenceEmailPage, correspondenceDetails.emailAddr)
     } yield updatedAnswers
   }
 

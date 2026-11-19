@@ -56,9 +56,6 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
       ZoneOffset.UTC
     )
 
-  private val tradingName: String =
-    "Test Trading Name"
-
   private val businessName: String =
     "Test Business Ltd"
 
@@ -1112,17 +1109,8 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       running(application) {
 
-        implicit val lang: Lang =
-          messages(application).lang
-
         val request =
           postRequest(invalidAnswer)
-
-        val boundForm =
-          form(application)
-            .bind(
-              formData(invalidAnswer)
-            )
 
         val result =
           controller(application)

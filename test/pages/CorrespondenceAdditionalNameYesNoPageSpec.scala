@@ -25,7 +25,7 @@ class CorrespondenceAdditionalNameYesNoPageSpec extends SpecBase {
   "CorrespondenceAdditionalNameYesNoPage" - {
 
     "must have the correct path" in {
-      CorrespondenceAdditionalNameYesNoPage.path mustEqual (JsPath \ "correspondenceAdditionalNameYesNo")
+      CorrespondenceAdditionalNameYesNoPage.path mustEqual (JsPath \ "correspondenceDetailsSection" \ "correspondenceAdditionalNameYesNo")
     }
 
     "must have the correct string representation" in {
