@@ -22,7 +22,7 @@ import forms.cancellation.CancelGroupRegistrationDateFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.DateOfRegistrationPage
-import pages.cancellation.{CancelGroupRegistrationDatePage, RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
+import pages.cancellation.{RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository

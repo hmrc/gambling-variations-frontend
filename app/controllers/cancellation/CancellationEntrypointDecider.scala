@@ -23,44 +23,49 @@ import play.api.mvc.Result
 import play.api.mvc.Results.Redirect
 
 //TODO is it worth it?
-trait CancellationNavigator {
+trait CancellationEntrypointDecider {
 
   // TODO name
-  enum Cancel {
-    case Proceed, Locked, Warning
+  enum CurrentScreen {
+    case Cancel, Locked, Warning
   }
 
-  def checkScreen(userAnswers: UserAnswers, screen: Cancel)(render: => Result): Result = {
-    val a: Cancel = determineScreen(userAnswers)
+  def checkScreen(userAnswers: UserAnswers, currentScreen: CurrentScreen)(render: => Result): Result = {
+    val validScreen: CurrentScreen = determineValidScreen(userAnswers)
+    println("currentSceen: " + currentScreen)
+    println("validScreen: " + validScreen)
 
-    if (screen == a) {
+    if (currentScreen == validScreen) {
       render
     } else {
-      Redirect(a match {
-        case Cancel.Proceed => controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode)
-        case Cancel.Locked  => controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad()
-        case Cancel.Warning => controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad()
+      Redirect(validScreen match {
+        case CurrentScreen.Cancel  => controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode)
+        case CurrentScreen.Locked  => controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad()
+        case CurrentScreen.Warning => controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad()
       })
     }
   }
 
-  private def determineScreen(userAnswers: UserAnswers): Cancel = {
+  private def determineValidScreen(userAnswers: UserAnswers): CurrentScreen = {
 
     // User submitted cancellation, but if isAlreadyCancelled is false means HMRC didn't approve it yet and show warninig
     val registrationAlreadyCancelled = userAnswers.get(RegistrationCancellationDeclarationPage).contains(true)
 
     // HMRC already cancelled, has to go to locked
     val isAlreadyCancelled = userAnswers.get(RegistrationStatusPage).exists {
-      case RegistrationStatus.Cancelled => registrationAlreadyCancelled
+      case RegistrationStatus.Cancelled => true
       case _                            => false
     }
 
+    println("registrationAlreadyCancelled: " + registrationAlreadyCancelled)
+    println("isAlreadyCancelled: " + isAlreadyCancelled)
+
     if (isAlreadyCancelled) {
-      Cancel.Locked
+      CurrentScreen.Locked
     } else if (registrationAlreadyCancelled) {
-      Cancel.Warning
+      CurrentScreen.Warning
     } else {
-      Cancel.Proceed
+      CurrentScreen.Cancel
     }
   }
 

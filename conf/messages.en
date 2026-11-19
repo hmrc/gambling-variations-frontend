@@ -1812,5 +1812,5 @@ cancelGroupRegistrationWarning.error.required = Select yes to submit a new cance
 registrationCancellationLocked.title = This registration has already been cancelled
 registrationCancellationLocked.heading = This registration has already been cancelled
 registrationCancellationLocked.caption = Cancel registration
-registrationCancellationLocked.legend = You cannot submit a new cancellation request.
-registrationCancellationLocked.legend2 = Return to your manage your Machine Games Duty
+registrationCancellationLocked.p1 = You cannot submit a new cancellation request.
+registrationCancellationLocked.link = Return to your manage your Machine Games Duty

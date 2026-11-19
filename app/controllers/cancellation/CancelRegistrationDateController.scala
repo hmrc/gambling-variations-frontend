@@ -49,7 +49,7 @@ class CancelRegistrationDateController @Inject() (
   view: CancelRegistrationDateView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with CancellationNavigator
+    with CancellationEntrypointDecider
     with I18nSupport {
 
   def onLanding(regNumber: String): Action[AnyContent] =
@@ -60,7 +60,7 @@ class CancelRegistrationDateController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      checkScreen(request.userAnswers, Cancel.Proceed) {
+      checkScreen(request.userAnswers, CurrentScreen.Cancel) {
 
         request.userAnswers.get(DateOfRegistrationPage) match {
           case Some(registrationDate) =>
