@@ -74,11 +74,6 @@ class CorrespondenceNameControllerSpec extends SpecBase with MockitoSugar {
         )
       )
 
-//      val data = Json.obj(
-//        "correspondenceDetailsSection"  -> Json.obj("mgdRegNum" -> userAnswersId),
-//        CorrespondenceNamePage.toString -> "validName"
-//      )
-
       val userAnswers = LoadedSectionDetails(userAnswersId, data, CorrespondenceDetailsSection)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

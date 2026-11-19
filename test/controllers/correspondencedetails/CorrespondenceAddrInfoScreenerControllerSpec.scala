@@ -42,9 +42,6 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
   val form = formProvider()
 
   val requiredAnswer: UserAnswers = LoadedSectionDetails("id", Json.obj(), CorrespondenceDetailsSection)
-//  val requiredAnswer = Json.obj(
-//    "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-//  )
 
   lazy val correspondenceAddrInfoScreenerRoute =
     controllers.correspondencedetails.routes.CorrespondenceAddrInfoScreenerController.onPageLoad().url
@@ -70,18 +67,7 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = Some(requiredAnswer.set(AddCorrespondenceAddressAdditionalInformationPage, true).success.value)
-//      val userAnswers = Some(
-//        UserAnswers(
-//          "id",
-//          Json.obj(
-//            "correspondenceDetailsSection" -> Json.obj(
-//              "mgdRegNum" -> mgdRegNum
-//            ),
-//            "addCorrespondenceAddressAdditionalInformation" -> true
-//          )
-//        )
-//      )
-
+      
       val application = applicationBuilder(userAnswers = userAnswers).build()
 
       running(application) {
