@@ -41,7 +41,7 @@
     pageTitle = title(
         form,
         messages("partnerDetails.title"),
-        if(totalPages > 1) then Some(messages("site.pagination.page", page, totalPages) + " " + messages("changeRegistrationDetails.caption")) else None
+        if(totalPages > 1) then Some(messages("site.pagination.page", page, totalPages) + " " + messages("changeRegistrationDetails.caption")) else Some(messages("changeRegistrationDetails.caption"))
     ),
     isFullWidth = true
 ) {
