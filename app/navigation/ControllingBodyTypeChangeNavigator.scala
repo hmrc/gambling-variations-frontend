@@ -17,7 +17,7 @@
 package navigation
 
 import controllers.controllingbody.routes as controllingBodyRoutes
-import models.BusinessType.{LimitedLiabilityPartnership, Partnership, Soleproprietor, Unincorporatedbody}
+import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership, Partnership, Soleproprietor, Unincorporatedbody}
 import models.{BusinessType, UserAnswers}
 import pages.Page
 import pages.controllingbody.*
@@ -35,6 +35,7 @@ object ControllingBodyTypeChangeNavigator {
       case (Some(previous), Some(LimitedLiabilityPartnership)) if previous != LimitedLiabilityPartnership => changeToLlpRoutes(previous)
       case (Some(previous), Some(Unincorporatedbody)) if previous != Unincorporatedbody => changeToUnincorporatedBodyRoutes(previous)
       case (Some(previous), Some(Soleproprietor)) if previous != Soleproprietor         => changeToSoleproprietorRoutes(previous, answers)
+      case (Some(previous), Some(Corporatebody)) if previous != Corporatebody           => changeToCorporateBodyRoutes(previous, answers)
       case _                                                                            => PartialFunction.empty
     }
 
@@ -79,6 +80,27 @@ object ControllingBodyTypeChangeNavigator {
     case ControllingBodyNinoPage if previous == Partnership =>
       controllingBodyRoutes.ControllingBodyUTRController.onPageLoad()
     case ControllingBodyNinoPage =>
+      controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+    case ControllingBodyUtrPage if previous == Partnership =>
+      controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+  }
+
+  // CB-BN-CB and CB-IN, then CB-DIN and CB-CR for a business incorporated in the UK, or CB-COU and CB-FOR for one
+  // incorporated abroad. After that CB-UTR only when the previous type was a partnership, and then CB-CYA.
+  private def changeToCorporateBodyRoutes(previous: BusinessType, answers: UserAnswers): PartialFunction[Page, Call] = {
+    case ControllingBodyBusinessNamePage =>
+      controllingBodyRoutes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
+    case ControllingBodyIsUkIncorporatedPage if answers.get(ControllingBodyIsUkIncorporatedPage).contains("1") =>
+      controllingBodyRoutes.DateOfIncorporationController.onPageLoad()
+    case ControllingBodyIsUkIncorporatedPage if answers.get(ControllingBodyIsUkIncorporatedPage).contains("0") =>
+      controllingBodyRoutes.ControllingBodyCountryOfIncorporationController.onPageLoad()
+    case ControllingBodyDateOfIncorporationPage =>
+      controllingBodyRoutes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
+    case ControllingBodyCountryOfIncorporationPage =>
+      controllingBodyRoutes.ControllingBodyForeignCorpRefController.onPageLoad()
+    case ControllingBodyCrnPage | ControllingBodyForeignCorpRefPage if previous == Partnership =>
+      controllingBodyRoutes.ControllingBodyUTRController.onPageLoad()
+    case ControllingBodyCrnPage | ControllingBodyForeignCorpRefPage =>
       controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
     case ControllingBodyUtrPage if previous == Partnership =>
       controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
