@@ -14,14 +14,30 @@
  * limitations under the License.
  *@
 
+@import views.html.components.*
+
 @this(
         layout: templates.Layout,
-        govukButton: GovukButton
+        formHelper: FormWithCSRF,
+        govukButton: GovukButton,
+        h1:H1,
+        p:Paragraph,
+        caption: Caption,
+        paragraphWithLink: ParagraphMessageWithLink,
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("registrationCancellationLocked.title"))) {
+@layout(pageTitle = titleNoForm(messages("registrationCancellationLocked.title"), Some(messages("registrationCancellationLocked.caption")))) {
 
-    <h1 class="govuk-heading-xl">@messages("registrationCancellationLocked.heading")</h1>
+
+    @caption(messages("registrationCancellationLocked.caption"))
+    @h1(messages("registrationCancellationLocked.heading"))
+    @p(messages("registrationCancellationLocked.p1"))
+    @paragraphWithLink(
+        None,
+        messages("registrationCancellationLocked.link"),
+        None,
+        "LINK"
+    )
 }

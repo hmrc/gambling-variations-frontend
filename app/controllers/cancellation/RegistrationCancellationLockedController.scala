@@ -34,11 +34,11 @@ class RegistrationCancellationLockedController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: RegistrationCancellationLockedView
 ) extends FrontendBaseController
-    with CancellationNavigator
+    with CancellationEntrypointDecider
     with I18nSupport {
 
   // TODO checking here
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    checkScreen(request.userAnswers, Cancel.Locked)(Ok(view()))
+    checkScreen(request.userAnswers, CurrentScreen.Locked)(Ok(view()))
   }
 }

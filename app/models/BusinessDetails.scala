@@ -24,7 +24,7 @@ final case class BusinessDetails(
   mgdRegNumber: String,
   businessType: Option[BusinessType],
   currentlyRegistered: RegistrationStatus,
-  groupReg: Boolean, //TODO change to ADT, its either 0 or 1 for groups
+  groupReg: Boolean,
   dateOfRegistration: Option[LocalDate],
   businessPartnerNumber: Option[String],
   systemDate: LocalDate

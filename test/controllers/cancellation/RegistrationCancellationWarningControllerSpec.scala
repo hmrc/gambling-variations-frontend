@@ -104,8 +104,8 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
         }
       }
 
-      //TODO change test to redirect
-      //TODO add test that fails because we don't have data we expect (maybe just a trait spec tho, check multiple potential problems)
+      // TODO change test to redirect
+      // TODO add test that fails because we don't have data we expect (maybe just a trait spec tho, check multiple potential problems)
       "must redirect to SystemError when the registration cancellation value does not exist" in {
 
         val userAnswers = emptyUserAnswers.remove(RegistrationCancellationDeclarationPage).success.value
@@ -121,7 +121,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
         }
       }
 
-      //TODO change test to redirect
+      // TODO change test to redirect
       "must redirect to SystemError when the registration cancellation value is false" in {
 
         val userAnswers = emptyUserAnswers.set(RegistrationCancellationDeclarationPage, false).success.value
