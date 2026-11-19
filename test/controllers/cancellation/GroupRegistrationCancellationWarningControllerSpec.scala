@@ -57,7 +57,7 @@ class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view("http://localhost:10400/gambling/")(
+          view("http://localhost:10400/manage-gambling-tax/manage-your-machine-games-duty/")(
             request,
             messages(application)
           ).toString
