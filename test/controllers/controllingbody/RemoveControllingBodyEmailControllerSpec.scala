@@ -18,7 +18,7 @@ package controllers.controllingbody
 
 import base.SpecBase
 import forms.controllingbody.RemoveControllingBodyEmailFormProvider
-import models.{Address, ContactNumber, CorrespondenceDetails, NormalMode, UserAnswers}
+import models.{Address, ContactDetails, ContactNumber, NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
@@ -42,7 +42,7 @@ class RemoveControllingBodyEmailControllerSpec extends SpecBase with MockitoSuga
   private lazy val removeControllingBodyEmailRoute =
     routes.RemoveControllingBodyEmailController.onPageLoad().url
 
-  private val correspondenceDetails = CorrespondenceDetails(
+  private val correspondenceDetails = ContactDetails(
     mgdRegNumber = userAnswersId,
     nameLine1    = None,
     nameLine2    = None,

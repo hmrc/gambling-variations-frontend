@@ -19,7 +19,7 @@ package models
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.*
 import models.SoleProprietorPartnerDetails.*
-import models.CorrespondenceDetails.*
+import models.ContactDetails.*
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -54,7 +54,7 @@ sealed trait PartnerDetails {
   val dateOfIncorporation: Option[LocalDate]
   val countryOfIncorporation: Option[String]
   val foreignCorporateRef: Option[String]
-  val correspondenceDetails: Option[CorrespondenceDetails]
+  val contactDetails: Option[ContactDetails]
 
   val isFutureLeaveDate: Option[Boolean]
   val isFutureJoinDate: Option[Boolean]
@@ -78,7 +78,7 @@ final case class SoleProprietorPartnerDetails(
   dateOfIncorporation: Option[LocalDate],
   countryOfIncorporation: Option[String],
   foreignCorporateRef: Option[String],
-  correspondenceDetails: Option[CorrespondenceDetails],
+  contactDetails: Option[ContactDetails],
   isFutureLeaveDate: Option[Boolean],
   isFutureJoinDate: Option[Boolean],
   businessType: BusinessType
@@ -101,7 +101,7 @@ case class BusinessPartnerDetails(
   dateOfIncorporation: Option[LocalDate],
   countryOfIncorporation: Option[String],
   foreignCorporateRef: Option[String],
-  correspondenceDetails: Option[CorrespondenceDetails],
+  contactDetails: Option[ContactDetails],
   isFutureLeaveDate: Option[Boolean],
   isFutureJoinDate: Option[Boolean],
   businessType: BusinessType
@@ -155,7 +155,7 @@ object SoleProprietorPartnerDetails {
       (__ \ "dateOfIncorporation").readNullable[LocalDate] and
       (__ \ "countryOfIncorporation").readNullable[String] and
       (__ \ "foreignCorporateRef").readNullable[String] and
-      CorrespondenceDetails.reads.map(Some(_)).orElse(Reads.pure(None)) and
+      ContactDetails.reads.map(Some(_)).orElse(Reads.pure(None)) and
       (__ \ "isFutureLeaveDate").readNullable[Boolean] and
       (__ \ "isFutureJoinDate").readNullable[Boolean] and
       (__ \ "businessType").read[BusinessType]
@@ -182,7 +182,7 @@ object BusinessPartnerDetails {
       (__ \ "dateOfIncorporation").readNullable[LocalDate] and
       (__ \ "countryOfIncorporation").readNullable[String] and
       (__ \ "foreignCorporateRef").readNullable[String] and
-      CorrespondenceDetails.reads.map(Some(_)).orElse(Reads.pure(None)) and
+      ContactDetails.reads.map(Some(_)).orElse(Reads.pure(None)) and
       (__ \ "isFutureLeaveDate").readNullable[Boolean] and
       (__ \ "isFutureJoinDate").readNullable[Boolean] and
       (__ \ "businessType").read[BusinessType]

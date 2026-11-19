@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.GamblingConnector
 import controllers.businesscontactdetails.LoadedPartnerDetails
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{Address, BusinessPartnerDetails, BusinessType, ContactNumber, CorrespondenceDetails, PartnersDetails, SoleProprietorName, SoleProprietorPartnerDetails, UserAnswers}
+import models.{Address, BusinessPartnerDetails, BusinessType, ContactDetails, ContactNumber, PartnersDetails, SoleProprietorName, SoleProprietorPartnerDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
@@ -580,8 +580,8 @@ object PartnerDetailsDataRequiredActionSpec {
     dateOfIncorporation    = Some(LocalDate.parse("2020-03-01")),
     countryOfIncorporation = Some("GB"),
     foreignCorporateRef    = Some("FCR-987654"),
-    correspondenceDetails = Some(
-      CorrespondenceDetails(
+    contactDetails = Some(
+      ContactDetails(
         mgdRegNumber = "XWM00000001762",
         nameLine1    = None,
         nameLine2    = None,
@@ -632,8 +632,8 @@ object PartnerDetailsDataRequiredActionSpec {
     dateOfIncorporation    = Some(LocalDate.parse("2020-03-01")),
     countryOfIncorporation = Some("GB"),
     foreignCorporateRef    = Some("FCR-987654"),
-    correspondenceDetails = Some(
-      CorrespondenceDetails(
+    contactDetails = Some(
+      ContactDetails(
         mgdRegNumber = "XWM00000001762",
         nameLine1    = None,
         nameLine2    = None,

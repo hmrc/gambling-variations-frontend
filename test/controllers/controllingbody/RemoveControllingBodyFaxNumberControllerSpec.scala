@@ -18,7 +18,7 @@ package controllers.controllingbody
 
 import base.SpecBase
 import forms.controllingbody.RemoveControllingBodyFaxNumberFormProvider
-import models.{CorrespondenceDetails, NormalMode, UserAnswers}
+import models.{ContactDetails, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -110,7 +110,7 @@ class RemoveControllingBodyFaxNumberControllerSpec extends SpecBase with Mockito
     "must show the fax number as stored by the controlling body details loader" in {
 
       // The loader stores the whole correspondence section as one object, and the page must find the fax number in it
-      val correspondenceDetails = CorrespondenceDetails(
+      val correspondenceDetails = ContactDetails(
         mgdRegNumber          = userAnswersId,
         nameLine1             = None,
         nameLine2             = None,

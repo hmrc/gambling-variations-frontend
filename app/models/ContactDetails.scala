@@ -19,7 +19,7 @@ package models
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.*
 
-case class CorrespondenceDetails(
+case class ContactDetails(
   mgdRegNumber: String,
   nameLine1: Option[String],
   nameLine2: Option[String],
@@ -31,7 +31,7 @@ case class CorrespondenceDetails(
   emailAddr: Option[String]
 )
 
-object CorrespondenceDetails {
+object ContactDetails {
 
   private val booleanYNFormat: Format[Boolean] = Format(
     Reads {
@@ -56,16 +56,16 @@ object CorrespondenceDetails {
     }
   )
 
-  implicit val writes: OWrites[CorrespondenceDetails] =
+  implicit val writes: OWrites[ContactDetails] =
     OWrites { details =>
-      val json = Json.writes[CorrespondenceDetails].writes(details)
+      val json = Json.writes[ContactDetails].writes(details)
 
       json ++ Json.obj(
         "iomOrCiFlag" -> details.iomOrCiFlag.map(booleanYNFormat.writes)
       )
     }
 
-  implicit val reads: Reads[CorrespondenceDetails] = (
+  implicit val reads: Reads[ContactDetails] = (
     (__ \ "mgdRegNumber").read[String] and
       (__ \ "nameLine1").readNullable[String] and
       (__ \ "nameLine2").readNullable[String].map(_.filter(_.nonEmpty)) and
@@ -77,6 +77,6 @@ object CorrespondenceDetails {
         .orElse(Reads.pure(None)) and
       (__ \ "faxNumber").readNullable[String].map(_.filter(_.nonEmpty)) and
       (__ \ "emailAddr").readNullable[String].map(_.filter(_.nonEmpty))
-  )(CorrespondenceDetails.apply _)
+  )(ContactDetails.apply _)
 
 }
