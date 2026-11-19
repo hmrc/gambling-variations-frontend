@@ -24,7 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.businesscontactdetails.CheckContactDetailsView
 
-class CheckContactDetailsControllerSpec extends SpecBase {
+class CheckBusinessContactDetailsControllerSpec extends SpecBase {
 
   "CheckContactDetails Controller" - {
 

@@ -28,7 +28,7 @@ import views.html.businesscontactdetails.CheckContactDetailsView
 
 import javax.inject.Inject
 
-class CheckContactDetailsController @Inject() (
+class CheckBusinessContactDetailsController @Inject()(
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,

@@ -23,7 +23,7 @@ import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import views.html.businesscontactdetails.CheckContactDetailsView
 
-class CheckContactDetailsViewSpec extends SpecBase {
+class CheckBusinessContactDetailsViewSpec extends SpecBase {
 
   trait Setup {
     val app = applicationBuilder().build()
