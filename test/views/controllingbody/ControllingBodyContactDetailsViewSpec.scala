@@ -17,7 +17,7 @@
 package views.controllingbody
 
 import base.SpecBase
-import forms.contactdetails.ContactNumberFormProvider
+import forms.businesscontactdetails.ContactNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*

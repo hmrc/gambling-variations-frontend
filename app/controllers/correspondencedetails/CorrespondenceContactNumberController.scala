@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.contactdetails.ContactNumberFormProvider
+import forms.businesscontactdetails.ContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.*

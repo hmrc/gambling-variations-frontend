@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package forms.contactdetails
+package forms.businesscontactdetails
 
 import forms.behaviours.StringFieldBehaviours
-import forms.contactdetails.EmailAddressFormProvider
+import forms.businesscontactdetails.EmailAddressFormProvider
 import org.scalacheck.Gen
 import play.api.data.FormError
 

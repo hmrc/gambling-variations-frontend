@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import base.{LoadedSectionDetails, SpecBase}
-import forms.contactdetails.FaxNumberFormProvider
+import forms.businesscontactdetails.FaxNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import pages.*

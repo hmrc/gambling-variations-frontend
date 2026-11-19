@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import controllers.businesscontactdetails.LoadedPartnerDetails
-import forms.contactdetails.ContactNumberFormProvider
+import forms.businesscontactdetails.ContactNumberFormProvider
 import models.{CheckMode, ContactNumber, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any

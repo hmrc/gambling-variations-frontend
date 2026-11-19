@@ -18,7 +18,7 @@ package controllers.businesscontactdetails
 
 import base.SpecBase
 import controllers.{LoadedBusinessContactDetails, routes}
-import forms.contactdetails.FaxNumberFormProvider
+import forms.businesscontactdetails.FaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

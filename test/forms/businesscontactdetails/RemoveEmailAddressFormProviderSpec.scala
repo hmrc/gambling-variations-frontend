@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package forms.contactdetails
+package forms.businesscontactdetails
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.contactdetails.RemoveEmailAddressFormProvider
+import forms.businesscontactdetails.RemoveEmailAddressFormProvider
 import play.api.data.FormError
 
 class RemoveEmailAddressFormProviderSpec extends BooleanFieldBehaviours {

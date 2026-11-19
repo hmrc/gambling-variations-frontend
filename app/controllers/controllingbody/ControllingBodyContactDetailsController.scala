@@ -17,7 +17,7 @@
 package controllers.controllingbody
 
 import controllers.actions.*
-import forms.contactdetails.ContactNumberFormProvider
+import forms.businesscontactdetails.ContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.controllingbody.{ControllingBodyChangesPage, ControllingBodyContactDetailsPage, ControllingBodySubmittedPage}

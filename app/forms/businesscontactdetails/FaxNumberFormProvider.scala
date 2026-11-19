@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms.contactdetails
+package forms.businesscontactdetails
 
 import forms.mappings.Mappings
 import play.api.data.Form
