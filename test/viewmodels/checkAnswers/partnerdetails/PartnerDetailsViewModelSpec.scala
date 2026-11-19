@@ -291,6 +291,63 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
       row.statusDetails mustBe None
     }
 
+    "show due to join status for a new partner when joining date is in the past" in {
+
+      val newPartnerIndex = 0
+      val pastJoiningDate =
+        todayDate.minusDays(10)
+
+      val answers =
+        emptyUserAnswers
+          .set(
+            PartnerDetailsAddPartnerCompletedPage(newPartnerIndex),
+            true
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsMgdRegNumberPage(newPartnerIndex),
+            emptyUserAnswers.id
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsDateOfJoiningPage(newPartnerIndex),
+            pastJoiningDate
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsBusinessTypePage(newPartnerIndex),
+            BusinessType.LimitedLiabilityPartnership
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsBusinessNamePage(newPartnerIndex),
+            "New Partner"
+          )
+          .success
+          .value
+
+      val viewModel =
+        buildViewModel(
+          partnerNumbers = Seq(newPartnerIndex),
+          userAnswers    = answers
+        )
+
+      val row =
+        viewModel.partners.head
+
+      row.status mustBe messages(
+        "partnerDetails.status.dueToJoin"
+      )
+
+      row.statusDetails mustBe Some(
+        pastJoiningDate.format(dateFormatter)
+      )
+    }
+
     "show due to join status when joining date is in the future" in {
 
       val joinDate =

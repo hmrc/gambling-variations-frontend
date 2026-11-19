@@ -19,7 +19,7 @@ package controllers.actions
 import base.SpecBase
 import connectors.GamblingConnector
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessDetails, BusinessType, UserAnswers}
+import models.{BusinessDetails, BusinessType, RegistrationStatus, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
@@ -190,7 +190,7 @@ object BusinessDetailsDataRequiredActionSpec {
     BusinessDetails(
       mgdRegNumber          = mgdRegNum,
       businessType          = Some(BusinessType.Partnership),
-      currentlyRegistered   = 1,
+      currentlyRegistered   = RegistrationStatus.Cancelled,
       groupReg              = true,
       dateOfRegistration    = Some(LocalDate.of(2026, 1, 1)),
       businessPartnerNumber = None,

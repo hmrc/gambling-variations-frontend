@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package pages.cancellation
+package forms.cancellation
 
-import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
+import play.api.data.validation.{Constraint, Invalid, Valid}
 
-class CancelGroupRegistrationDatePageSpec extends PlaySpec {
+import javax.inject.Inject
 
-  "CancelGroupRegistrationDatePage" must {
+class RegistrationCancellationWarningFormProvider @Inject() extends Mappings {
 
-    "have the correct path" in {
-
-      CancelGroupRegistrationDatePage.path mustEqual (JsPath \ "cancelGroupRegistrationDate")
-    }
-
-    "have the correct toString value" in {
-
-      CancelGroupRegistrationDatePage.toString mustEqual "cancelGroupRegistrationDate"
-    }
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("cancelGroupRegistrationWarning.error.required")
+        .verifying(Constraint[Boolean](if _ then Valid else Invalid("cancelGroupRegistrationWarning.error.required")))
+    )
 }

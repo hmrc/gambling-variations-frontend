@@ -21,12 +21,12 @@ import connectors.GamblingConnector
 import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl}
 import controllers.routes
 import forms.cancellation.CancelGroupRegistrationDateFormProvider
-import models.{BusinessDetails, NormalMode, UserAnswers}
+import models.{BusinessDetails, NormalMode, RegistrationStatus, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.cancellation.CancelGroupRegistrationDatePage
+import pages.cancellation.RegistrationCancellationDatePage
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -121,7 +121,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
     BusinessDetails(
       mgdRegNumber          = "XMGD00000000001",
       businessType          = None,
-      currentlyRegistered   = 1,
+      currentlyRegistered   = RegistrationStatus.Cancelled,
       groupReg              = true,
       dateOfRegistration    = dateOfRegistration,
       businessPartnerNumber = None,
@@ -160,7 +160,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
       "must populate the view when the question has previously been answered" in {
 
-        val userAnswers = UserAnswers(userAnswersId).set(CancelGroupRegistrationDatePage, validAnswer).success.value
+        val userAnswers = UserAnswers(userAnswersId).set(RegistrationCancellationDatePage, validAnswer).success.value
 
         val application = buildApplication(
           userAnswers     = Some(userAnswers),
@@ -238,7 +238,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
           verify(mockSessionRepository).set(
             org.mockito.ArgumentMatchers.argThat[UserAnswers] { answers =>
-              answers.get(CancelGroupRegistrationDatePage).contains(validAnswer)
+              answers.get(RegistrationCancellationDatePage).contains(validAnswer)
             }
           )
         }
@@ -487,7 +487,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
           verify(mockSessionRepository).set(
             org.mockito.ArgumentMatchers.argThat[UserAnswers] { answers =>
-              answers.get(CancelGroupRegistrationDatePage).contains(validAnswer)
+              answers.get(RegistrationCancellationDatePage).contains(validAnswer)
             }
           )
         }

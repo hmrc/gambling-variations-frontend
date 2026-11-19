@@ -19,7 +19,7 @@ package controllers.returnperiods
 import base.SpecBase
 import connectors.GamblingConnector
 import models.ChooseReturnPeriods.{Feb, Jan}
-import models.{BusinessDetails, GamblingReturnPeriods, NoReturnPeriodsSet, NormalMode, UserAnswers}
+import models.{BusinessDetails, GamblingReturnPeriods, NoReturnPeriodsSet, NormalMode, RegistrationStatus, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, verifyNoInteractions, when}
 import org.scalatest.BeforeAndAfterEach
@@ -218,7 +218,7 @@ class CheckReturnPeriodsControllerSpec extends SpecBase with MockitoSugar with B
     BusinessDetails(
       mgdRegNumber          = mgdRegNum,
       businessType          = None,
-      currentlyRegistered   = 1,
+      currentlyRegistered   = RegistrationStatus.Cancelled,
       groupReg              = false,
       dateOfRegistration    = dateOfRegistration,
       businessPartnerNumber = Some("XB1234567890"),
