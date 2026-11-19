@@ -17,7 +17,7 @@
 package controllers.controllingbody
 
 import controllers.actions.{AuthorisedAction, ControllingBodyDetailsDataRequiredAction, DataRetrievalAction}
-import pages.controllingbody.ControllingBodySubmittedPage
+import pages.controllingbody.ControllingBodyContinuePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -52,8 +52,8 @@ class CheckControllingBodyDetailsController @Inject() (
       Future.successful(Redirect(viewModel.continueUrl))
     } else {
       for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodySubmittedPage, true))
-        _              <- sessionRepository.set(updatedAnswers)
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyContinuePage, true))
+        _ <- sessionRepository.set(updatedAnswers)
       } yield Redirect(viewModel.continueUrl)
     }
   }

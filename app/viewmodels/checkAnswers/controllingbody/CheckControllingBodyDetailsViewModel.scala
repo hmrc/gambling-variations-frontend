@@ -33,8 +33,8 @@ import viewmodels.implicits.*
 import java.time.LocalDate
 
 /** CB-CYA in the add flow: screener questions are shown once answered, optional details read "Not provided" while they have no data, and missing
- * mandatory details link to the screen that provides them. Once the details have been submitted, the optional details that hold data can also
- * be removed.
+ * mandatory details link to the screen that provides them. Once the user has continued from the page, the optional details that hold data can
+ * also be removed. Once the details have been submitted, the incorporation details can no longer be changed.
  */
 case class CheckControllingBodyDetailsViewModel(
                                                  businessType: Option[BusinessType] = None,
@@ -62,6 +62,7 @@ case class CheckControllingBodyDetailsViewModel(
                                                  faxNumber: Option[String] = None,
                                                  addEmailAddress: Option[Boolean] = None,
                                                  emailAddress: Option[String] = None,
+                                                 hasContinued: Boolean = false,
                                                  isSubmitted: Boolean = false
                                                ) {
 
@@ -92,22 +93,34 @@ case class CheckControllingBodyDetailsViewModel(
   private val dateOfBirthDetail: Option[MandatoryDetail] =
     Option.when(isSoleProprietor)(MandatoryDetail.date("soleProprietorDOB", dateOfBirth, dateOfBirthUrl))
 
+  // The incorporation details cannot be changed once the details have been submitted
   private val isUkIncorporatedDetail: Option[MandatoryDetail] =
     Option.when(isCorporateBody) {
-      MandatoryDetail("isIncorporated", isUkIncorporated.map(answer => messages => Text(yesNo(answer)(messages))), isUkIncorporatedUrl)
+      MandatoryDetail(
+        "isIncorporated",
+        isUkIncorporated.map(answer => messages => Text(yesNo(answer)(messages))),
+        isUkIncorporatedUrl,
+        locked = isSubmitted
+      )
     }
 
   private val countryOfIncorporationDetail: Option[MandatoryDetail] =
-    Option.when(showNonUkIncorporation)(MandatoryDetail.text("countryOfIncorporation", countryOfIncorporation, countryOfIncorporationUrl))
+    Option.when(showNonUkIncorporation) {
+      MandatoryDetail.text("countryOfIncorporation", countryOfIncorporation, countryOfIncorporationUrl, locked = isSubmitted)
+    }
 
   private val foreignCorporateRefDetail: Option[MandatoryDetail] =
-    Option.when(showNonUkIncorporation)(MandatoryDetail.text("foreignCorporateRef", foreignCorporateRef, foreignCorporateRefUrl))
+    Option.when(showNonUkIncorporation) {
+      MandatoryDetail.text("foreignCorporateRef", foreignCorporateRef, foreignCorporateRefUrl, locked = isSubmitted)
+    }
 
   private val dateOfIncorporationDetail: Option[MandatoryDetail] =
-    Option.when(showUkIncorporation)(MandatoryDetail.date("dateOfInc", dateOfIncorporation, dateOfIncorporationUrl))
+    Option.when(showUkIncorporation) {
+      MandatoryDetail.date("dateOfInc", dateOfIncorporation, dateOfIncorporationUrl, locked = isSubmitted)
+    }
 
   private val crnDetail: Option[MandatoryDetail] =
-    Option.when(showUkIncorporation)(MandatoryDetail.text("companyRegNumber", crn, crnUrl))
+    Option.when(showUkIncorporation)(MandatoryDetail.text("companyRegNumber", crn, crnUrl, locked = isSubmitted))
 
   // A partnership is not asked for a Unique Taxpayer Reference
   private val utrDetail: Option[MandatoryDetail] =
@@ -200,7 +213,7 @@ case class CheckControllingBodyDetailsViewModel(
     answer.map(value => changeableRow(key, Text(yesNo(value)), href))
 
   // An optional detail is hidden once its screener has been answered no, otherwise it is shown with "Not provided" in place of missing data.
-  // Once the details have been submitted, a detail that holds data can also be removed.
+  // Once the user has continued from the page, a detail that holds data can also be removed.
   private def optionalRow(key: String, screenerAnswer: Option[Boolean], value: Option[String], href: String, removeHref: Option[String] = None)(
     implicit messages: Messages
   ): Option[SummaryListRow] =
@@ -209,7 +222,7 @@ case class CheckControllingBodyDetailsViewModel(
         key,
         Text(value.getOrElse(messages("site.notProvided"))),
         href,
-        removeHref.filter(_ => isSubmitted && value.isDefined)
+        removeHref.filter(_ => hasContinued && value.isDefined)
       )
     }
 
@@ -259,13 +272,16 @@ object CheckControllingBodyDetailsViewModel {
   private val removeFaxNumberUrl = "#"
   private val removeEmailAddressUrl = "#"
 
-  // A detail that must be provided before the controlling body can be submitted, shown as a link to add it while it is missing
-  private final case class MandatoryDetail(key: String, value: Option[Messages => Content], href: String) {
+  // A detail that must be provided before the controlling body can be submitted, shown as a link to add it while it is missing.
+  // A locked detail is shown without any actions, so it cannot be changed.
+  private final case class MandatoryDetail(key: String, value: Option[Messages => Content], href: String, locked: Boolean = false) {
 
     val isMissing: Boolean = value.isEmpty
 
     def row(implicit messages: Messages): SummaryListRow =
       value match {
+        case Some(content) if locked =>
+          SummaryListRowViewModel(key = s"$prefix.$key", value = ValueViewModel(content(messages)))
         case Some(content) =>
           changeableRow(key, content(messages), href)
         case None =>
@@ -275,11 +291,11 @@ object CheckControllingBodyDetailsViewModel {
 
   private object MandatoryDetail {
 
-    def text(key: String, value: Option[String], href: String): MandatoryDetail =
-      MandatoryDetail(key, value.map(text => _ => Text(text)), href)
+    def text(key: String, value: Option[String], href: String, locked: Boolean = false): MandatoryDetail =
+      MandatoryDetail(key, value.map(text => _ => Text(text)), href, locked)
 
-    def date(key: String, value: Option[LocalDate], href: String): MandatoryDetail =
-      MandatoryDetail(key, value.map(date => _ => Text(shortDateDisplay(date))), href)
+    def date(key: String, value: Option[LocalDate], href: String, locked: Boolean = false): MandatoryDetail =
+      MandatoryDetail(key, value.map(date => _ => Text(shortDateDisplay(date))), href, locked)
   }
 
   private def changeableRow(key: String, content: Content, href: String, removeHref: Option[String] = None)(implicit
@@ -337,6 +353,7 @@ object CheckControllingBodyDetailsViewModel {
       faxNumber              = text(ControllingBodyFaxNumberPage),
       addEmailAddress        = answers.get(ControllingBodyAddEmailAddressYesNoPage),
       emailAddress           = text(ControllingBodyEmailPage),
+      hasContinued           = answers.get(ControllingBodyContinuePage).getOrElse(false),
       isSubmitted            = answers.get(ControllingBodySubmittedPage).getOrElse(false)
     )
   }
