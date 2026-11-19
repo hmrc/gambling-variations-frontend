@@ -16,14 +16,21 @@
 
 package pages.cancellation
 
-import pages.QuestionPage
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-import java.time.LocalDate
+class RegistrationCancellationCancelAgainYesNoPageSpec extends PlaySpec {
 
-case object CancelGroupRegistrationDatePage extends QuestionPage[LocalDate] {
+  "RegistrationCancellationCancelAgainYesNoPage" must {
 
-  override def path: JsPath = JsPath \ toString
+    "have the correct path" in {
 
-  override def toString: String = "cancelGroupRegistrationDate"
+      RegistrationCancellationCancelAgainYesNoPage.path mustEqual (JsPath \ "registrationCancellationCancelAgainYesNo")
+    }
+
+    "have the correct toString value" in {
+
+      RegistrationCancellationCancelAgainYesNoPage.toString mustEqual "registrationCancellationCancelAgainYesNo"
+    }
+  }
 }

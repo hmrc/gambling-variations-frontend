@@ -67,7 +67,7 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = Some(requiredAnswer.set(AddCorrespondenceAddressAdditionalInformationPage, true).success.value)
-      
+
       val application = applicationBuilder(userAnswers = userAnswers).build()
 
       running(application) {

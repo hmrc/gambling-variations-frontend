@@ -23,7 +23,7 @@ import java.time.LocalDate
 final case class BusinessDetails(
   mgdRegNumber: String,
   businessType: Option[BusinessType],
-  currentlyRegistered: Int,
+  currentlyRegistered: RegistrationStatus,
   groupReg: Boolean,
   dateOfRegistration: Option[LocalDate],
   businessPartnerNumber: Option[String],
