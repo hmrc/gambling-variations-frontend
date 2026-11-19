@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-package forms
+package forms.tradingdetails
 
-import forms.behaviours.OptionFieldBehaviours
-import models.BusinessTradeClass
+import forms.behaviours.BooleanFieldBehaviours
+import forms.tradingdetails.AssociatedRegistrationNumbersFormProvider
 import play.api.data.FormError
 
-class BusinessTradeClassFormProviderSpec extends OptionFieldBehaviours {
+class AssociatedRegistrationNumbersFormProviderSpec extends BooleanFieldBehaviours {
 
-  val form = new BusinessTradeClassFormProvider()()
+  val requiredKey = "associatedRegistrationNumbers.error.required"
+  val invalidKey = "error.boolean"
 
-  ".value" - {
+  val form = new AssociatedRegistrationNumbersFormProvider()()
 
-    val fieldName = "value"
-    val requiredKey = "businessTradeClass.error.required"
+  ".addAssociatedRegistrationNumber" - {
 
-    behave like optionsField[BusinessTradeClass](
+    val fieldName = "addAssociatedRegistrationNumber"
+
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = BusinessTradeClass.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(

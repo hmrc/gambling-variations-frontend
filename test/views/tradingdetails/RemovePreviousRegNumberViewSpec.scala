@@ -17,7 +17,7 @@
 package views.tradingdetails
 
 import base.SpecBase
-import forms.RemovePreviousRegNumberFormProvider
+import forms.tradingdetails.RemovePreviousRegNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

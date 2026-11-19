@@ -17,7 +17,7 @@
 package controllers.tradingdetails
 
 import controllers.actions.*
-import forms.SeasonalBusinessFormProvider
+import forms.tradingdetails.SeasonalBusinessFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.tradingdetails.{IsSeasonalBusinessPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}

@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package forms.tradingdetails
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.tradingdetails.RemoveAssociatedRegNumberFormProvider
 import play.api.data.FormError
 
-class RemovePreviousRegNumberFormProviderSpec extends BooleanFieldBehaviours {
+class RemoveAssociatedRegNumberFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "removePreviousRegNumber.error.required"
+  val requiredKey = "removeAssociatedRegNumber.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new RemovePreviousRegNumberFormProvider()()
+  val form = new RemoveAssociatedRegNumberFormProvider()()
 
   ".value" - {
 
