@@ -393,5 +393,9 @@ GET        /cancel-registration/submitted                       controllers.canc
 
 GET        /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = NormalMode)
+
 GET        /cancel-group-registration/change-no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
 POST       /cancel-group-registration/change-no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = CheckMode)
+
+GET        /cancel-group-registration/reviewing-cancellation-request   controllers.cancellation.RegistrationCancellationWarningController.onPageLoad(mode: Mode = NormalMode)
+POST       /cancel-group-registration/reviewing-cancellation-request   controllers.cancellation.RegistrationCancellationWarningController.onSubmit(mode: Mode = NormalMode)

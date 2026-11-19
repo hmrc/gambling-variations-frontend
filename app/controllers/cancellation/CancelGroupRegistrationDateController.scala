@@ -16,13 +16,13 @@
 
 package controllers.cancellation
 
-import connectors.GamblingConnector
 import controllers.actions.{AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import controllers.routes
 import forms.cancellation.CancelGroupRegistrationDateFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.cancellation.CancelGroupRegistrationDatePage
+import pages.DateOfRegistrationPage
+import pages.cancellation.{RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
@@ -41,7 +41,6 @@ class CancelGroupRegistrationDateController @Inject() (
   getData: DataRetrievalAction,
   requireData: BusinessDetailsDataRequiredAction,
   formProvider: CancelGroupRegistrationDateFormProvider,
-  gamblingConnector: GamblingConnector,
   clock: Clock,
   val controllerComponents: MessagesControllerComponents,
   view: CancelGroupRegistrationDateView
@@ -50,84 +49,81 @@ class CancelGroupRegistrationDateController @Inject() (
     with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData).async { implicit request =>
-      gamblingConnector
-        .getBusinessDetails(request.mgdRegNum)
-        .map { businessDetails =>
-          businessDetails.dateOfRegistration match {
-            case Some(registrationDate) =>
-              val maximumValidDate =
-                LocalDate.now(clock).plusDays(14)
+    (authorise andThen getData andThen requireData) { implicit request =>
+      val registrationAlreadyCancelled = request.userAnswers.get(RegistrationCancellationDeclarationPage).contains(true)
 
-              val firstInvalidDate =
-                maximumValidDate.plusDays(1)
+      if (registrationAlreadyCancelled) {
+        Redirect(controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url)
+      } else {
+        request.userAnswers
+          .get(DateOfRegistrationPage)
+          .map { dateOfRegistration =>
+            val maximumValidDate =
+              LocalDate.now(clock).plusDays(14)
 
-              val form =
-                formProvider(registrationDate, maximumValidDate)
+            val firstInvalidDate =
+              maximumValidDate.plusDays(1)
 
-              val middleOfDateRange =
-                middleDate(registrationDate, firstInvalidDate)
+            val form =
+              formProvider(dateOfRegistration, maximumValidDate)
 
-              val preparedForm =
-                request.userAnswers
-                  .get(CancelGroupRegistrationDatePage)
-                  .map(form.fill)
-                  .getOrElse(form)
+            val middleOfDateRange =
+              middleDate(dateOfRegistration, firstInvalidDate)
 
-              Ok(
-                view(preparedForm, mode, registrationDate, firstInvalidDate, middleOfDateRange)
-              )
+            val preparedForm =
+              request.userAnswers
+                .get(RegistrationCancellationDatePage)
+                .map(form.fill)
+                .getOrElse(form)
 
-            case None =>
-              systemErrorRedirect
+            Ok(
+              view(preparedForm, mode, dateOfRegistration, firstInvalidDate, middleOfDateRange)
+            )
           }
-        }
+          .getOrElse(systemErrorRedirect)
+      }
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      gamblingConnector
-        .getBusinessDetails(request.mgdRegNum)
-        .flatMap { businessDetails =>
-          businessDetails.dateOfRegistration match {
-            case Some(registrationDate) =>
-              val maximumValidDate =
-                LocalDate.now(clock).plusDays(14)
 
-              val firstInvalidDate =
-                maximumValidDate.plusDays(1)
+      request.userAnswers
+        .get(DateOfRegistrationPage)
+        .map { dateOfRegistration =>
+          val maximumValidDate =
+            LocalDate.now(clock).plusDays(14)
 
-              val form =
-                formProvider(registrationDate, maximumValidDate)
+          val firstInvalidDate =
+            maximumValidDate.plusDays(1)
 
-              val middleOfDateRange =
-                middleDate(registrationDate, firstInvalidDate)
+          val form =
+            formProvider(dateOfRegistration, maximumValidDate)
 
-              form
-                .bindFromRequest()
-                .fold(
-                  formWithErrors =>
-                    Future.successful(
-                      BadRequest(
-                        view(formWithErrors, mode, registrationDate, firstInvalidDate, middleOfDateRange)
-                      )
-                    ),
-                  value =>
-                    for {
-                      updatedAnswers <- Future.fromTry(
-                                          request.userAnswers.set(CancelGroupRegistrationDatePage, value)
-                                        )
-                      _ <- sessionRepository.set(updatedAnswers)
-                    } yield Redirect(
-                      navigator.nextPage(CancelGroupRegistrationDatePage, mode, updatedAnswers)
-                    )
+          val middleOfDateRange =
+            middleDate(dateOfRegistration, firstInvalidDate)
+
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors =>
+                Future.successful(
+                  BadRequest(
+                    view(formWithErrors, mode, dateOfRegistration, firstInvalidDate, middleOfDateRange)
+                  )
+                ),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(
+                                      request.userAnswers.set(RegistrationCancellationDatePage, value)
+                                    )
+                  _ <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(
+                  navigator.nextPage(RegistrationCancellationDatePage, mode, updatedAnswers)
                 )
+            )
 
-            case None =>
-              Future.successful(systemErrorRedirect)
-
-          }
         }
+        .getOrElse(Future.successful(systemErrorRedirect))
     }
 
   private def systemErrorRedirect: Result =
@@ -142,5 +138,4 @@ class CancelGroupRegistrationDateController @Inject() (
 
     startDate.plusDays(daysBetween / 2)
   }
-
 }
