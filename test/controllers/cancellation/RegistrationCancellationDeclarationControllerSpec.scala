@@ -45,14 +45,15 @@ class RegistrationCancellationDeclarationControllerSpec extends SpecBase with Mo
       .success
       .value
 
-  lazy val registrationCancellationDeclarationRoute =
+  lazy val registrationCancellationDeclarationRoute: String =
     controllers.cancellation.routes.RegistrationCancellationDeclarationController.onPageLoad().url
 
   "RegistrationCancellationDeclaration Controller" - {
 
-    "must return OK and the correct view for a GET" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+    "given is not a group, it must return OK and the correct view for a GET" in {
+      val isGroup: Boolean = false
+      val ua = emptyUserAnswers.set(GroupMemberPage, isGroup).success.value
+      val application = applicationBuilder(userAnswers = Some(ua)).build()
 
       running(application) {
         val request = FakeRequest(GET, registrationCancellationDeclarationRoute)
@@ -62,7 +63,24 @@ class RegistrationCancellationDeclarationControllerSpec extends SpecBase with Mo
         val view = application.injector.instanceOf[RegistrationCancellationDeclarationView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+        contentAsString(result) mustEqual view(isGroup)(request, messages(application)).toString
+      }
+    }
+
+    "given is a group, it must return OK and render the correct view for a GET" in {
+      val isGroup: Boolean = true
+      val ua = emptyUserAnswers.set(GroupMemberPage, isGroup).success.value
+      val application = applicationBuilder(userAnswers = Some(ua)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, registrationCancellationDeclarationRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[RegistrationCancellationDeclarationView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(isGroup)(request, messages(application)).toString
       }
     }
 

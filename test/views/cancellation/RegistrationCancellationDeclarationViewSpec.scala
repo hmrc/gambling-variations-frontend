@@ -36,7 +36,9 @@ class RegistrationCancellationDeclarationViewSpec extends SpecBase {
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val html = view()(request, messages)
+    def isGroup: Boolean
+
+    private val html = view(isGroup)(request, messages)
 
     val doc: Document = Jsoup.parse(html.body)
 
@@ -44,7 +46,43 @@ class RegistrationCancellationDeclarationViewSpec extends SpecBase {
 
   "RegistrationCancellationDeclarationView" - {
 
-    "must render page correctly" in new Setup {
+    "must render page correctly for groups" in new Setup {
+
+      override def isGroup: Boolean = true
+
+      doc.title must include(
+        messages("registrationCancellationDeclaration.title")
+      )
+
+      doc.select("span").select(".govuk-caption-l").text() must include(
+        messages("cancelGroupRegistrationDate.caption")
+      )
+
+      doc.select("h1").text() must include(
+        messages("registrationCancellationDeclaration.heading")
+      )
+
+      doc.select("p").select(".govuk-body").text() must include(messages("declaration.group.p1"))
+      doc.select("li").text()                      must include(messages("declaration.group.bp1"))
+      doc.select("li").text()                      must include(messages("declaration.group.bp2"))
+      doc.select("li").text()                      must include(messages("declaration.group.bp3"))
+      doc.select("li").text()                      must include(messages("declaration.group.bp4"))
+      doc.select("li").text()                      must include(messages("declaration.group.bp5"))
+      doc.select("li").text()                      must include(messages("declaration.group.bp6"))
+      doc.select("li").text()                      must include(messages("declaration.group.bp7"))
+      doc.select("li").text()                      must include(messages("declaration.group.bp8"))
+
+      doc.select("p").select(".govuk-body").text() must include(messages("declaration.group.link"))
+
+      doc.select("p").select(".govuk-body").text() must include(messages("declaration.group.p2"))
+
+      doc.select("button.govuk-button").text must include(
+        messages("registrationCancellationDeclaration.submit")
+      )
+
+    }
+
+    "must render page correctly for non groups" in new Setup {
 
       doc.title must include(
         messages("registrationCancellationDeclaration.title")
@@ -66,6 +104,7 @@ class RegistrationCancellationDeclarationViewSpec extends SpecBase {
         messages("registrationCancellationDeclaration.submit")
       )
 
+      override def isGroup: Boolean = false
     }
 
   }
