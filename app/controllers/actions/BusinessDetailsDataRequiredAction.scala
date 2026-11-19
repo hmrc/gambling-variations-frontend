@@ -139,6 +139,11 @@ class BusinessDetailsDataRequiredActionImpl @Inject() (
                           GroupMemberPage,
                           details.groupReg
                         )
+      updatedAnswers <- updatedAnswers.set(
+                          CurrentlyRegisteredPage,
+                          details.currentlyRegistered
+                        )
+
     } yield updatedAnswers
   }
 }
