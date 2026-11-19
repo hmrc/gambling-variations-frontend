@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.GamblingConnector
 import controllers.routes
 import forms.partnerdetails.PartnerDateOfJoiningFormProvider
-import models.{BusinessDetails, BusinessType, CheckMode, NormalMode}
+import models.{BusinessDetails, BusinessType, CheckMode, NormalMode, RegistrationStatus}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
@@ -78,7 +78,7 @@ class PartnerDateOfJoiningControllerSpec extends SpecBase with MockitoSugar with
     BusinessDetails(
       mgdRegNumber          = mgdRegNum,
       businessType          = Some(BusinessType.Corporatebody),
-      currentlyRegistered   = 1,
+      currentlyRegistered   = RegistrationStatus.Cancelled,
       groupReg              = false,
       dateOfRegistration    = Some(registrationDate),
       businessPartnerNumber = Some("XB1234567890"),
