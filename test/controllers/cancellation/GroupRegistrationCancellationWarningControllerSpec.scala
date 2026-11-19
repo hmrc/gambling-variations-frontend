@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import base.SpecBase
 import models.{BusinessType, UserAnswers}
-import pages.{BusinessTypePage, GroupMemberPage}
+import pages.{BusinessTypePage, CurrentlyRegisteredPage, GroupMemberPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.cancellation.GroupRegistrationCancellationWarningView
@@ -31,6 +31,9 @@ class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
       .success
       .value
       .set(GroupMemberPage, false)
+      .success
+      .value
+      .set(CurrentlyRegisteredPage, 1)
       .success
       .value
 
