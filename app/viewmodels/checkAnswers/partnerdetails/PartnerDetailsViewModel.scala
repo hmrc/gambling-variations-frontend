@@ -70,6 +70,10 @@ object PartnerDetailsViewModel {
      * paginatedPartnerNumbers.size = 10
      * allPartnerNumbers.size       = 100
      */
+
+    val completedNewPartners =
+      PartnerUtils.getCompletedNewPartners(userAnswers)
+
     val activePartnerCount =
       allPartnerNumbers.count { partnerNumber =>
 
@@ -107,6 +111,9 @@ object PartnerDetailsViewModel {
 
           } yield {
 
+            val isNewPartner =
+              completedNewPartners.contains(partnerNumber)
+
             val dateOfJoining =
               userAnswers.get(
                 PartnerDetailsDateOfJoiningPage(partnerNumber)
@@ -127,6 +134,11 @@ object PartnerDetailsViewModel {
 
                 case None =>
                   dateOfJoining match {
+
+                    case Some(_) if isNewPartner =>
+                      messages(
+                        "partnerDetails.status.dueToJoin"
+                      )
 
                     case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
                       messages(
@@ -156,6 +168,11 @@ object PartnerDetailsViewModel {
 
                 case None =>
                   dateOfJoining match {
+
+                    case Some(joiningDate) if isNewPartner =>
+                      Some(
+                        joiningDate.format(dateFormatter)
+                      )
 
                     case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
                       Some(

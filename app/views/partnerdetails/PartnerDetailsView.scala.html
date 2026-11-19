@@ -41,7 +41,7 @@
     pageTitle = title(
         form,
         messages("partnerDetails.title"),
-        if(totalPages > 0) then Some(messages("site.pagination.page", page, totalPages) + " " + messages("changeRegistrationDetails.caption")) else None
+        if(totalPages > 1) then Some(messages("site.pagination.page", page, totalPages) + " " + messages("changeRegistrationDetails.caption")) else None
     ),
     isFullWidth = true
 ) {
@@ -182,7 +182,10 @@
             </tbody>
         </table>
 
-        @pageNavigator(paginatedViewModel)
+        @if(totalPages > 1) {
+         @pageNavigator(paginatedViewModel)
+        }
+
         @if(viewModel.addAnotherPartner) {
 
         @govukRadios(
