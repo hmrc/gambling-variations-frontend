@@ -23,6 +23,7 @@ import models.CorrespondenceChangeAddrOption.*
 import models.cancellation.ReasonForCancellation
 import models.controllingbody.ControllingBodyChangeOption.*
 import models.licencespremises.LicencesPremisesAnswers.*
+import navigation.ControllingBodyTypeChangeNavigator.typeChangeRoutes
 import navigation.PartnerDetailsNavigator.{partnerDetailsCheckRoutes, partnerDetailsNormalRoutes}
 import pages.*
 import pages.businessaddress.*
@@ -296,7 +297,7 @@ class Navigator @Inject() () {
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
     mode match {
       case NormalMode =>
-        combinedNormalRoutes(page)(userAnswers)
+        typeChangeRoutes(userAnswers).applyOrElse(page, combinedNormalRoutes(_)(userAnswers))
       case CheckMode =>
         combinedCheckRouteMap(page)(userAnswers)
     }

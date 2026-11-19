@@ -19,14 +19,14 @@ package controllers.controllingbody
 import base.SpecBase
 import controllers.controllingbody.routes.ControllingBodyBusinessTypeController
 import forms.controllingbody.ControllingBodyBusinessTypeFormProvider
-import models.BusinessType.{Corporatebody, Soleproprietor}
+import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership, Partnership, Soleproprietor}
 import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import org.mockito.ArgumentCaptor
-import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodySubmittedPage}
+import pages.controllingbody.{ControllingBodyBusinessPartnerNumberPage, ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodyPreviousBusinessTypePage, ControllingBodySubmittedPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -87,6 +87,31 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
       )
     )
   )
+
+  private def submit(answers: UserAnswers, businessType: BusinessType): UserAnswers = {
+    val mockSessionRepository = mock[SessionRepository]
+    when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+    val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+    val application =
+      applicationBuilder(userAnswers = Some(answers))
+        .overrides(
+          bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+          bind[SessionRepository].toInstance(mockSessionRepository)
+        )
+        .build()
+
+    running(application) {
+      val request =
+        FakeRequest(POST, ControllingBodyBusinessTypeController.onSubmit().url)
+          .withFormUrlEncodedBody(("value", businessType.toString))
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+      verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+      savedAnswersCaptor.getValue
+    }
+  }
 
   "ControllingBodyBusinessType Controller" - {
 
@@ -159,6 +184,41 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
           savedAnswersCaptor.getValue.get(ControllingBodySubmittedPage).value mustEqual true
           savedAnswersCaptor.getValue.get(ControllingBodyChangesPage).value mustEqual true
         }
+      }
+
+      "must record the type of the existing controlling body when it is changed" in {
+        val saved = submit(userAnswers, LimitedLiabilityPartnership)
+
+        saved.get(ControllingBodyBusinessTypePage).value mustEqual LimitedLiabilityPartnership
+        saved.get(ControllingBodyPreviousBusinessTypePage).value mustEqual Soleproprietor
+      }
+
+      "must keep the type recorded at the first change when the type is changed again" in {
+        val alreadyChanged = userAnswers
+          .set(ControllingBodyBusinessTypePage, Corporatebody)
+          .success
+          .value
+          .set(ControllingBodyPreviousBusinessTypePage, Partnership)
+          .success
+          .value
+
+        val saved = submit(alreadyChanged, LimitedLiabilityPartnership)
+
+        saved.get(ControllingBodyPreviousBusinessTypePage).value mustEqual Partnership
+      }
+
+      "must not record a previous type when the same type is submitted" in {
+        val saved = submit(userAnswers, Soleproprietor)
+
+        saved.get(ControllingBodyPreviousBusinessTypePage) mustBe None
+      }
+
+      "must not record a previous type when there is no existing controlling body" in {
+        val firstTimeSetup = userAnswers.remove(ControllingBodyBusinessPartnerNumberPage).success.value
+
+        val saved = submit(firstTimeSetup, LimitedLiabilityPartnership)
+
+        saved.get(ControllingBodyPreviousBusinessTypePage) mustBe None
       }
 
       "must return BAD_REQUEST and errors when invalid data is submitted" in {
