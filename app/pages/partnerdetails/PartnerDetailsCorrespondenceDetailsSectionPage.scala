@@ -16,11 +16,11 @@
 
 package pages.partnerdetails
 
-import models.CorrespondenceDetails
+import models.ContactDetails
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
-case class PartnerDetailsCorrespondenceDetailsSectionPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[CorrespondenceDetails] {
+case class PartnerDetailsCorrespondenceDetailsSectionPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[ContactDetails] {
 
   override val path: JsPath = businessNumberOrIndex match {
     case key: String => ExistingPartnerDetailsSection.path \ key \ toString

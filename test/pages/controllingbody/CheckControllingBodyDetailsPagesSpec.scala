@@ -17,7 +17,7 @@
 package pages.controllingbody
 
 import base.SpecBase
-import models.{Address, ContactNumber, CorrespondenceDetails}
+import models.{Address, ContactDetails, ContactNumber}
 import play.api.libs.json.JsPath
 
 class CheckControllingBodyDetailsPagesSpec extends SpecBase {
@@ -34,7 +34,7 @@ class CheckControllingBodyDetailsPagesSpec extends SpecBase {
 
     "must read the details that the data required action stores in the correspondence section" in {
       val address = Address("Address 1", Some("Address 2"), None, None, Some("AA1 1AA"), Some("Spain"))
-      val details = CorrespondenceDetails(
+      val details = ContactDetails(
         mgdRegNumber          = mgdRegNum,
         nameLine1             = None,
         nameLine2             = None,
@@ -56,7 +56,7 @@ class CheckControllingBodyDetailsPagesSpec extends SpecBase {
     }
 
     "must be absent when the correspondence section has no such details" in {
-      val details = CorrespondenceDetails(mgdRegNum, None, None, None, None, None, None, None, None)
+      val details = ContactDetails(mgdRegNum, None, None, None, None, None, None, None, None)
 
       val answers = emptyUserAnswers.set(ControllingBodyCorrespondenceSectionPage, details).success.value
 
