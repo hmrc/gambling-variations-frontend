@@ -17,7 +17,7 @@
 package forms.controllingbody
 
 import forms.behaviours.StringFieldBehaviours
-import forms.controllingbody.ControllingBodyNINumberFormProvider.{invalidCharsKey, invalidFormatKey, ninoCharsRegex, requiredKey}
+import forms.controllingbody.ControllingBodyNINumberFormProvider.{invalidCharsKey, invalidFormatKey, requiredKey}
 import play.api.data.{Form, FormError}
 
 class ControllingBodyNINumberFormProviderSpec extends StringFieldBehaviours {

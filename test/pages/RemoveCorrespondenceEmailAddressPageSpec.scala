@@ -30,7 +30,7 @@ class RemoveCorrespondenceEmailAddressPageSpec extends AnyFreeSpec with Matchers
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "removeCorrespondenceEmailAddress"
+      val expectedPath: JsPath = JsPath \ "correspondenceDetailsSection" \ "removeCorrespondenceEmailAddress"
       RemoveCorrespondenceEmailAddressPage.path mustBe expectedPath
     }
   }

@@ -16,12 +16,13 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import forms.FaxNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import pages.*
-import pages.correspondencedetails.{CorrespondenceDetailsSectionPage, CorrespondenceFaxNumberPage}
+import pages.correspondencedetails.{CorrespondenceDetailsSection, CorrespondenceFaxNumberPage}
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.correspondencedetails.CorrespondenceFaxNumberView
@@ -33,11 +34,7 @@ class CorrespondenceFaxNumberControllerSpec extends SpecBase {
 
   private val validAnswer = "01234567890"
 
-  private val baseAnswers =
-    emptyUserAnswers
-      .set(CorrespondenceDetailsSectionPage, mgdRegNum)
-      .success
-      .value
+  private val baseAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   private lazy val onPageLoadRoute =
     controllers.correspondencedetails.routes.CorrespondenceFaxNumberController.onPageLoad().url

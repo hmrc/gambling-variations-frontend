@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.correspondencedetails.RemoveCorrespondenceDetailsYesNoFormProvider
 import models.{NormalMode, UserAnswers}
@@ -24,8 +24,9 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceDetailsSectionPage, RemoveCorrespondenceDetailsYesNoPage}
+import pages.correspondencedetails.{CorrespondenceDetailsSection, RemoveCorrespondenceDetailsYesNoPage}
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -44,11 +45,7 @@ class RemoveCorrespondenceDetailsYesNoControllerSpec extends SpecBase with Mocki
   private lazy val removeCorrespondenceDetailsYesNoRoute =
     controllers.correspondencedetails.routes.RemoveCorrespondenceDetailsYesNoController.onPageLoad().url
 
-  private val validUserAnswers =
-    emptyUserAnswers
-      .set(CorrespondenceDetailsSectionPage, userAnswersId)
-      .success
-      .value
+  private val validUserAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "RemoveCorrespondenceDetailsYesNo Controller" - {
 

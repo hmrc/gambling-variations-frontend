@@ -16,11 +16,12 @@
 
 package pages
 
+import pages.correspondencedetails.CorrespondenceDetailsSection
 import play.api.libs.json.JsPath
 
 case object IsleMOrChannelFlagPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = CorrespondenceDetailsSection.path \ toString
 
   override def toString: String = "iomOrCiFlag"
 }

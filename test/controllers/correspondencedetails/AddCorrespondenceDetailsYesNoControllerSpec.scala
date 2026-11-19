@@ -16,15 +16,16 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import forms.correspondencedetails.AddCorrespondingDetailsYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{AddCorrespondingDetailsYesNoPage, CorrespondenceDetailsSectionPage}
+import pages.correspondencedetails.{AddCorrespondingDetailsYesNoPage, CorrespondenceDetailsSection}
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -44,10 +45,7 @@ class AddCorrespondenceDetailsYesNoControllerSpec extends SpecBase with MockitoS
     controllers.correspondencedetails.routes.AddCorrespondenceDetailsYesNoController.onPageLoad().url
 
   private val userAnswersWithCorrespondenceDetails =
-    emptyUserAnswers
-      .set(CorrespondenceDetailsSectionPage, userAnswersId)
-      .success
-      .value
+    LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "AddCorrespondingDetailsYesNo Controller" - {
 

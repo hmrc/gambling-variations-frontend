@@ -44,7 +44,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
       index.toString -> f"XYZ Consulting-$index%03d"
     }
 
-  private val paginationHelper =
+  private lazy val paginationHelper =
     PaginationHelper(
       1,
       businessNumbers = Seq(
@@ -52,14 +52,14 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
       ).toIndexedSeq
     )
 
-  private val paginationHelperMaxSizePage1 =
+  private lazy val paginationHelperMaxSizePage1 =
     PaginationHelper(
       100,
       1,
       existingPartners
     )
 
-  private val paginationHelperMaxSizePage2 =
+  private lazy val paginationHelperMaxSizePage2 =
     PaginationHelper(
       100,
       2,

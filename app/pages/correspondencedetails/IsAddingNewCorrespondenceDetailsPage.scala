@@ -16,12 +16,12 @@
 
 package pages.correspondencedetails
 
-import pages.QuestionPage
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
-case object IsAddingNewCorrespondenceDetailsPage extends QuestionPage[Boolean] {
+case object IsAddingNewCorrespondenceDetailsPage extends FlagPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = CorrespondenceDetailsSection.path \ toString
 
   override def toString: String = "isAddingNewCorrespondenceDetails"
 }

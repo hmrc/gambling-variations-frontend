@@ -30,7 +30,7 @@ class RemoveAdditionalCorrespondenceNameYesNoPageSpec extends AnyFreeSpec with M
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "removeAdditionalCorrespondenceNameYesNo"
+      val expectedPath: JsPath = JsPath \ "correspondenceDetailsSection" \ "removeAdditionalCorrespondenceNameYesNo"
 
       RemoveAdditionalCorrespondenceNameYesNoPage.path mustBe expectedPath
     }

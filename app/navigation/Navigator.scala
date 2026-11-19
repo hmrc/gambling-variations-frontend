@@ -590,7 +590,7 @@ class Navigator @Inject() () {
       .get(ControllingBodyChangeScreenerPage)
       .map {
         case EditDetails => controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
-        case ProvideNew  => controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+        case ProvideNew  => controllers.controllingbody.routes.ControllingBodyNotProvidedYesNoController.onPageLoad()
         case KeepSame    => routes.ChangeRegistrationDetailsController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())

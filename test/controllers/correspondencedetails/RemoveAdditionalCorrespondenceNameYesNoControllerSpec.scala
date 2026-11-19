@@ -16,15 +16,16 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.correspondencedetails.RemoveAdditionalCorrespondenceNameYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceAdditionalNamePage, CorrespondenceDetailsSectionPage, RemoveAdditionalCorrespondenceNameYesNoPage}
+import pages.correspondencedetails.{CorrespondenceAdditionalNamePage, CorrespondenceDetailsSection, RemoveAdditionalCorrespondenceNameYesNoPage}
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -41,19 +42,13 @@ class RemoveAdditionalCorrespondenceNameYesNoControllerSpec extends SpecBase wit
     controllers.correspondencedetails.routes.RemoveAdditionalCorrespondenceNameYesNoController.onPageLoad().url
 
   private val userAnswersWithAdditionalName =
-    emptyUserAnswers
-      .set(CorrespondenceDetailsSectionPage, userAnswersId)
-      .success
-      .value
+    LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
       .set(CorrespondenceAdditionalNamePage, "Name 2")
       .success
       .value
 
   private val userAnswersWithoutAdditionalName =
-    emptyUserAnswers
-      .set(CorrespondenceDetailsSectionPage, userAnswersId)
-      .success
-      .value
+    LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "RemoveAdditionalCorrespondenceNameYesNo Controller" - {
 

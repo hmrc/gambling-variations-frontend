@@ -17,7 +17,6 @@
 package controllers.businesscontactdetails
 
 import base.SpecBase
-import controllers.businessname.LoadedBusinessName
 import controllers.{LoadedBusinessContactDetails, routes}
 import forms.RemoveFaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
@@ -27,7 +26,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.GroupMemberPage
-import pages.contactdetails.{BusinessContactDetailsSection, BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, ContactDetailsChangesPage, RemoveFaxNumberPage}
+import pages.contactdetails.*
 import play.api.inject.bind
 import play.api.libs.json.{JsNull, Json}
 import play.api.mvc.Call

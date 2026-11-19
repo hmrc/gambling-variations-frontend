@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.correspondencedetails.RemoveCorrespondenceFaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
@@ -25,9 +25,9 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, CorrespondenceFaxNumberPage, RemoveCorrespondenceFaxNumberPage}
+import pages.correspondencedetails.*
 import play.api.inject.bind
-import play.api.libs.json.Json
+import play.api.libs.json.{JsNull, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -42,14 +42,14 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
 
   private val correspondenceFaxNumber = "123456789"
 
-  private val baseAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        CorrespondenceFaxNumberPage.toString -> correspondenceFaxNumber,
-        "correspondenceDetailsSection"       -> Json.obj("mgdRegNum" -> mgdRegNum)
-      )
-    )
+  private val baseAnswers = LoadedSectionDetails(
+    userAnswersId,
+    Json.obj(
+      "correspondenceDetailsSection" ->
+        Json.obj(CorrespondenceFaxNumberPage.toString -> correspondenceFaxNumber)
+    ),
+    CorrespondenceDetailsSection
+  )
 
   val formProvider = new RemoveCorrespondenceFaxNumberFormProvider()
   val form = formProvider()
@@ -149,6 +149,47 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
       }
     }
 
+    "must assert the removal, so the fax number loaded from backend does not show again" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor =
+        ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeCorrespondenceFaxNumberRoute)
+            .withFormUrlEncodedBody("value" -> "true")
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers =
+          savedAnswersCaptor.getValue
+
+        savedAnswers.get(CorrespondenceFaxNumberPage) mustBe None
+        savedAnswers.original.get[String](CorrespondenceFaxNumberPage.path).value mustEqual correspondenceFaxNumber
+        savedAnswers.changes(CorrespondenceDetailsSection) mustBe Json.obj(
+          "correspondenceDetailsSection" -> Json.obj(CorrespondenceFaxNumberPage.toString -> JsNull)
+        )
+      }
+    }
+
     "must keep CorrespondenceFaxNumberPage when user selects no" in {
 
       val mockSessionRepository = mock[SessionRepository]
@@ -195,16 +236,7 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
 
     "must redirect to SystemError on GET when CorrespondenceFaxNumberPage is missing" in {
 
-      val userAnswers =
-        UserAnswers(
-          userAnswersId,
-          Json.obj(
-            "correspondenceDetailsSection" ->
-              Json.obj(
-                "mgdRegNum" -> mgdRegNum
-              )
-          )
-        )
+      val userAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -226,16 +258,7 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
 
     "must redirect to SystemError on POST when CorrespondenceFaxNumberPage is missing" in {
 
-      val userAnswers =
-        UserAnswers(
-          userAnswersId,
-          Json.obj(
-            "correspondenceDetailsSection" ->
-              Json.obj(
-                "mgdRegNum" -> mgdRegNum
-              )
-          )
-        )
+      val userAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -277,7 +300,7 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
 
         val request =
           FakeRequest(POST, removeCorrespondenceFaxNumberRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody("value" -> "true")
 
         val result = route(application, request).value
 
