@@ -44,12 +44,12 @@ class RegistrationCancellationWarningController @Inject() (
   view: RegistrationCancellationWarningView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with CancellationNavigator
+    with CancellationEntrypointDecider
     with I18nSupport {
 
   // TODO extra check
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    checkScreen(request.userAnswers, Cancel.Warning) {
+    checkScreen(request.userAnswers, CurrentScreen.Warning) {
       request.userAnswers
         .get(RegistrationCancellationDatePage)
         .fold(Redirect(routes.SystemErrorController.onPageLoad())) { cancellationDate =>
