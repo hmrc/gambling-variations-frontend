@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package forms
+package forms.contactdetails
 
-import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
 import play.api.data.validation.{Constraint, Invalid, Valid}
+
+import javax.inject.Inject
 
 class FaxNumberFormProvider @Inject() extends Mappings {
 

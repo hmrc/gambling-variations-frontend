@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package forms
+package forms.contactdetails
 
 import forms.behaviours.StringFieldBehaviours
+import forms.contactdetails.FaxNumberFormProvider
 import org.scalacheck.Gen
 import play.api.data.FormError
 

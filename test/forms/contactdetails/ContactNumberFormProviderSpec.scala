@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package forms
+package forms.contactdetails
 
 import forms.behaviours.StringFieldBehaviours
+import forms.contactdetails.ContactNumberFormProvider
 import org.scalacheck.Gen
 
 class ContactNumberFormProviderSpec extends StringFieldBehaviours {

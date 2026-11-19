@@ -18,7 +18,7 @@ package controllers.controllingbody
 
 import base.SpecBase
 import controllers.controllingbody.routes.ControllingBodyContactDetailsController
-import forms.ContactNumberFormProvider
+import forms.contactdetails.ContactNumberFormProvider
 import models.{ContactNumber, CorrespondenceDetails, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

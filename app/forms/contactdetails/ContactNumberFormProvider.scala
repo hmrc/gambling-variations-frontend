@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package forms
+package forms.contactdetails
 
-import javax.inject.Inject
 import forms.mappings.Mappings
 import models.ContactNumber
 import play.api.data.Form
 import play.api.data.Forms.*
 import play.api.data.validation.*
+
+import javax.inject.Inject
 
 class ContactNumberFormProvider @Inject() extends Mappings {
 

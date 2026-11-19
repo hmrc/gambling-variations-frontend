@@ -264,7 +264,7 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
   }
 
   "onLanding" - {
-    def landingRequest(regNumber: String) =
+    def landingRequest(regNumber: Strin g) =
       FakeRequest(GET, routes.ChangeRegistrationDetailsController.onLanding(regNumber).url)
 
     "must redirect an organisation to the page and store the regNumber" in {

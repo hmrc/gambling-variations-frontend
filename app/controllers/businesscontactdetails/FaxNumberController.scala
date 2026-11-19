@@ -18,7 +18,7 @@ package controllers.businesscontactdetails
 
 import controllers.actions.*
 import controllers.routes
-import forms.FaxNumberFormProvider
+import forms.contactdetails.FaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.GroupMemberPage

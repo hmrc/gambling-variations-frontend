@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import controllers.actions.*
-import forms.FaxNumberFormProvider
+import forms.contactdetails.FaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.partnerdetails.{PartnerDetailsChangePartnerFaxNumberPage, PartnerDetailsCorrespondenceFaxNumberPage}

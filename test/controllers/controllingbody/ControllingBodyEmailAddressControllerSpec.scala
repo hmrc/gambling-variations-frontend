@@ -17,7 +17,7 @@
 package controllers.controllingbody
 
 import base.SpecBase
-import forms.EmailAddressFormProvider
+import forms.contactdetails.EmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

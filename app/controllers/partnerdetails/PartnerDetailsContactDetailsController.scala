@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import controllers.actions.*
-import forms.ContactNumberFormProvider
+import forms.contactdetails.ContactNumberFormProvider
 import models.{ContactNumber, Mode}
 import navigation.Navigator
 import pages.partnerdetails.PartnerDetailsContactNumberPage
