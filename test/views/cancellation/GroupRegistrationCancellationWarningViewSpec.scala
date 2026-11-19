@@ -34,7 +34,7 @@ class GroupRegistrationCancellationWarningViewSpec extends SpecBase {
 
     val request: play.api.mvc.Request[?] = FakeRequest()
 
-    val gamblingManagementHomeUrl = "http://localhost:10400/gambling/"
+    val gamblingManagementHomeUrl = "http://localhost:10400/manage-gambling-tax/manage-your-machine-games-duty/"
 
     val messages: Messages =
       app.injector
