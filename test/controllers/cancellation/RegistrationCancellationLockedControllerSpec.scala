@@ -17,6 +17,8 @@
 package controllers.cancellation
 
 import base.SpecBase
+import models.{BusinessType, NormalMode, RegistrationStatus}
+import pages.{BusinessTypePage, GroupMemberPage, RegistrationStatusPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.cancellation.RegistrationCancellationLockedView
@@ -27,7 +29,20 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers =
+        Some(
+          emptyUserAnswers
+            .setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled)
+            .success
+            .value
+            .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
+            .success
+            .value
+            .setOriginal(GroupMemberPage, true)
+            .success
+            .value
+        )
+      ).build()
 
       running(application) {
         val request = FakeRequest(GET, routes.RegistrationCancellationLockedController.onPageLoad().url)
@@ -37,7 +52,36 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[RegistrationCancellationLockedView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+        contentAsString(result) mustEqual view(NormalMode, "http://localhost:10400/gambling/")(request, messages(application)).toString
+      }
+    }
+
+    "must redirect and show correct view for a GET when RegistrationStatus is not cancelled" in {
+
+      val application = applicationBuilder(userAnswers =
+        Some(
+          emptyUserAnswers
+            .setOriginal(RegistrationStatusPage, RegistrationStatus.Registered)
+            .success
+            .value
+            .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
+            .success
+            .value
+            .setOriginal(GroupMemberPage, true)
+            .success
+            .value
+        )
+      ).build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.RegistrationCancellationLockedController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
       }
     }
   }

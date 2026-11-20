@@ -17,7 +17,7 @@
 package controllers.cancellation
 
 import base.SpecBase
-import models.{BusinessType, UserAnswers}
+import models.{BusinessType, NormalMode, UserAnswers}
 import pages.cancellation.RegistrationCancellationConfirmationReferencePage
 import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.test.FakeRequest
@@ -56,7 +56,7 @@ class RegistrationCancellationConfirmationControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[RegistrationCancellationConfirmationView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view("http://localhost:10400/gambling/", cancellationConfirmationRefNumber)(
+        contentAsString(result) mustEqual view(NormalMode, "http://localhost:10400/gambling/", cancellationConfirmationRefNumber)(
           request,
           messages(application)
         ).toString

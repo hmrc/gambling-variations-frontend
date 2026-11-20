@@ -18,15 +18,13 @@
 
 @this(
         layout: templates.Layout,
-        formHelper: FormWithCSRF,
-        govukButton: GovukButton,
         h1:H1,
         p:Paragraph,
         caption: Caption,
         paragraphWithLink: ParagraphMessageWithLink,
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(mode: Mode, gamblingHomeUrl: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("registrationCancellationLocked.title"), Some(messages("registrationCancellationLocked.caption")))) {
 
@@ -38,6 +36,6 @@
         None,
         messages("registrationCancellationLocked.link"),
         None,
-        "LINK"
+        gamblingHomeUrl
     )
 }

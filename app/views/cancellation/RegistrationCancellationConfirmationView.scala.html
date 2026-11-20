@@ -24,7 +24,7 @@
     link: Link
 )
 
-@(gamblingManagementHomeUrl: String, referenceNumber: String)(implicit request: Request[_], messages: Messages)
+@(mode: Mode, gamblingManagementHomeUrl: String, referenceNumber: String)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = titleNoForm(messages("registrationCancellationConfirmation.panel.title"), Some(messages("registrationCancellationConfirmation.title"))),
