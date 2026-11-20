@@ -1804,7 +1804,8 @@ cancelGroupRegistrationDate.change.hidden = When is this group no longer liable 
 
 cancelGroupRegistrationWarning.title = We are reviewing your cancellation request
 cancelGroupRegistrationWarning.heading = We are reviewing your cancellation request
-cancelGroupRegistrationWarning.caption = Cancel group registration
-cancelGroupRegistrationWarning.legend = You submitted a request to cancel this group''s registration on {0}. We will review this request within 48 hours.
 cancelGroupRegistrationWarning.hint = Do you want to submit a new cancellation request?
 cancelGroupRegistrationWarning.error.required = Select yes to submit a new cancellation request
+
+cancelGroupRegistrationWarning.legend = You submitted a request to cancel this group''s registration on {0}. We will review this request within 48 hours.
+cancelRegistrationWarning.legend = You submitted a request to cancel your registration on {0}. We will review this request within 48 hours.
