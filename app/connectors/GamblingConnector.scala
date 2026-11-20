@@ -18,7 +18,7 @@ package connectors
 
 import models.controllingbody.ControllingBodyDetails
 import models.licencespremises.LicencesAndPremises
-import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, ClientListStatus, CorrespondenceDetails, EntityName, GamblingReturnPeriods, MgdCertificate, MgdTradeDetails, PartnersDetails}
+import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, ClientListStatus, ContactDetails, EntityName, GamblingReturnPeriods, MgdCertificate, MgdTradeDetails, PartnersDetails}
 import play.api.Logging
 import play.api.http.Status.OK
 import play.api.libs.json.JsValue
@@ -222,7 +222,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
       }
   }
 
-  def getCorrespondenceDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[CorrespondenceDetails] = {
+  def getCorrespondenceDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[ContactDetails] = {
     http
       .get(url"$baseUrl/correspondence-details/mgd/$mgdRegNumber")
       .execute[HttpResponse]
@@ -231,7 +231,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
 
           case OK =>
             response.json
-              .validate[CorrespondenceDetails]
+              .validate[ContactDetails]
               .fold(
                 errors => throw new RuntimeException(s"Invalid JSON Mgd Trade Details: $errors"),
                 details => details

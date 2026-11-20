@@ -18,7 +18,7 @@ package controllers.actions
 
 import connectors.GamblingConnector
 import controllers.routes
-import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName, UserAnswers}
+import models.{Address, ContactDetails, ContactNumber, SoleProprietorName, UserAnswers}
 import models.controllingbody.ControllingBodyDetails
 import models.requests.{DataRequest, OptionalDataRequest}
 import pages.controllingbody.*
@@ -83,7 +83,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
           Some(ContactNumber(phoneNumber, mobilePhoneNumber))
       }
 
-    val correspondenceDetails = CorrespondenceDetails(
+    val correspondenceDetails = ContactDetails(
       mgdRegNumber          = details.mgdRegNumber,
       nameLine1             = None,
       nameLine2             = None,

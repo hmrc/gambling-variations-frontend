@@ -39,8 +39,8 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
     dateOfIncorporation    = Some(LocalDate.parse("2020-03-01")),
     countryOfIncorporation = Some("GB"),
     foreignCorporateRef    = Some("FCR-987654"),
-    correspondenceDetails = Some(
-      CorrespondenceDetails(
+    contactDetails = Some(
+      ContactDetails(
         mgdRegNumber = "XWM00000001762",
         nameLine1    = None,
         nameLine2    = None,
@@ -91,8 +91,8 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
     dateOfIncorporation    = Some(LocalDate.parse("2020-03-01")),
     countryOfIncorporation = Some("GB"),
     foreignCorporateRef    = Some("FCR-987654"),
-    correspondenceDetails = Some(
-      CorrespondenceDetails(
+    contactDetails = Some(
+      ContactDetails(
         mgdRegNumber = "XWM00000001762",
         nameLine1    = None,
         nameLine2    = None,
@@ -257,8 +257,8 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
             dateOfIncorporation    = None,
             countryOfIncorporation = None,
             foreignCorporateRef    = None,
-            correspondenceDetails = Some(
-              CorrespondenceDetails(
+            contactDetails = Some(
+              ContactDetails(
                 mgdRegNumber          = "XWM00000001762",
                 nameLine1             = None,
                 nameLine2             = None,
@@ -299,8 +299,8 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
             dateOfIncorporation    = None,
             countryOfIncorporation = None,
             foreignCorporateRef    = None,
-            correspondenceDetails = Some(
-              CorrespondenceDetails(
+            contactDetails = Some(
+              ContactDetails(
                 mgdRegNumber          = "XWM00000001762",
                 nameLine1             = None,
                 nameLine2             = None,

@@ -19,7 +19,7 @@ package viewmodels.checkAnswers.controllingbody
 import base.SpecBase
 import controllers.controllingbody.routes
 import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership, Partnership, Soleproprietor, Unincorporatedbody}
-import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName}
+import models.{Address, ContactDetails, ContactNumber, SoleProprietorName}
 import org.jsoup.Jsoup
 import pages.ControllingBodyVATScreenerPage
 import pages.controllingbody.*
@@ -474,7 +474,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
     "from user answers" - {
 
       "must read the controlling body details as stored by the data required action and the screens" in {
-        val correspondence = CorrespondenceDetails(
+        val correspondence = ContactDetails(
           mgdRegNumber          = mgdRegNum,
           nameLine1             = None,
           nameLine2             = None,
@@ -529,16 +529,16 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
           answers <- answers.set(ControllingBodyTradingNamePage, "")
           answers <- answers.set(
                        ControllingBodyCorrespondenceSectionPage,
-                       CorrespondenceDetails(mgdRegNum,
-                                             None,
-                                             None,
-                                             Some(address.copy(address1 = " ")),
-                                             None,
-                                             None,
-                                             Some(ContactNumber(Some(" "), None)),
-                                             None,
-                                             None
-                                            )
+                       ContactDetails(mgdRegNum,
+                                      None,
+                                      None,
+                                      Some(address.copy(address1 = " ")),
+                                      None,
+                                      None,
+                                      Some(ContactNumber(Some(" "), None)),
+                                      None,
+                                      None
+                                     )
                      )
         } yield answers).success.value
 
