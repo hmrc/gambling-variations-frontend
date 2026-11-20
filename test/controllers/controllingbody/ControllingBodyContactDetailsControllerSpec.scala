@@ -18,9 +18,8 @@ package controllers.controllingbody
 
 import base.SpecBase
 import controllers.controllingbody.routes.ControllingBodyContactDetailsController
-import forms.ContactNumberFormProvider
-import forms.businesscontactdetails.ContactNumberFormProvider
-import models.{ContactNumber, CorrespondenceDetails, NormalMode, UserAnswers}
+import forms.businesscontactdetails.BusinessContactNumberFormProvider
+import models.{ContactNumber, NormalMode, UserAnswers, ContactDetails}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -41,7 +40,7 @@ class ControllingBodyContactDetailsControllerSpec extends SpecBase with MockitoS
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new ContactNumberFormProvider()
+  val formProvider = new BusinessContactNumberFormProvider()
   val form = formProvider("controllingBodyContactDetails")
 
   private val phoneNumber = "123456789"

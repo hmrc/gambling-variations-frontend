@@ -17,7 +17,7 @@
 package controllers.controllingbody
 
 import controllers.actions.*
-import forms.businesscontactdetails.ContactNumberFormProvider
+import forms.businesscontactdetails.BusinessContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.controllingbody.{ControllingBodyChangesPage, ControllingBodyContactDetailsPage, ControllingBodySubmittedPage}
@@ -32,15 +32,15 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ControllingBodyContactDetailsController @Inject() (
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  authorise: AuthorisedAction,
-  getData: DataRetrievalAction,
-  requireData: ControllingBodyDetailsDataRequiredAction,
-  formProvider: ContactNumberFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: ControllingBodyContactDetailsView
+                                                          override val messagesApi: MessagesApi,
+                                                          sessionRepository: SessionRepository,
+                                                          navigator: Navigator,
+                                                          authorise: AuthorisedAction,
+                                                          getData: DataRetrievalAction,
+                                                          requireData: ControllingBodyDetailsDataRequiredAction,
+                                                          formProvider: BusinessContactNumberFormProvider,
+                                                          val controllerComponents: MessagesControllerComponents,
+                                                          view: ControllingBodyContactDetailsView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {

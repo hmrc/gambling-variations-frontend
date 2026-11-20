@@ -17,12 +17,12 @@
 package forms.businesscontactdetails
 
 import forms.behaviours.StringFieldBehaviours
-import forms.businesscontactdetails.ContactNumberFormProvider
+import forms.businesscontactdetails.BusinessContactNumberFormProvider
 import org.scalacheck.Gen
 
-class ContactNumberFormProviderSpec extends StringFieldBehaviours {
+class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
 
-  val form = new ContactNumberFormProvider()("businessContactNumber")
+  val form = new BusinessContactNumberFormProvider()("businessContactNumber")
 
   ".phoneNumber" - {
 

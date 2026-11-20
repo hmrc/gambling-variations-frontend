@@ -82,27 +82,27 @@ class NavigatorSpec extends SpecBase {
 
       "should route BusinessContactNumberPage to CheckContactDetails" in {
         navigator.nextPage(BusinessContactNumberPage, NormalMode, emptyAnswers) mustBe
-          controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
+          controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad()
       }
 
       "should route BusinessEmailAddressPage to CheckContactDetails" in {
         navigator.nextPage(BusinessEmailAddressPage, NormalMode, emptyAnswers) mustBe
-          controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
+          controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad()
       }
 
       "should route BusinessFaxNumberPage to CheckContactDetails" in {
         navigator.nextPage(BusinessFaxNumberPage, NormalMode, emptyAnswers) mustBe
-          controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
+          controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad()
       }
 
       "should route RemoveEmailAddressPage to CheckContactDetails" in {
         navigator.nextPage(RemoveEmailAddressPage, NormalMode, emptyAnswers) mustBe
-          controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
+          controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad()
       }
 
       "should route RemoveFaxNumberPage to CheckContactDetails" in {
         navigator.nextPage(RemoveFaxNumberPage, NormalMode, emptyAnswers) mustBe
-          controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
+          controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad()
       }
 
       "should route BusinessTradeClassPage to CheckTradingDetails" in {

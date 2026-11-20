@@ -24,17 +24,17 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkFlag
-import views.html.businesscontactdetails.CheckContactDetailsView
+import views.html.businesscontactdetails.CheckBusinessContactDetailsView
 
 import javax.inject.Inject
 
-class CheckBusinessContactDetailsController @Inject()(
+class CheckBusinessContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessContactDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: CheckContactDetailsView
+  view: CheckBusinessContactDetailsView
 ) extends FrontendBaseController
     with I18nSupport {
 

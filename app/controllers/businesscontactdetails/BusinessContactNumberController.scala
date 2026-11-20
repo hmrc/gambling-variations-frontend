@@ -18,7 +18,7 @@ package controllers.businesscontactdetails
 
 import controllers.actions.*
 import controllers.routes
-import forms.businesscontactdetails.ContactNumberFormProvider
+import forms.businesscontactdetails.BusinessContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.GroupMemberPage
@@ -34,15 +34,15 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessContactNumberController @Inject() (
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  authorise: AuthorisedAction,
-  getData: DataRetrievalAction,
-  requireData: BusinessContactDetailsDataRequiredAction,
-  formProvider: ContactNumberFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: BusinessContactNumberView
+                                                  override val messagesApi: MessagesApi,
+                                                  sessionRepository: SessionRepository,
+                                                  navigator: Navigator,
+                                                  authorise: AuthorisedAction,
+                                                  getData: DataRetrievalAction,
+                                                  requireData: BusinessContactDetailsDataRequiredAction,
+                                                  formProvider: BusinessContactNumberFormProvider,
+                                                  val controllerComponents: MessagesControllerComponents,
+                                                  view: BusinessContactNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {

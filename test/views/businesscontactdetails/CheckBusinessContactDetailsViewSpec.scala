@@ -21,14 +21,14 @@ import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.businesscontactdetails.CheckContactDetailsView
+import views.html.businesscontactdetails.CheckBusinessContactDetailsView
 
 class CheckBusinessContactDetailsViewSpec extends SpecBase {
 
   trait Setup {
     val app = applicationBuilder().build()
 
-    val view = app.injector.instanceOf[CheckContactDetailsView]
+    val view = app.injector.instanceOf[CheckBusinessContactDetailsView]
 
     implicit val request: play.api.mvc.Request[?] = FakeRequest()
 
@@ -77,7 +77,7 @@ class CheckBusinessContactDetailsViewSpec extends SpecBase {
       doc.select(".email-address").text   must include(messages("contactDetails.message.notProvided"))
     }
 
-    "must display error message and direct continue button back to CheckContactDetails when both phone numbers are missing" in new Setup {
+    "must display error message and direct continue button back to CheckBusinessContactDetails when both phone numbers are missing" in new Setup {
 
       val html = view(None, None, Some("3"), Some("4"), isFlagged = false)(request, messages)
 

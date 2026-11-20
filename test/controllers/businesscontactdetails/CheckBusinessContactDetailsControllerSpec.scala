@@ -22,7 +22,7 @@ import pages.GroupMemberPage
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import views.html.businesscontactdetails.CheckContactDetailsView
+import views.html.businesscontactdetails.CheckBusinessContactDetailsView
 
 class CheckBusinessContactDetailsControllerSpec extends SpecBase {
 
@@ -49,7 +49,7 @@ class CheckBusinessContactDetailsControllerSpec extends SpecBase {
 
       running(application) {
         val request =
-          FakeRequest(GET, controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad().url)
+          FakeRequest(GET, controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
 
@@ -75,10 +75,10 @@ class CheckBusinessContactDetailsControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad().url)
+        val request = FakeRequest(GET, controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
-        val view = application.injector.instanceOf[CheckContactDetailsView]
+        val view = application.injector.instanceOf[CheckBusinessContactDetailsView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(Some("07000000000"), Some("07000000000"), Some("07000000000"), Some("a@b.com"), false)(
@@ -108,7 +108,7 @@ class CheckBusinessContactDetailsControllerSpec extends SpecBase {
 
       running(application) {
         val request =
-          FakeRequest(GET, controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad().url)
+          FakeRequest(GET, controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
 

@@ -17,7 +17,7 @@
 package views.controllingbody
 
 import base.SpecBase
-import forms.businesscontactdetails.ContactNumberFormProvider
+import forms.businesscontactdetails.BusinessContactNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
@@ -37,7 +37,7 @@ class ControllingBodyContactDetailsViewSpec extends SpecBase {
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    val formProvider = new ContactNumberFormProvider()
+    val formProvider = new BusinessContactNumberFormProvider()
     val form = formProvider("controllingBodyContactDetails")
 
     val html = view(form, NormalMode)(request, messages)
