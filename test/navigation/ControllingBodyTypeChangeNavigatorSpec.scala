@@ -158,6 +158,111 @@ class ControllingBodyTypeChangeNavigatorSpec extends SpecBase {
     }
   }
 
+  "Navigator, when an existing controlling body is changed to a corporate body" - {
+
+    def changedTo(previous: BusinessType, isUkIncorporated: String): UserAnswers =
+      answers(Corporatebody, Some(previous)).set(ControllingBodyIsUkIncorporatedPage, isUkIncorporated).success.value
+
+    Seq(Soleproprietor, Unincorporatedbody, LimitedLiabilityPartnership, Partnership).foreach { previous =>
+      s"from $previous" - {
+
+        "must route CB-BN-CB to CB-IN" in {
+          navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, answers(Corporatebody, Some(previous))) mustBe
+            controllingBodyRoutes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
+        }
+
+        "must route CB-IN Yes to CB-DIN" in {
+          navigator.nextPage(ControllingBodyIsUkIncorporatedPage, NormalMode, changedTo(previous, "1")) mustBe
+            controllingBodyRoutes.DateOfIncorporationController.onPageLoad()
+        }
+
+        "must route CB-IN No to CB-COU" in {
+          navigator.nextPage(ControllingBodyIsUkIncorporatedPage, NormalMode, changedTo(previous, "0")) mustBe
+            controllingBodyRoutes.ControllingBodyCountryOfIncorporationController.onPageLoad()
+        }
+
+        "must route CB-DIN to CB-CR" in {
+          navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, changedTo(previous, "1")) mustBe
+            controllingBodyRoutes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
+        }
+
+        "must route CB-COU to CB-FOR" in {
+          navigator.nextPage(ControllingBodyCountryOfIncorporationPage, NormalMode, changedTo(previous, "0")) mustBe
+            controllingBodyRoutes.ControllingBodyForeignCorpRefController.onPageLoad()
+        }
+      }
+    }
+
+    "from Partnership" - {
+
+      "must route CB-CR to CB-UTR" in {
+        navigator.nextPage(ControllingBodyCrnPage, NormalMode, changedTo(Partnership, "1")) mustBe
+          controllingBodyRoutes.ControllingBodyUTRController.onPageLoad()
+      }
+
+      "must route CB-FOR to CB-UTR" in {
+        navigator.nextPage(ControllingBodyForeignCorpRefPage, NormalMode, changedTo(Partnership, "0")) mustBe
+          controllingBodyRoutes.ControllingBodyUTRController.onPageLoad()
+      }
+
+      "must route CB-UTR to CB-CYA" in {
+        navigator.nextPage(ControllingBodyUtrPage, NormalMode, changedTo(Partnership, "1")) mustBe
+          controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+      }
+    }
+
+    Seq(Soleproprietor, Unincorporatedbody, LimitedLiabilityPartnership).foreach { previous =>
+      s"from $previous" - {
+
+        "must route CB-CR to CB-CYA" in {
+          navigator.nextPage(ControllingBodyCrnPage, NormalMode, changedTo(previous, "1")) mustBe
+            controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+        }
+
+        "must route CB-FOR to CB-CYA" in {
+          navigator.nextPage(ControllingBodyForeignCorpRefPage, NormalMode, changedTo(previous, "0")) mustBe
+            controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+        }
+
+        "must keep the normal route from CB-UTR" in {
+          navigator.nextPage(ControllingBodyUtrPage, NormalMode, changedTo(previous, "1")) mustBe
+            controllingBodyRoutes.ControllingBodyVATScreenerController.onPageLoad()
+        }
+      }
+    }
+
+    "must keep the normal route from CB-IN when it has no answer" in {
+      navigator.nextPage(ControllingBodyIsUkIncorporatedPage, NormalMode, answers(Corporatebody, Some(Partnership))) mustBe
+        routes.SystemErrorController.onPageLoad()
+    }
+
+    "must keep the normal routes of the pages outside the mini-flow" in {
+      val changed = changedTo(Partnership, "1")
+
+      navigator.nextPage(ControllingBodyEmailPage, NormalMode, changed) mustBe
+        controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+      navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, changed) mustBe
+        controllingBodyRoutes.ChangeControllingBodyNameController.onPageLoad(Corporatebody)
+    }
+
+    "must not change the routes in check mode" in {
+      navigator.nextPage(ControllingBodyBusinessNamePage, CheckMode, changedTo(Partnership, "1")) mustBe
+        routes.ChangeRegistrationDetailsController.onPageLoad()
+    }
+  }
+
+  "Navigator, when the controlling body has not been changed to a corporate body" - {
+
+    "must keep the normal routes for an existing corporate body" in {
+      val unchanged = answers(Corporatebody, None).set(ControllingBodyIsUkIncorporatedPage, "1").success.value
+
+      navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, unchanged) mustBe
+        controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+      navigator.nextPage(ControllingBodyUtrPage, NormalMode, unchanged) mustBe
+        controllingBodyRoutes.ControllingBodyVATScreenerController.onPageLoad()
+    }
+  }
+
   "Navigator, when the controlling body has not been changed to an unincorporated body" - {
 
     "must keep the normal routes for an existing unincorporated body" in {
@@ -193,11 +298,11 @@ class ControllingBodyTypeChangeNavigatorSpec extends SpecBase {
     }
 
     "must keep the normal routes when the type was changed to another type" in {
-      val changedToCorporateBody = answers(Corporatebody, Some(Partnership))
+      val changedToSoleProprietor = answers(Soleproprietor, Some(Partnership))
 
-      navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, changedToCorporateBody) mustBe
+      navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, changedToSoleProprietor) mustBe
         controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
-      navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, changedToCorporateBody) mustBe
+      navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, changedToSoleProprietor) mustBe
         routes.IndexController.onPageLoad()
     }
   }
