@@ -19,7 +19,7 @@ package controllers.actions
 import base.{LoadedSectionDetails, SpecBase}
 import connectors.GamblingConnector
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{Address, ContactNumber, CorrespondenceDetails, UserAnswers}
+import models.{Address, ContactDetails, ContactNumber, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
@@ -229,7 +229,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
 }
 
 object CorrespondenceDetailsDataRequiredActionSpec {
-  val correspondenceDetailsUk: CorrespondenceDetails = CorrespondenceDetails(
+  val correspondenceDetailsUk: ContactDetails = ContactDetails(
     mgdRegNumber = "XWM00000001770",
     nameLine1    = Some("ABC ltd"),
     nameLine2    = Some("XX"),
@@ -250,7 +250,7 @@ object CorrespondenceDetailsDataRequiredActionSpec {
     emailAddr             = Some("abc@email.com")
   )
 
-  val correspondenceDetailsNonUk: CorrespondenceDetails = CorrespondenceDetails(
+  val correspondenceDetailsNonUk: ContactDetails = ContactDetails(
     mgdRegNumber = "XWM00000001770",
     nameLine1    = Some("ABC ltd"),
     nameLine2    = Some("XX"),

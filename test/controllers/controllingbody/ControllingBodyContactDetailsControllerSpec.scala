@@ -18,6 +18,7 @@ package controllers.controllingbody
 
 import base.SpecBase
 import controllers.controllingbody.routes.ControllingBodyContactDetailsController
+import forms.ContactNumberFormProvider
 import forms.businesscontactdetails.ContactNumberFormProvider
 import models.{ContactNumber, CorrespondenceDetails, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -56,7 +57,7 @@ class ControllingBodyContactDetailsControllerSpec extends SpecBase with MockitoS
       .value
       .set(
         ControllingBodyCorrespondenceSectionPage,
-        CorrespondenceDetails(
+        ContactDetails(
           mgdRegNumber          = "",
           nameLine1             = None,
           nameLine2             = None,

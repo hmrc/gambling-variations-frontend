@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.GamblingConnector
 import models.controllingbody.ControllingBodyDetails
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName, UserAnswers}
+import models.{Address, ContactDetails, ContactNumber, SoleProprietorName, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
@@ -310,8 +310,8 @@ object ControllingBodyDetailsDataRequiredActionSpec {
       isUkIncorporated       = Some("0")
     )
 
-  val correspondenceDetails: CorrespondenceDetails =
-    CorrespondenceDetails(
+  val contactDetails: ContactDetails =
+    ContactDetails(
       mgdRegNumber = "XGM00000001761",
       nameLine1    = None,
       nameLine2    = None,
