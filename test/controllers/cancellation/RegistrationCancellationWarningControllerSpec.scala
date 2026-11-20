@@ -81,7 +81,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form, currentDateFormatted, NormalMode)(request, messages(application)).toString
+            view(form, currentDateFormatted, false, NormalMode)(request, messages(application)).toString
         }
       }
 
@@ -100,7 +100,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form.fill(true), currentDateFormatted, NormalMode)(request, messages(application)).toString
+            view(form.fill(true), currentDateFormatted, false, NormalMode)(request, messages(application)).toString
         }
       }
 
@@ -170,7 +170,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, currentDateFormatted, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, currentDateFormatted, false, NormalMode)(request, messages(application)).toString
         }
       }
 
