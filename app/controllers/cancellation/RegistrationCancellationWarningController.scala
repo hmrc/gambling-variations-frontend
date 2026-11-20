@@ -19,7 +19,7 @@ package controllers.cancellation
 import controllers.actions.{AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import controllers.routes
 import forms.cancellation.RegistrationCancellationWarningFormProvider
-import models.{Mode, NormalMode}
+import models.Mode
 import navigation.Navigator
 import pages.cancellation.{RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -47,7 +47,6 @@ class RegistrationCancellationWarningController @Inject() (
     with CancellationEntrypointDecider
     with I18nSupport {
 
-  // TODO extra check
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     checkScreen(request.userAnswers, CurrentScreen.Warning) {
       request.userAnswers
@@ -57,7 +56,7 @@ class RegistrationCancellationWarningController @Inject() (
             .get(RegistrationCancellationCancelAgainYesNoPage)
             .fold(formProvider())(formProvider().fill)
 
-          Ok(view(form, dateFormatter.format(cancellationDate), NormalMode))
+          Ok(view(form, dateFormatter.format(cancellationDate), mode))
         }
     }
   }

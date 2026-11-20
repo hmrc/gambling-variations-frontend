@@ -17,6 +17,7 @@
 package views.cancellation
 
 import base.SpecBase
+import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
@@ -36,7 +37,7 @@ class RegistrationCancellationDeclarationViewSpec extends SpecBase {
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val html = view()(request, messages)
+    private val html = view(NormalMode)(request, messages)
 
     val doc: Document = Jsoup.parse(html.body)
 

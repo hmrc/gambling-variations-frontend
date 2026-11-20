@@ -18,6 +18,7 @@ package views.cancellation
 
 import base.SpecBase
 import controllers.cancellation.routes
+import models.NormalMode
 import models.cancellation.ReasonForCancellation
 import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage}
 import play.api.i18n.{Messages, MessagesApi}
@@ -73,7 +74,7 @@ class CheckRegistrationCancellationDetailsViewSpec extends SpecBase {
 
   private val document =
     org.jsoup.Jsoup.parse(
-      view(summaryList).toString
+      view(NormalMode, summaryList).toString
     )
 
   "CheckRegistrationCancellationDetailsView" - {

@@ -17,7 +17,7 @@
 package controllers.cancellation
 
 import base.SpecBase
-import models.BusinessType
+import models.{BusinessType, NormalMode}
 import models.cancellation.ReasonForCancellation
 import pages.{BusinessTypePage, GroupMemberPage}
 import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage}
@@ -85,7 +85,7 @@ class CheckRegistrationCancellationDetailsControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(expectedSummaryList)(request, msgs).toString
+          view(NormalMode, expectedSummaryList)(request, msgs).toString
       }
     }
   }

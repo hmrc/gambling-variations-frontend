@@ -27,7 +27,7 @@
   h1:H1
  )
 
-@(summaryList: SummaryList)(implicit request: Request[_], messages: Messages)
+@(mode: Mode, summaryList: SummaryList)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("checkRegistrationCancellationDetails.title"), Some(messages("checkRegistrationCancellationDetails.caption")))) {
 
