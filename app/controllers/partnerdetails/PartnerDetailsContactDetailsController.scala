@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import controllers.actions.*
-import forms.ContactNumberFormProvider
+import forms.businesscontactdetails.BusinessContactNumberFormProvider
 import models.{ContactNumber, Mode}
 import navigation.Navigator
 import pages.partnerdetails.PartnerDetailsContactNumberPage
@@ -33,15 +33,15 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PartnerDetailsContactDetailsController @Inject() (
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  authorise: AuthorisedAction,
-  getData: DataRetrievalAction,
-  requireData: PartnerDetailsDataRequiredAction,
-  formProvider: ContactNumberFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: PartnerDetailsContactDetailsView
+                                                         override val messagesApi: MessagesApi,
+                                                         sessionRepository: SessionRepository,
+                                                         navigator: Navigator,
+                                                         authorise: AuthorisedAction,
+                                                         getData: DataRetrievalAction,
+                                                         requireData: PartnerDetailsDataRequiredAction,
+                                                         formProvider: BusinessContactNumberFormProvider,
+                                                         val controllerComponents: MessagesControllerComponents,
+                                                         view: PartnerDetailsContactDetailsView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {

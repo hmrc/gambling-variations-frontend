@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businesscontactdetails
 
-import javax.inject.Inject
 import forms.mappings.Mappings
 import models.ContactNumber
 import play.api.data.Form
 import play.api.data.Forms.*
 import play.api.data.validation.*
 
-class ContactNumberFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
+
+class BusinessContactNumberFormProvider @Inject() extends Mappings {
 
   private val MaxDigits = 20
   private val AllowedCharsRegex = "^[0-9 ]+$"

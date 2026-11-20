@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businesscontactdetails
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.businesscontactdetails.RemoveFaxNumberFormProvider
 import play.api.data.FormError
 
 class RemoveFaxNumberFormProviderSpec extends BooleanFieldBehaviours {

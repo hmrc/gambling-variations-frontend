@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.businesscontactdetails
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class RemoveFaxNumberFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
+
+class RemoveEmailAddressFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("removeFaxNumber.error.required")
+      "value" -> boolean("removeEmailAddress.error.required")
     )
 }
