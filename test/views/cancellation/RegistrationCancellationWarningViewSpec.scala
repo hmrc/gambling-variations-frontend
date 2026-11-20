@@ -76,7 +76,7 @@ class RegistrationCancellationWarningViewSpec extends SpecBase {
       doc
         .select(".govuk-caption-l")
         .text() must include(
-        messages("cancelGroupRegistrationWarning.caption")
+        messages("cancelGroupRegistrationDate.caption")
       )
 
       doc
