@@ -18,7 +18,7 @@ package controllers.tradingdetails
 
 import base.SpecBase
 import controllers.routes
-import forms.RemoveAssociatedRegNumberFormProvider
+import forms.tradingdetails.RemoveAssociatedRegNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

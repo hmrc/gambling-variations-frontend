@@ -19,7 +19,7 @@ package controllers.tradingdetails
 import base.SpecBase
 import controllers.actions.{MgdTradeDetailsDataRequiredAction, MgdTradeDetailsDataRequiredActionImpl}
 import controllers.routes
-import forms.OtherTradeClassFormProvider
+import forms.tradingdetails.OtherTradeClassFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

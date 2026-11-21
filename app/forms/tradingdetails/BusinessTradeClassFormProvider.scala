@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package forms.tradingdetails
+
+import forms.mappings.Mappings
+import models.BusinessTradeClass
+import play.api.data.Form
 
 import javax.inject.Inject
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class BusinessTradeClassFormProvider @Inject() extends Mappings {
 
-class RemovePreviousRegNumberFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[Boolean] =
+  def apply(): Form[BusinessTradeClass] =
     Form(
-      "value" -> boolean("removePreviousRegNumber.error.required")
+      "value" -> enumerable[BusinessTradeClass]("businessTradeClass.error.required")
     )
 }

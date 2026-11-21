@@ -18,7 +18,7 @@ package controllers.tradingdetails
 
 import controllers.actions.*
 import controllers.routes
-import forms.RemovePreviousRegNumberFormProvider
+import forms.tradingdetails.RemovePreviousRegNumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.tradingdetails.TradingDetailsChangesPage

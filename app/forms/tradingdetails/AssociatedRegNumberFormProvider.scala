@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.tradingdetails
 
 import forms.mappings.{ChecksumConstraints, Mappings}
 import play.api.data.Form
 import utils.ChecksumValidator
+
+import javax.inject.Inject
 
 class AssociatedRegNumberFormProvider @Inject() extends Mappings with ChecksumConstraints {
 

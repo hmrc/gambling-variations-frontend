@@ -17,7 +17,7 @@
 package controllers.tradingdetails
 
 import controllers.actions.*
-import forms.BusinessTradeClassFormProvider
+import forms.tradingdetails.BusinessTradeClassFormProvider
 import models.{BusinessTradeClass, CheckMode, Mode, NormalMode}
 import navigation.Navigator
 import pages.tradingdetails.*

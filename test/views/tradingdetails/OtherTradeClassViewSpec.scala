@@ -17,7 +17,7 @@
 package views.tradingdetails
 
 import base.SpecBase
-import forms.OtherTradeClassFormProvider
+import forms.tradingdetails.OtherTradeClassFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

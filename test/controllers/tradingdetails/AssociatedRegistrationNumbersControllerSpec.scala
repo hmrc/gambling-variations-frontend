@@ -18,7 +18,7 @@ package controllers.tradingdetails
 
 import base.SpecBase
 import controllers.routes
-import forms.AssociatedRegistrationNumbersFormProvider
+import forms.tradingdetails.AssociatedRegistrationNumbersFormProvider
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any

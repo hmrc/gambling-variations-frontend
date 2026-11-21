@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.tradingdetails
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class SeasonalBusinessFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
+
+class RemoveAssociatedRegNumberFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("seasonalBusiness.error.required")
+      "value" -> boolean("removeAssociatedRegNumber.error.required")
     )
 }

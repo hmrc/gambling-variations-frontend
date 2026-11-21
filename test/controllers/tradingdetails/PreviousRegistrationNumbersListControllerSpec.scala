@@ -19,7 +19,7 @@ package controllers.tradingdetails
 import base.SpecBase
 import controllers.routes.*
 import controllers.tradingdetails.routes.*
-import forms.PreviousRegistrationNumbersFormProvider
+import forms.tradingdetails.PreviousRegistrationNumbersFormProvider
 import models.{NormalMode, RegistrationNumbers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
