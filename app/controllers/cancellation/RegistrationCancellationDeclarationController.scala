@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import controllers.Execution.trampoline
 import controllers.actions.*
-import models.NormalMode
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.GroupMemberPage
 import pages.cancellation.RegistrationCancellationDeclarationPage
@@ -48,9 +48,11 @@ class RegistrationCancellationDeclarationController @Inject() (
       case Some(flag) => Ok(view(flag))
       case None       => Redirect(controllers.routes.SystemErrorController.onPageLoad().url)
     }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    Ok(view(mode))
   }
 
-  def onSubmit: Action[AnyContent] =
+  def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(RegistrationCancellationDeclarationPage, true))

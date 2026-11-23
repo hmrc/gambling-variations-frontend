@@ -178,7 +178,7 @@ class ControllingBodyTypeChangeNavigatorSpec extends SpecBase {
       navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, unchanged) mustBe
         controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
       navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, unchanged) mustBe
-        routes.IndexController.onPageLoad()
+        controllingBodyRoutes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
       navigator.nextPage(ControllingBodyUtrPage, NormalMode, unchanged) mustBe
         controllingBodyRoutes.ControllingBodyVATScreenerController.onPageLoad()
     }
@@ -198,7 +198,7 @@ class ControllingBodyTypeChangeNavigatorSpec extends SpecBase {
       navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, changedToCorporateBody) mustBe
         controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
       navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, changedToCorporateBody) mustBe
-        routes.IndexController.onPageLoad()
+        controllingBodyRoutes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
     }
   }
 }

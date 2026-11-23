@@ -21,8 +21,7 @@ import controllers.routes
 import forms.controllingbody.ControllingBodyNotProvidedYesNoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.controllingbody.ControllingBodyBusinessNamePage
-import pages.controllingbody.ControllingBodyNotProvidedYesNoPage
+import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodyChangesPage, ControllingBodyNotProvidedYesNoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -72,8 +71,9 @@ class ControllingBodyNotProvidedYesNoController @Inject() (
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyNotProvidedYesNoPage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(ControllingBodyNotProvidedYesNoPage, mode, updatedAnswers))
+                finalAnswer    <- Future.fromTry(updatedAnswers.set(ControllingBodyChangesPage, value))
+                _              <- sessionRepository.set(finalAnswer)
+              } yield Redirect(navigator.nextPage(ControllingBodyNotProvidedYesNoPage, mode, finalAnswer))
           )
       }
       .getOrElse {
