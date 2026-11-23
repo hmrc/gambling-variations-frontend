@@ -17,7 +17,7 @@
 package controllers.cancellation
 
 import base.SpecBase
-import models.{BusinessType, NormalMode, UserAnswers}
+import models.{BusinessType, UserAnswers}
 import pages.cancellation.RegistrationCancellationConfirmationReferencePage
 import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.test.FakeRequest
@@ -44,7 +44,7 @@ class RegistrationCancellationConfirmationControllerSpec extends SpecBase {
 
   "RegistrationCancellationConfirmation Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the non-group view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswersWithReferenceNumber)).build()
 
@@ -56,10 +56,40 @@ class RegistrationCancellationConfirmationControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[RegistrationCancellationConfirmationView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(NormalMode, "http://localhost:10400/gambling/", cancellationConfirmationRefNumber)(
+        contentAsString(result) mustEqual view("http://localhost:10400/gambling/", cancellationConfirmationRefNumber, isGroup = false)(
           request,
           messages(application)
         ).toString
+      }
+    }
+
+    "must return OK and group view for a GET" in {
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithReferenceNumber)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoadGroup().url)
+        val result = route(application, request).value
+        val view = application.injector.instanceOf[RegistrationCancellationConfirmationView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view("http://localhost:10400/gambling/", cancellationConfirmationRefNumber, isGroup = true)(
+          request,
+          messages(application)
+        ).toString
+      }
+
+    }
+
+    "must redirect to SystemError for group when ref number is missing" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoadGroup().url)
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
       }
     }
 
