@@ -17,7 +17,7 @@
 package controllers.cancellation
 
 import base.SpecBase
-import models.{BusinessType, UserAnswers}
+import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -62,7 +62,7 @@ class RegistrationCancellationDeclarationControllerSpec extends SpecBase with Mo
         val view = application.injector.instanceOf[RegistrationCancellationDeclarationView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+        contentAsString(result) mustEqual view(NormalMode)(request, messages(application)).toString
       }
     }
 

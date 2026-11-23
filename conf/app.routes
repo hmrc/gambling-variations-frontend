@@ -369,8 +369,8 @@ POST       /change-registration-details/controlling-body-details/foreign-corpora
 GET        /change-registration-details/controlling-body-details/remove-vat-registration-number                        controllers.controllingbody.ControllingBodyRemoveVATRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/remove-vat-registration-number                        controllers.controllingbody.ControllingBodyRemoveVATRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
 
-GET        /cancel-registration/declaration                      controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad()
-POST       /cancel-registration/declaration                      controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit()
+GET        /cancel-registration/declaration                      controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad(mode: Mode = NormalMode)
+POST       /cancel-registration/declaration                      controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit(mode: Mode = NormalMode)
 
 GET        /cancel-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = NormalMode)
@@ -384,9 +384,9 @@ POST       /change-registration-details/controlling-body-details/national-insura
 GET        /change-registration-details/controlling-body-details/business-country-incorporated        controllers.controllingbody.ControllingBodyCountryOfIncorporationController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/business-country-incorporated        controllers.controllingbody.ControllingBodyCountryOfIncorporationController.onSubmit(mode: Mode = NormalMode)
 
-GET        /cancel-registration/check                       controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoad()
+GET        /cancel-registration/check                       controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoad(mode: Mode = NormalMode)
 
-GET        /cancel-registration/submitted                       controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad()
+GET        /cancel-registration/submitted                       controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad(mode: Mode = NormalMode)
 
 GET        /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = NormalMode)
@@ -398,3 +398,5 @@ GET        /cancel-group-registration/reviewing-cancellation-request   controlle
 POST       /cancel-group-registration/reviewing-cancellation-request   controllers.cancellation.RegistrationCancellationWarningController.onSubmit(mode: Mode = NormalMode)
 
 GET        /cancel-group-registration/check                             controllers.cancellation.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
+
+GET        /cancel-registration/already-cancelled                       controllers.cancellation.RegistrationCancellationLockedController.onPageLoad(mode: Mode = NormalMode)

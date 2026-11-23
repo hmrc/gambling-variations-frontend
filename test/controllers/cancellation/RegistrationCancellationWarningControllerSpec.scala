@@ -104,7 +104,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
         }
       }
 
-      "must redirect to SystemError when the registration cancellation value does not exist" in {
+      "must redirect when the registration cancellation value does not exist" in {
 
         val userAnswers = emptyUserAnswers.remove(RegistrationCancellationDeclarationPage).success.value
 
@@ -115,11 +115,11 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual
-            routes.SystemErrorController.onPageLoad().url
+            controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
         }
       }
 
-      "must redirect to SystemError when the registration cancellation value is false" in {
+      "must redirect when the registration cancellation value is false" in {
 
         val userAnswers = emptyUserAnswers.set(RegistrationCancellationDeclarationPage, false).success.value
 
@@ -130,7 +130,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual
-            routes.SystemErrorController.onPageLoad().url
+            controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
         }
       }
     }

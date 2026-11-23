@@ -19,7 +19,7 @@ package controllers.cancellation
 import controllers.actions.{AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import controllers.routes
 import forms.cancellation.RegistrationCancellationWarningFormProvider
-import models.{Mode, NormalMode}
+import models.Mode
 import navigation.Navigator
 import pages.cancellation.{RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -44,19 +44,22 @@ class RegistrationCancellationWarningController @Inject() (
   view: RegistrationCancellationWarningView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
+    with CancellationEntrypointDecider
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    checkScreen(request.userAnswers, CurrentScreen.Warning) {
+      request.userAnswers
+        .get(RegistrationCancellationDatePage)
+        .fold(Redirect(routes.SystemErrorController.onPageLoad())) { cancellationDate =>
+          val form = request.userAnswers
+            .get(RegistrationCancellationCancelAgainYesNoPage)
+            .fold(formProvider())(formProvider().fill)
 
-      val form = request.userAnswers.get(RegistrationCancellationCancelAgainYesNoPage).fold(formProvider())(formProvider().fill)
-
-      (for {
-        isCancelled      <- request.userAnswers.get(RegistrationCancellationDeclarationPage).filter(identity)
-        cancellationDate <- request.userAnswers.get(RegistrationCancellationDatePage)
-      } yield Ok(view(form, dateFormatter.format(cancellationDate), NormalMode)))
-        .getOrElse(Redirect(routes.SystemErrorController.onPageLoad().url))
+          Ok(view(form, dateFormatter.format(cancellationDate), mode))
+        }
     }
+  }
 
   def onSubmit(mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData).async { implicit request =>

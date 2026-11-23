@@ -18,6 +18,7 @@ package controllers.cancellation
 
 import config.FrontendAppConfig
 import controllers.actions.*
+import models.Mode
 import pages.cancellation.RegistrationCancellationConfirmationReferencePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,12 +38,12 @@ class RegistrationCancellationConfirmationController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     request.userAnswers
       .get(RegistrationCancellationConfirmationReferencePage)
       .fold(
         Redirect(controllers.routes.SystemErrorController.onPageLoad().url)
-      )(referenceNumber => Ok(view(appConfig.gamblingManagementHomeUrl, referenceNumber)))
+      )(referenceNumber => Ok(view(mode, appConfig.gamblingManagementHomeUrl, referenceNumber)))
 
   }
 }

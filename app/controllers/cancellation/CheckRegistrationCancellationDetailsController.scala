@@ -17,6 +17,7 @@
 package controllers.cancellation
 
 import controllers.actions.*
+import models.Mode
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -35,10 +36,10 @@ class CheckRegistrationCancellationDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val summaryList =
       CheckRegistrationCancellationDetailsViewModel.summaryList(request.userAnswers)
 
-    Ok(view(summaryList))
+    Ok(view(mode, summaryList))
   }
 }
