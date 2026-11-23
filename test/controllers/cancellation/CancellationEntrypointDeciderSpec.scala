@@ -18,20 +18,20 @@ package controllers.cancellation
 
 import base.SpecBase
 import forms.cancellation.CancelRegistrationDateFormProvider
-import models.{BusinessType, NormalMode, RegistrationStatus, UserAnswers}
+import models.{BusinessType, RegistrationStatus, UserAnswers}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage, RegistrationStatusPage}
 import pages.cancellation.{CancelRegistrationDatePage, RegistrationCancellationDeclarationPage}
+import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage, RegistrationStatusPage}
 import play.api.i18n.Messages
 import play.api.inject.bind
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import play.api.mvc.Call
 import views.html.cancellation.{CancelRegistrationDateView, RegistrationCancellationLockedView, RegistrationCancellationWarningView}
 
 import java.time.format.DateTimeFormatter
-import java.time.{Clock, Instant, LocalDate, ZoneOffset}
 import java.time.temporal.ChronoUnit
+import java.time.{Clock, Instant, LocalDate, ZoneOffset}
 
 class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
 
@@ -111,7 +111,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
     .value
 
   lazy val cancelRegistrationDateRoute: String =
-    controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
+    controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
 
   lazy val registrationCancellationLockedRoute: String =
     controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url
@@ -140,7 +140,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         val request = FakeRequest(
           GET,
           controllers.cancellation.routes.CancelRegistrationDateController
-            .onPageLoad(NormalMode)
+            .onPageLoad()
             .url
         )
 
@@ -156,7 +156,6 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         contentAsString(result) mustEqual
           view(
             form,
-            NormalMode,
             registrationDate,
             firstInvalidDate,
             middleOfDateRange
@@ -180,7 +179,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         val request = FakeRequest(
           GET,
           controllers.cancellation.routes.CancelRegistrationDateController
-            .onPageLoad(NormalMode)
+            .onPageLoad()
             .url
         )
 
@@ -206,7 +205,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         val request = FakeRequest(
           GET,
           controllers.cancellation.routes.CancelRegistrationDateController
-            .onPageLoad(NormalMode)
+            .onPageLoad()
             .url
         )
 
@@ -232,7 +231,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         val request = FakeRequest(
           GET,
           controllers.cancellation.routes.CancelRegistrationDateController
-            .onPageLoad(NormalMode)
+            .onPageLoad()
             .url
         )
 
@@ -279,8 +278,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
           view(
             form,
             dateFormatter.format(dateOfCancellation),
-            isGroupFlag,
-            NormalMode
+            isGroupFlag
           )(
             request,
             messages(application)
@@ -337,7 +335,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
+          controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
       }
     }
 
@@ -397,13 +395,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(
-            NormalMode,
-            gamblingUrl
-          )(
-            request,
-            messages(application)
-          ).toString
+          view(gamblingUrl)(request, messages(application)).toString
       }
 
     }
@@ -430,7 +422,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
+          controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
       }
     }
 

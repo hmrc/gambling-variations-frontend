@@ -18,7 +18,6 @@ package viewmodels.checkAnswers.cancellation
 
 import base.SpecBase
 import controllers.cancellation.routes
-import models.CheckMode
 import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.FakeRequest
@@ -63,7 +62,7 @@ class CheckGroupRegistrationCancellationDetailsViewModelSpec extends SpecBase {
         val action =
           CheckGroupRegistrationCancellationDetailsViewModel.summaryList(userAnswers).rows.head.actions.value.items.head
 
-        action.href mustBe routes.CancelGroupRegistrationDateController.onPageLoad(CheckMode).url
+        action.href mustBe routes.CancelGroupRegistrationDateController.onPageLoad().url
         action.content mustBe Text(messages("site.change"))
         action.visuallyHiddenText mustBe Some(
           messages("checkGroupRegistrationCancellationDetails.cancellationDate.change.hidden")

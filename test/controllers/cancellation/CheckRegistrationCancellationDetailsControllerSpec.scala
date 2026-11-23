@@ -17,10 +17,11 @@
 package controllers.cancellation
 
 import base.SpecBase
-import models.{BusinessType, NormalMode}
+import models.BusinessType
 import models.cancellation.ReasonForCancellation
-import pages.{BusinessTypePage, GroupMemberPage}
 import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage}
+import pages.{BusinessTypePage, GroupMemberPage}
+import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import viewmodels.checkAnswers.cancellation.CheckRegistrationCancellationDetailsViewModel
@@ -77,7 +78,7 @@ class CheckRegistrationCancellationDetailsControllerSpec extends SpecBase {
           application.injector
             .instanceOf[CheckRegistrationCancellationDetailsView]
 
-        implicit val msgs = messages(application)
+        implicit val msgs: Messages = messages(application)
 
         val expectedSummaryList =
           CheckRegistrationCancellationDetailsViewModel.summaryList(userAnswers)
@@ -85,7 +86,7 @@ class CheckRegistrationCancellationDetailsControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(NormalMode, expectedSummaryList)(request, msgs).toString
+          view(expectedSummaryList)(request, msgs).toString
       }
     }
   }

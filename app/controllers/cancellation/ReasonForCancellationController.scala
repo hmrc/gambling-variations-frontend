@@ -19,8 +19,10 @@ package controllers.cancellation
 import controllers.actions.*
 import forms.cancellation.ReasonForCancellationFormProvider
 import models.Mode
+import models.cancellation.ReasonForCancellation
 import navigation.Navigator
 import pages.cancellation.ReasonForCancellationPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -44,7 +46,7 @@ class ReasonForCancellationController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[ReasonForCancellation] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
@@ -53,14 +55,14 @@ class ReasonForCancellationController @Inject() (
       case Some(value) => form.fill(value)
     }
 
-    Ok(view(preparedForm, mode))
+    Ok(view(preparedForm))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ReasonForCancellationPage, value))

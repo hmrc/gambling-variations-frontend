@@ -20,7 +20,7 @@ import connectors.GamblingConnector
 import controllers.actions.{AuthenticatedAction, AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
-import models.{Mode, NormalMode}
+import models.Mode
 import navigation.Navigator
 import pages.DateOfRegistrationPage
 import pages.cancellation.CancelRegistrationDatePage
@@ -54,7 +54,7 @@ class CancelRegistrationDateController @Inject() (
 
   def onLanding(regNumber: String): Action[AnyContent] =
     authenticate { request =>
-      Redirect(controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode))
+      Redirect(controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad())
         .addingToSession(AuthorisedAction.sessionRegNumberKey -> regNumber)(request)
     }
 
@@ -85,7 +85,6 @@ class CancelRegistrationDateController @Inject() (
             Ok(
               view(
                 preparedForm,
-                mode,
                 registrationDate,
                 firstInvalidDate,
                 middleOfDateRange
@@ -125,7 +124,6 @@ class CancelRegistrationDateController @Inject() (
                       BadRequest(
                         view(
                           formWithErrors,
-                          mode,
                           registrationDate,
                           firstInvalidDate,
                           middleOfDateRange

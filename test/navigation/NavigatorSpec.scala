@@ -348,9 +348,12 @@ class NavigatorSpec extends SpecBase {
 
         "cancellation navigation" - {
           "should route CancelRegistrationDatePage to ReasonForCancellation in NormalMode" in {
-            navigator.nextPage(CancelRegistrationDatePage, NormalMode, emptyAnswers) mustBe
+            val answers =
+              emptyAnswers.set(GroupMemberPage, true).success.value
+
+            navigator.nextPage(CancelRegistrationDatePage, NormalMode, answers) mustBe
               controllers.cancellation.routes.ReasonForCancellationController
-                .onPageLoad(NormalMode)
+                .onPageLoad()
           }
 
           "should route ReasonForCancellationPage to group registration number when the business is part of a group" in {
@@ -365,7 +368,7 @@ class NavigatorSpec extends SpecBase {
 
             navigator.nextPage(ReasonForCancellationPage, NormalMode, answers) mustBe
               controllers.cancellation.routes.ChangeGroupRegistrationNumberController
-                .onPageLoad(NormalMode)
+                .onPageLoad()
           }
 
           "should route ReasonForCancellationPage to cancellation check answers for any other reason" in {
@@ -399,12 +402,16 @@ class NavigatorSpec extends SpecBase {
           }
 
           "should route CancelRegistrationDatePage to group cancellation check answers in NormalMode" in {
-            navigator.nextPage(CancelRegistrationDatePage, NormalMode, emptyAnswers) mustBe
-              controllers.cancellation.routes.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
+            val answers = emptyAnswers.set(GroupMemberPage, true).success.value
+
+            navigator.nextPage(CancelRegistrationDatePage, NormalMode, answers) mustBe
+              controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
           }
 
           "should route CancelRegistrationDatePage to group cancellation check answers in CheckMode" in {
-            navigator.nextPage(CancelRegistrationDatePage, CheckMode, emptyAnswers) mustBe
+            val answers = emptyAnswers.set(GroupMemberPage, true).success.value
+
+            navigator.nextPage(CancelRegistrationDatePage, CheckMode, answers) mustBe
               controllers.cancellation.routes.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
           }
         }
@@ -483,10 +490,13 @@ class NavigatorSpec extends SpecBase {
       "cancellation navigation" - {
 
         "should route CancelRegistrationDatePage back to cancellation check answers" in {
+          val answers =
+            emptyAnswers.set(GroupMemberPage, true).success.value
+
           navigator.nextPage(
             CancelRegistrationDatePage,
             CheckMode,
-            emptyAnswers
+            answers
           ) mustBe
             controllers.cancellation.routes.CheckRegistrationCancellationDetailsController
               .onPageLoad()
@@ -504,7 +514,7 @@ class NavigatorSpec extends SpecBase {
 
           navigator.nextPage(ReasonForCancellationPage, CheckMode, answers) mustBe
             controllers.cancellation.routes.ChangeGroupRegistrationNumberController
-              .onPageLoad(CheckMode)
+              .onPageLoad()
         }
 
         "should route ReasonForCancellationPage back to cancellation check answers in CheckMode for any other reason" in {

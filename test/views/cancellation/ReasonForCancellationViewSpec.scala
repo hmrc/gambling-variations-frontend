@@ -18,7 +18,6 @@ package views.cancellation
 
 import base.SpecBase
 import forms.cancellation.ReasonForCancellationFormProvider
-import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
@@ -50,7 +49,7 @@ class ReasonForCancellationViewSpec extends SpecBase {
 
     "must render page correctly" in new Setup {
 
-      val html = view(form, NormalMode)(request, messages)
+      val html = view(form)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
       print(doc.toString)
 
@@ -107,7 +106,7 @@ class ReasonForCancellationViewSpec extends SpecBase {
       val boundForm =
         form.bind(Map("reasonForCancellation" -> ""))
 
-      val html = view(boundForm, NormalMode)(request, messages)
+      val html = view(boundForm)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
 
       doc

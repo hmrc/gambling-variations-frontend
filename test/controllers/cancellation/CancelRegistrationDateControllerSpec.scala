@@ -21,7 +21,7 @@ import connectors.GamblingConnector
 import controllers.actions.*
 import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
-import models.{BusinessDetails, BusinessType, NormalMode, RegistrationStatus, UserAnswers}
+import models.{BusinessDetails, BusinessType, RegistrationStatus, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
@@ -91,7 +91,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
 
   private lazy val cancelRegistrationDateRoute =
     controllers.cancellation.routes.CancelRegistrationDateController
-      .onPageLoad(NormalMode)
+      .onPageLoad()
       .url
 
   override val emptyUserAnswers: UserAnswers =
@@ -209,7 +209,6 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
           contentAsString(result) mustEqual
             view(
               form,
-              NormalMode,
               registrationDate,
               firstInvalidDate,
               middleOfDateRange
@@ -251,7 +250,6 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
           contentAsString(result) mustEqual
             view(
               form.fill(validAnswer),
-              NormalMode,
               registrationDate,
               firstInvalidDate,
               middleOfDateRange
@@ -436,7 +434,6 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
           contentAsString(result) mustEqual
             view(
               boundForm,
-              NormalMode,
               registrationDate,
               firstInvalidDate,
               middleOfDateRange
@@ -479,7 +476,6 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
           contentAsString(result) mustEqual
             view(
               boundForm,
-              NormalMode,
               registrationDate,
               firstInvalidDate,
               middleOfDateRange
@@ -586,7 +582,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, landingRequest("id")).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
+        redirectLocation(result).value mustEqual controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
         cookies(result).get("mdtp") mustBe defined
       }
     }
@@ -612,7 +608,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual
-        controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
+        controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
       session(result).get("mgdRegNum").value mustEqual "client1"
     }
   }

@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.cancellation
 
 import controllers.cancellation.routes
-import models.{CheckMode, UserAnswers}
+import models.UserAnswers
 import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
@@ -45,7 +45,7 @@ object CheckGroupRegistrationCancellationDetailsViewModel {
         actions = Seq(
           ActionItemViewModel(
             "site.change",
-            routes.CancelGroupRegistrationDateController.onPageLoad(CheckMode).url
+            routes.CancelGroupRegistrationDateController.onPageLoad().url
           ).withVisuallyHiddenText(
             messages("checkGroupRegistrationCancellationDetails.cancellationDate.change.hidden")
           )

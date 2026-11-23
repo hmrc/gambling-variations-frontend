@@ -16,7 +16,7 @@
 
 package viewmodels.checkAnswers
 
-import models.{CheckMode, UserAnswers}
+import models.UserAnswers
 import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.{Lang, Messages}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -35,7 +35,7 @@ object CancelRegistrationDateSummary {
         key   = "cancelRegistrationDate.checkYourAnswersLabel",
         value = ValueViewModel(answer.format(dateTimeFormat())),
         actions = Seq(
-          ActionItemViewModel("site.change", controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url)
             .withVisuallyHiddenText(messages("cancelRegistrationDate.change.hidden"))
         )
       )

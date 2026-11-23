@@ -25,12 +25,12 @@ class CancelRegistrationDatePageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      CancelRegistrationDatePage.path mustEqual (JsPath \ "registrationCancellationDate")
+      CancelRegistrationDatePage.path mustEqual (JsPath \ "cancelRegistrationDate")
     }
 
     "have the correct toString value" in {
 
-      CancelRegistrationDatePage.toString mustEqual "registrationCancellationDate"
+      CancelRegistrationDatePage.toString mustEqual "cancelRegistrationDate"
     }
   }
 }

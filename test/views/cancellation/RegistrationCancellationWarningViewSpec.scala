@@ -18,7 +18,6 @@ package views.cancellation
 
 import base.SpecBase
 import forms.cancellation.RegistrationCancellationWarningFormProvider
-import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
@@ -59,7 +58,7 @@ class RegistrationCancellationWarningViewSpec extends SpecBase {
       formToRender: play.api.data.Form[Boolean] = form,
       isGroup: Boolean = true
     ): Document = {
-      val html = view(formToRender, currentDateFormatted, isGroup, NormalMode)(request, messages)
+      val html = view(formToRender, currentDateFormatted, isGroup)(request, messages)
       Jsoup.parse(html.body)
     }
   }
@@ -106,7 +105,7 @@ class RegistrationCancellationWarningViewSpec extends SpecBase {
       val boundForm =
         form.bind(Map("reasonForCancellation" -> ""))
 
-      val html = view(boundForm, currentDateFormatted, false, NormalMode)(request, messages)
+      val html = view(boundForm, currentDateFormatted, false)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
 
       doc

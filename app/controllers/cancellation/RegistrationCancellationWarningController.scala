@@ -57,7 +57,7 @@ class RegistrationCancellationWarningController @Inject() (
       (for {
         isGroup <- request.userAnswers.get(GroupMemberPage)
         date    <- request.userAnswers.get(CancelRegistrationDatePage)
-      } yield Ok(view(preparedForm, dateFormatter.format(date), isGroup, mode)))
+      } yield Ok(view(preparedForm, dateFormatter.format(date), isGroup)))
         .getOrElse(Redirect(routes.SystemErrorController.onPageLoad()))
     }
   }
@@ -76,7 +76,7 @@ class RegistrationCancellationWarningController @Inject() (
               formWithErrors =>
                 Future.successful(
                   BadRequest(
-                    view(formWithErrors, dateFormatter.format(systemDate), isGroupFlag, mode)
+                    view(formWithErrors, dateFormatter.format(systemDate), isGroupFlag)
                   )
                 ),
               value =>

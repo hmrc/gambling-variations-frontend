@@ -21,7 +21,7 @@ import connectors.GamblingConnector
 import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl}
 import controllers.routes
 import forms.cancellation.CancelGroupRegistrationDateFormProvider
-import models.{BusinessDetails, NormalMode, RegistrationStatus, UserAnswers}
+import models.{BusinessDetails, RegistrationStatus, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
@@ -71,11 +71,11 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
   private val onwardRoute = Call("GET", "/foo")
 
   private lazy val cancelGroupRegistrationDateRoute =
-    controllers.cancellation.routes.CancelGroupRegistrationDateController.onPageLoad(NormalMode).url
+    controllers.cancellation.routes.CancelGroupRegistrationDateController.onPageLoad().url
 
   override val emptyUserAnswers = UserAnswers(userAnswersId)
 
-  private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
+  private def getRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, cancelGroupRegistrationDateRoute)
 
   private def postRequest(answer: LocalDate = validAnswer): FakeRequest[AnyContentAsFormUrlEncoded] =
@@ -146,7 +146,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
         )
 
         running(application) {
-          val request = getRequest()
+          val request = getRequest
 
           val result = route(application, request).value
 
@@ -154,7 +154,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form, NormalMode, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
+            view(form, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
         }
       }
 
@@ -168,15 +168,15 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
         )
 
         running(application) {
-          val request = getRequest()
+          val request = getRequest
 
           val view = application.injector.instanceOf[CancelGroupRegistrationDateView]
 
-          val result = route(application, getRequest()).value
+          val result = route(application, getRequest).value
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form.fill(validAnswer), NormalMode, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
+            view(form.fill(validAnswer), registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
         }
       }
 
@@ -188,7 +188,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
         )
 
         running(application) {
-          val result = route(application, getRequest()).value
+          val result = route(application, getRequest).value
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual
@@ -204,7 +204,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
         )
 
         running(application) {
-          val result = route(application, getRequest()).value
+          val result = route(application, getRequest).value
 
           status(result) mustEqual OK
         }
@@ -320,7 +320,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
           status(result) mustEqual BAD_REQUEST
           contentAsString(result) mustEqual
-            view(boundForm, NormalMode, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
+            view(boundForm, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
         }
       }
 
@@ -348,7 +348,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
           status(result) mustEqual BAD_REQUEST
           contentAsString(result) mustEqual
-            view(boundForm, NormalMode, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
+            view(boundForm, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
         }
       }
 

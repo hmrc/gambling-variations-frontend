@@ -77,7 +77,7 @@ class CancelGroupRegistrationDateController @Inject() (
                 .getOrElse(form)
 
             Ok(
-              view(preparedForm, mode, dateOfRegistration, firstInvalidDate, middleOfDateRange)
+              view(preparedForm, dateOfRegistration, firstInvalidDate, middleOfDateRange)
             )
           }
           .getOrElse(systemErrorRedirect)
@@ -108,7 +108,7 @@ class CancelGroupRegistrationDateController @Inject() (
               formWithErrors =>
                 Future.successful(
                   BadRequest(
-                    view(formWithErrors, mode, dateOfRegistration, firstInvalidDate, middleOfDateRange)
+                    view(formWithErrors, dateOfRegistration, firstInvalidDate, middleOfDateRange)
                   )
                 ),
               value =>

@@ -17,7 +17,7 @@
 package controllers.cancellation
 
 import base.SpecBase
-import models.{BusinessType, NormalMode, RegistrationStatus}
+import models.{BusinessType, RegistrationStatus}
 import pages.{BusinessTypePage, GroupMemberPage, RegistrationStatusPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -52,7 +52,7 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[RegistrationCancellationLockedView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(NormalMode, "http://localhost:10400/gambling/")(request, messages(application)).toString
+        contentAsString(result) mustEqual view("http://localhost:10400/gambling/")(request, messages(application)).toString
       }
     }
 
@@ -81,7 +81,7 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
+          controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
       }
     }
   }

@@ -18,9 +18,9 @@ package views.cancellation
 
 import base.SpecBase
 import forms.cancellation.CancelRegistrationDateFormProvider
-import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import views.html.cancellation.CancelRegistrationDateView
@@ -34,19 +34,19 @@ class CancelRegistrationDateViewSpec extends SpecBase {
     private val app =
       applicationBuilder().build()
 
-    val view =
+    val view: CancelRegistrationDateView =
       app.injector.instanceOf[CancelRegistrationDateView]
 
-    val registrationDate =
+    val registrationDate: LocalDate =
       LocalDate.of(2007, 3, 20)
 
-    val maximumValidDate =
+    val maximumValidDate: LocalDate =
       LocalDate.of(2026, 11, 4)
 
-    val firstInvalidDate =
+    val firstInvalidDate: LocalDate =
       LocalDate.of(2026, 11, 5)
 
-    val middleOfDateRange =
+    val middleOfDateRange: LocalDate =
       LocalDate.of(2017, 1, 27)
 
     val request: play.api.mvc.Request[?] =
@@ -60,27 +60,12 @@ class CancelRegistrationDateViewSpec extends SpecBase {
     val formProvider =
       new CancelRegistrationDateFormProvider()
 
-    val form =
-      formProvider(
-        registrationDate,
-        maximumValidDate
-      )
+    val form: Form[LocalDate] = formProvider(registrationDate, maximumValidDate)
 
-    def document(
-      formToRender: play.api.data.Form[LocalDate] = form
-    ): Document = {
+    def document(formToRender: Form[LocalDate] = form): Document = {
 
       val html =
-        view(
-          formToRender,
-          NormalMode,
-          registrationDate,
-          firstInvalidDate,
-          middleOfDateRange
-        )(
-          request,
-          messages
-        )
+        view(formToRender, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages)
 
       Jsoup.parse(html.body)
     }
@@ -90,7 +75,7 @@ class CancelRegistrationDateViewSpec extends SpecBase {
 
     "must render page correctly" in new Setup {
 
-      val doc =
+      val doc: Document =
         document()
 
       doc.title must include(
@@ -121,8 +106,7 @@ class CancelRegistrationDateViewSpec extends SpecBase {
 
     "must render the dynamic hint with registration date, first invalid date and example date" in new Setup {
 
-      val doc =
-        document()
+      val doc: Document = document()
 
       doc
         .select(".govuk-hint")
@@ -137,8 +121,7 @@ class CancelRegistrationDateViewSpec extends SpecBase {
 
     "must render the registration date in full month format in the hint" in new Setup {
 
-      val doc =
-        document()
+      val doc: Document = document()
 
       doc
         .select(".govuk-hint")
@@ -149,8 +132,7 @@ class CancelRegistrationDateViewSpec extends SpecBase {
 
     "must render the first invalid date in full month format in the hint" in new Setup {
 
-      val doc =
-        document()
+      val doc: Document = document()
 
       doc
         .select(".govuk-hint")
@@ -161,8 +143,7 @@ class CancelRegistrationDateViewSpec extends SpecBase {
 
     "must render the middle date in numerical format in the hint" in new Setup {
 
-      val doc =
-        document()
+      val doc: Document = document()
 
       doc
         .select(".govuk-hint")
@@ -173,8 +154,7 @@ class CancelRegistrationDateViewSpec extends SpecBase {
 
     "must render day, month and year date inputs" in new Setup {
 
-      val doc =
-        document()
+      val doc: Document = document()
 
       doc
         .select("#value\\.day")
@@ -191,20 +171,19 @@ class CancelRegistrationDateViewSpec extends SpecBase {
 
     "must submit to the correct route" in new Setup {
 
-      val doc =
-        document()
+      val doc: Document = document()
 
       doc
         .select("form")
         .attr("action") mustBe
         controllers.cancellation.routes.CancelRegistrationDateController
-          .onSubmit(NormalMode)
+          .onSubmit()
           .url
     }
 
     "must render error summary when form has errors" in new Setup {
 
-      val boundForm =
+      val boundForm: Form[LocalDate] =
         form.bind(
           Map(
             "value.day"   -> "",
@@ -213,8 +192,7 @@ class CancelRegistrationDateViewSpec extends SpecBase {
           )
         )
 
-      val doc =
-        document(boundForm)
+      val doc: Document = document(boundForm)
 
       doc
         .select(".govuk-error-summary")
@@ -231,10 +209,10 @@ class CancelRegistrationDateViewSpec extends SpecBase {
 
     "must render outside boundaries error" in new Setup {
 
-      val invalidDate =
+      val invalidDate: LocalDate =
         registrationDate.minusDays(1)
 
-      val boundForm =
+      val boundForm: Form[LocalDate] =
         form.bind(
           Map(
             "value.day" ->
@@ -246,8 +224,7 @@ class CancelRegistrationDateViewSpec extends SpecBase {
           )
         )
 
-      val doc =
-        document(boundForm)
+      val doc: Document = document(boundForm)
 
       doc
         .select(".govuk-error-summary")
@@ -266,7 +243,7 @@ class CancelRegistrationDateViewSpec extends SpecBase {
 
     "must link the error summary to the day input" in new Setup {
 
-      val boundForm =
+      val boundForm: Form[LocalDate] =
         form.bind(
           Map(
             "value.day"   -> "",
@@ -275,8 +252,7 @@ class CancelRegistrationDateViewSpec extends SpecBase {
           )
         )
 
-      val doc =
-        document(boundForm)
+      val doc: Document = document(boundForm)
 
       doc
         .select(".govuk-error-summary a")

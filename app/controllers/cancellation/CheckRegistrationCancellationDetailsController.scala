@@ -40,6 +40,6 @@ class CheckRegistrationCancellationDetailsController @Inject() (
     val summaryList =
       CheckRegistrationCancellationDetailsViewModel.summaryList(request.userAnswers)
 
-    Ok(view(mode, summaryList))
+    Ok(view(summaryList))
   }
 }

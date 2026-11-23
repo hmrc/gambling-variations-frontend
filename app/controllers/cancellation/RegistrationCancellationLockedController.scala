@@ -39,6 +39,6 @@ class RegistrationCancellationLockedController @Inject() (
     with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    checkScreen(request.userAnswers, CurrentScreen.Locked)(Ok(view(mode, appConfig.gamblingManagementHomeUrl)))
+    checkScreen(request.userAnswers, CurrentScreen.Locked)(Ok(view(appConfig.gamblingManagementHomeUrl)))
   }
 }

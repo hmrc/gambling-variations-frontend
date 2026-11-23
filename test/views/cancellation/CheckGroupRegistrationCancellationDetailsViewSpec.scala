@@ -18,7 +18,6 @@ package views.cancellation
 
 import base.SpecBase
 import controllers.cancellation.routes
-import models.CheckMode
 import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{AnyContent, Request}
@@ -71,7 +70,7 @@ class CheckGroupRegistrationCancellationDetailsViewSpec extends SpecBase {
 
     "must display a Change link to the group cancellation date page" in {
       val link = document.select(".govuk-summary-list__actions a")
-      link.attr("href") mustBe routes.CancelGroupRegistrationDateController.onPageLoad(CheckMode).url
+      link.attr("href") mustBe routes.CancelGroupRegistrationDateController.onPageLoad().url
       link.select(".govuk-visually-hidden").text() mustBe
         messages(s"$msgKey.cancellationDate.change.hidden")
     }

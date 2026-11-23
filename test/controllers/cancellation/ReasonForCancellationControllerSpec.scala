@@ -19,13 +19,14 @@ package controllers.cancellation
 import base.SpecBase
 import forms.cancellation.ReasonForCancellationFormProvider
 import models.cancellation.ReasonForCancellation
-import models.{BusinessType, NormalMode, UserAnswers}
+import models.{BusinessType, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessTypePage, GroupMemberPage}
 import pages.cancellation.ReasonForCancellationPage
+import pages.{BusinessTypePage, GroupMemberPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -39,10 +40,10 @@ class ReasonForCancellationControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val reasonForCancellationRoute = routes.ReasonForCancellationController.onPageLoad(NormalMode).url
+  lazy val reasonForCancellationRoute: String = routes.ReasonForCancellationController.onPageLoad().url
 
-  val formProvider = new ReasonForCancellationFormProvider()
-  val form = formProvider()
+  val form: Form[ReasonForCancellation] = (new ReasonForCancellationFormProvider())()
+
   override val emptyUserAnswers: UserAnswers =
     super.emptyUserAnswers
       .set(BusinessTypePage, BusinessType.Partnership)
@@ -66,7 +67,7 @@ class ReasonForCancellationControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[ReasonForCancellationView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form)(request, messages(application)).toString
       }
     }
 
@@ -84,7 +85,7 @@ class ReasonForCancellationControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(ReasonForCancellation.values.head), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(ReasonForCancellation.values.head))(request, messages(application)).toString
       }
     }
 
@@ -130,7 +131,7 @@ class ReasonForCancellationControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm)(request, messages(application)).toString
       }
     }
 

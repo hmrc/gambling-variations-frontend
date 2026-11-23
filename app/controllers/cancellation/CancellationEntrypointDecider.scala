@@ -16,7 +16,7 @@
 
 package controllers.cancellation
 
-import models.{NormalMode, RegistrationStatus, UserAnswers}
+import models.{RegistrationStatus, UserAnswers}
 import pages.RegistrationStatusPage
 import pages.cancellation.RegistrationCancellationDeclarationPage
 import play.api.mvc.Result
@@ -35,7 +35,7 @@ trait CancellationEntrypointDecider {
       render
     } else {
       Redirect(validScreen match {
-        case CurrentScreen.Cancel  => controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode)
+        case CurrentScreen.Cancel  => controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad()
         case CurrentScreen.Locked  => controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad()
         case CurrentScreen.Warning => controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad()
       })

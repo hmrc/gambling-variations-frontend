@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import base.SpecBase
 import forms.cancellation.RegistrationCancellationWarningFormProvider
-import models.{BusinessType, NormalMode, UserAnswers}
+import models.{BusinessType, UserAnswers}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.cancellation.{CancelRegistrationDatePage, RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDeclarationPage}
 import pages.{BusinessTypePage, GroupMemberPage}
@@ -81,7 +81,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form, currentDateFormatted, isGroupFlag, NormalMode)(request, messages(application)).toString
+            view(form, currentDateFormatted, isGroupFlag)(request, messages(application)).toString
         }
       }
 
@@ -100,7 +100,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form.fill(true), currentDateFormatted, isGroupFlag, NormalMode)(request, messages(application)).toString
+            view(form.fill(true), currentDateFormatted, isGroupFlag)(request, messages(application)).toString
         }
       }
 
@@ -115,7 +115,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual
-            controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
+            controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
         }
       }
 
@@ -130,7 +130,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual
-            controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
+            controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
         }
       }
     }
@@ -167,7 +167,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, currentDateFormatted, isGroupFlag, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, currentDateFormatted, isGroupFlag)(request, messages(application)).toString
         }
       }
 

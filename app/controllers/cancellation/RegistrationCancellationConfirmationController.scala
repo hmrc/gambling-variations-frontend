@@ -43,7 +43,7 @@ class RegistrationCancellationConfirmationController @Inject() (
       .get(RegistrationCancellationConfirmationReferencePage)
       .fold(
         Redirect(controllers.routes.SystemErrorController.onPageLoad().url)
-      )(referenceNumber => Ok(view(mode, appConfig.gamblingManagementHomeUrl, referenceNumber)))
+      )(referenceNumber => Ok(view(appConfig.gamblingManagementHomeUrl, referenceNumber)))
 
   }
 }
