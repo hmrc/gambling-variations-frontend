@@ -20,6 +20,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
 import models.controllingbody.ControllingBodyDetails
+import models.groupmembers.{GroupMember, GroupMembers}
 import models.licencespremises.{LicencesAndPremises, PremisesDetails, PremisesDetailsResponse}
 import models.*
 import org.mockito.Mockito
@@ -771,6 +772,146 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     }
 
   }
+
+  "GamblingConnector.getGroupMembers" should {
+
+    "return GroupMembers when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "groupMembers": [
+           |    {
+           |      "mgdRegNumber": "XGM00000001772",
+           |      "businessPartnerNumber": "0100001772",
+           |      "businessName": "XGM00000001772 0100001772",
+           |      "crn": "1",
+           |      "foreignCorporateRef": "1",
+           |      "isRepMemberOfGroup": "1",
+           |      "dateOfJoining": "2025-05-31",
+           |      "dateOfLeaving": "2026-05-31",
+           |      "emailAddr": "test@example.com",
+           |      "systemDate": "2026-11-18"
+           |    },
+           |    {
+           |      "mgdRegNumber": "XGM00000001772",
+           |      "businessPartnerNumber": "0200001772"
+           |    }
+           |  ]
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getGroupMembers(mgdRegNumber).futureValue mustBe groupMembersResponse
+    }
+
+    "return no members when backend returns an empty list" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+          .willReturn(okJson("""{ "groupMembers": [] }"""))
+      )
+
+      connector.getGroupMembers(mgdRegNumber).futureValue mustBe GroupMembers(Nil)
+    }
+
+    "return no members when backend returns only the registration number in an item" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+          .willReturn(okJson("""{ "groupMembers": [ { "mgdRegNumber": "XGM00000001772" } ] }"""))
+      )
+
+      connector.getGroupMembers(mgdRegNumber).futureValue mustBe GroupMembers(Nil)
+    }
+
+    "return no members when backend returns only the registration number and no list" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+          .willReturn(okJson("""{ "mgdRegNumber": "XGM00000001772" }"""))
+      )
+
+      connector.getGroupMembers(mgdRegNumber).futureValue mustBe GroupMembers(Nil)
+    }
+
+    "throw RuntimeException when a member has no business partner number" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+          .willReturn(okJson("""{ "groupMembers": [ { "mgdRegNumber": "XGM00000001772", "businessName": "Member Ltd" } ] }"""))
+      )
+
+      recoverToSucceededIf[RuntimeException] {
+        connector.getGroupMembers(mgdRegNumber)
+      }
+    }
+
+    "read an empty string as a missing value" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "groupMembers": [
+           |    {
+           |      "mgdRegNumber": "XGM00000001772",
+           |      "businessPartnerNumber": "0200001772",
+           |      "businessName": "",
+           |      "crn": "",
+           |      "foreignCorporateRef": "",
+           |      "isRepMemberOfGroup": "",
+           |      "emailAddr": ""
+           |    }
+           |  ]
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getGroupMembers(mgdRegNumber).futureValue mustBe GroupMembers(groupMembersResponse.groupMembers.drop(1))
+    }
+
+    "throw RuntimeException when a member has an empty business partner number" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+          .willReturn(
+            okJson("""{ "groupMembers": [ { "mgdRegNumber": "XGM00000001772", "businessPartnerNumber": "", "businessName": "Member Ltd" } ] }""")
+          )
+      )
+
+      recoverToSucceededIf[RuntimeException] {
+        connector.getGroupMembers(mgdRegNumber)
+      }
+    }
+
+    "return UpstreamErrorResponse when backend returns 404" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getGroupMembers(mgdRegNumber)
+      }
+    }
+
+    "return UpstreamErrorResponse when backend returns 500" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+          .willReturn(serverError())
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getGroupMembers(mgdRegNumber)
+      }
+    }
+  }
 }
 
 object GamblingConnectorISpec {
@@ -1049,4 +1190,32 @@ object GamblingConnectorISpec {
       isUkIncorporated       = Some("0")
     )
 
+  val groupMembersResponse: GroupMembers = GroupMembers(
+    Seq(
+      GroupMember(
+        mgdRegNumber          = "XGM00000001772",
+        businessPartnerNumber = "0100001772",
+        businessName          = Some("XGM00000001772 0100001772"),
+        crn                   = Some("1"),
+        foreignCorporateRef   = Some("1"),
+        isRepMemberOfGroup    = Some("1"),
+        dateOfJoining         = Some(LocalDate.of(2025, 5, 31)),
+        dateOfLeaving         = Some(LocalDate.of(2026, 5, 31)),
+        emailAddr             = Some("test@example.com"),
+        systemDate            = Some(LocalDate.of(2026, 11, 18))
+      ),
+      GroupMember(
+        mgdRegNumber          = "XGM00000001772",
+        businessPartnerNumber = "0200001772",
+        businessName          = None,
+        crn                   = None,
+        foreignCorporateRef   = None,
+        isRepMemberOfGroup    = None,
+        dateOfJoining         = None,
+        dateOfLeaving         = None,
+        emailAddr             = None,
+        systemDate            = None
+      )
+    )
+  )
 }
