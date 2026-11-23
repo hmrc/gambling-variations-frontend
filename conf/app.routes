@@ -383,6 +383,8 @@ POST       /cancel-registration/no-longer-liable                  controllers.ca
 GET        /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
 POST       /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = CheckMode)
 
+GET        /cancel-registration/submitted                       controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad()
+
 GET        /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = NormalMode)
 
@@ -394,6 +396,8 @@ POST       /cancel-group-registration/reviewing-cancellation-request   controlle
 
 GET        /cancel-registration/check                                   controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoad(mode: Mode = NormalMode)
 GET        /cancel-group-registration/check                             controllers.cancellation.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
+
+GET        /cancel-group-registration/submitted                         controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoadGroup()
 
 GET        /cancel-registration/already-cancelled                       controllers.cancellation.RegistrationCancellationLockedController.onPageLoad(mode: Mode = NormalMode)
 

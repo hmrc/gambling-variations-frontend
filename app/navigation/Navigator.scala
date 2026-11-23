@@ -268,7 +268,11 @@ class Navigator @Inject() () {
     case ChangeGroupRegistrationNumberPage =>
       _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
     case RegistrationCancellationDeclarationPage =>
-      _ => controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoad()
+      userAnswers =>
+        if (userAnswers.get(GroupMemberPage).contains(true))
+          controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoadGroup()
+        else
+          controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoad()
     case RegistrationCancellationDatePage =>
       _ => controllers.cancellation.routes.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
 
