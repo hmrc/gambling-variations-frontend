@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.businesscontactdetails
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import play.api.data.validation.Constraint
-import play.api.data.validation.Invalid
-import play.api.data.validation.Valid
+import play.api.data.validation.{Constraint, Invalid, Valid}
+
+import javax.inject.Inject
 
 class EmailAddressFormProvider @Inject() extends Mappings {
 

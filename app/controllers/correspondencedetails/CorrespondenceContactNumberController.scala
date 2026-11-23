@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.ContactNumberFormProvider
+import forms.businesscontactdetails.BusinessContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.*
@@ -38,7 +38,7 @@ class CorrespondenceContactNumberController @Inject() (
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: ContactNumberFormProvider,
+  formProvider: BusinessContactNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: CorrespondenceContactNumberView
 )(implicit ec: ExecutionContext)

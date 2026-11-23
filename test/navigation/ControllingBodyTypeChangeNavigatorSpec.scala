@@ -107,6 +107,69 @@ class ControllingBodyTypeChangeNavigatorSpec extends SpecBase {
     }
   }
 
+  "Navigator, when an existing controlling body is changed to an unincorporated body" - {
+
+    "from Partnership" - {
+
+      val changed = answers(Unincorporatedbody, Some(Partnership))
+
+      "must route CB-BN-UB to CB-UTR" in {
+        navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, changed) mustBe
+          controllingBodyRoutes.ControllingBodyUTRController.onPageLoad()
+      }
+
+      "must route CB-UTR to CB-CYA" in {
+        navigator.nextPage(ControllingBodyUtrPage, NormalMode, changed) mustBe
+          controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+      }
+    }
+
+    Seq(Soleproprietor, LimitedLiabilityPartnership, Corporatebody).foreach { previous =>
+      s"from $previous" - {
+
+        val changed = answers(Unincorporatedbody, Some(previous))
+
+        "must route CB-BN-UB to CB-CYA" in {
+          navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, changed) mustBe
+            controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+        }
+
+        "must keep the normal route from CB-UTR" in {
+          navigator.nextPage(ControllingBodyUtrPage, NormalMode, changed) mustBe
+            controllingBodyRoutes.ControllingBodyVATScreenerController.onPageLoad()
+        }
+      }
+    }
+
+    "must keep the normal routes of the pages outside the mini-flow" in {
+      val changed = answers(Unincorporatedbody, Some(Partnership))
+
+      navigator.nextPage(ControllingBodyEmailPage, NormalMode, changed) mustBe
+        controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+      navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, changed) mustBe
+        controllingBodyRoutes.ChangeControllingBodyNameController.onPageLoad(Unincorporatedbody)
+    }
+
+    "must not change the routes in check mode" in {
+      val changed = answers(Unincorporatedbody, Some(Partnership))
+
+      navigator.nextPage(ControllingBodyBusinessNamePage, CheckMode, changed) mustBe
+        routes.ChangeRegistrationDetailsController.onPageLoad()
+    }
+  }
+
+  "Navigator, when the controlling body has not been changed to an unincorporated body" - {
+
+    "must keep the normal routes for an existing unincorporated body" in {
+      val unchanged = answers(Unincorporatedbody, None)
+
+      navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, unchanged) mustBe
+        controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+      navigator.nextPage(ControllingBodyUtrPage, NormalMode, unchanged) mustBe
+        controllingBodyRoutes.ControllingBodyVATScreenerController.onPageLoad()
+    }
+  }
+
   "Navigator, when the controlling body has not been changed to a limited liability partnership" - {
 
     "must keep the normal routes for an existing limited liability partnership" in {
@@ -115,7 +178,7 @@ class ControllingBodyTypeChangeNavigatorSpec extends SpecBase {
       navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, unchanged) mustBe
         controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
       navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, unchanged) mustBe
-        routes.IndexController.onPageLoad()
+        controllingBodyRoutes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
       navigator.nextPage(ControllingBodyUtrPage, NormalMode, unchanged) mustBe
         controllingBodyRoutes.ControllingBodyVATScreenerController.onPageLoad()
     }
@@ -135,7 +198,7 @@ class ControllingBodyTypeChangeNavigatorSpec extends SpecBase {
       navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, changedToCorporateBody) mustBe
         controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
       navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, changedToCorporateBody) mustBe
-        routes.IndexController.onPageLoad()
+        controllingBodyRoutes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
     }
   }
 }

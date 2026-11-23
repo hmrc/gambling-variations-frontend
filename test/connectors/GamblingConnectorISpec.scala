@@ -546,7 +546,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
           .willReturn(okJson(jsonAsString))
       )
 
-      connector.getCorrespondenceDetails(mgdRegNumber).futureValue mustBe correspondenceDetails
+      connector.getCorrespondenceDetails(mgdRegNumber).futureValue mustBe contactDetails
     }
 
     "return NotFound when backend returns UpstreamErrorResponse" in {
@@ -859,7 +859,7 @@ object GamblingConnectorISpec {
       returnPeriodEndDates = Seq.empty
     )
 
-  val correspondenceDetails: CorrespondenceDetails = CorrespondenceDetails(
+  val contactDetails: ContactDetails = ContactDetails(
     mgdRegNumber = "XWM00000001770",
     nameLine1    = Some("ABC ltd"),
     nameLine2    = Some("XX"),
@@ -930,8 +930,8 @@ object GamblingConnectorISpec {
         dateOfIncorporation    = Some(LocalDate.parse("2020-03-01")),
         countryOfIncorporation = Some("GB"),
         foreignCorporateRef    = Some("FCR-987654"),
-        correspondenceDetails = Some(
-          CorrespondenceDetails(
+        contactDetails = Some(
+          ContactDetails(
             mgdRegNumber = "XWM00000001762",
             nameLine1    = None,
             nameLine2    = None,

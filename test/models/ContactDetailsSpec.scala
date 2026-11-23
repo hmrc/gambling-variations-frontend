@@ -20,14 +20,14 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
 
-class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
+class ContactDetailsSpec extends AnyWordSpec with Matchers {
 
   "CorrespondenceDetails" should {
 
     "write JSON correctly" in {
 
       val model =
-        CorrespondenceDetails(
+        ContactDetails(
           mgdRegNumber          = "MGD123456",
           nameLine1             = Some("Test Name"),
           nameLine2             = Some("Line 2"),
@@ -56,7 +56,7 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
         )
 
       val result =
-        json.validate[CorrespondenceDetails]
+        json.validate[ContactDetails]
 
       result.isSuccess     shouldBe true
       result.get.nameLine2 shouldBe None
@@ -76,7 +76,7 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
         )
 
       val result =
-        json.validate[CorrespondenceDetails]
+        json.validate[ContactDetails]
 
       result.isSuccess shouldBe true
 
@@ -96,7 +96,7 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
         )
 
       val result =
-        json.validate[CorrespondenceDetails]
+        json.validate[ContactDetails]
 
       result.isSuccess                 shouldBe true
       result.get.additionalInformation shouldBe None
@@ -111,7 +111,7 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
         )
 
       val result =
-        json.validate[CorrespondenceDetails]
+        json.validate[ContactDetails]
 
       result.isSuccess     shouldBe true
       result.get.faxNumber shouldBe None
@@ -126,7 +126,7 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
         )
 
       val result =
-        json.validate[CorrespondenceDetails]
+        json.validate[ContactDetails]
 
       result.isSuccess     shouldBe true
       result.get.emailAddr shouldBe None
@@ -140,7 +140,7 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
         )
 
       val result =
-        json.validate[CorrespondenceDetails]
+        json.validate[ContactDetails]
 
       result.isSuccess                 shouldBe true
       result.get.correspondenceAddress shouldBe None
@@ -154,7 +154,7 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
         )
 
       val result =
-        json.validate[CorrespondenceDetails]
+        json.validate[ContactDetails]
 
       result.isSuccess         shouldBe true
       result.get.contactNumber shouldBe None
@@ -171,7 +171,7 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
       }
 
       val result =
-        json.validate[CorrespondenceDetails]
+        json.validate[ContactDetails]
 
       result.isSuccess       shouldBe true
       result.get.iomOrCiFlag shouldBe Some(true)
@@ -200,13 +200,13 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
       }
 
       val result1 =
-        json1.validate[CorrespondenceDetails]
+        json1.validate[ContactDetails]
 
       val result2 =
-        json2.validate[CorrespondenceDetails]
+        json2.validate[ContactDetails]
 
       val result3 =
-        json3.validate[CorrespondenceDetails]
+        json3.validate[ContactDetails]
 
       result1.isSuccess       shouldBe true
       result1.get.iomOrCiFlag shouldBe None
@@ -227,7 +227,7 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
         )
 
       val result =
-        json.validate[CorrespondenceDetails]
+        json.validate[ContactDetails]
 
       result.isSuccess     shouldBe true
       result.get.nameLine1 shouldBe Some("Name Line 1")

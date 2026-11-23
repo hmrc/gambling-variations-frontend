@@ -17,11 +17,11 @@
 package pages.partnerdetails
 
 import controllers.partnerdetails.PartnerDetailsHelper
-import models.{Address, ContactNumber, CorrespondenceDetails}
+import models.{Address, ContactDetails, ContactNumber}
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with PartnerDetailsHelper {
+class PartnerDetailsContactDetailsSectionPageSpec extends PlaySpec with PartnerDetailsHelper {
 
   "partners" must {
     "PartnerDetailsCorrespondenceDetailsSectionPage" must {
@@ -39,7 +39,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
 
       "be able to read and write PartnerDetailsCorrespondenceDetailsSectionPage values with correct index" in {
 
-        val value1 = CorrespondenceDetails(
+        val value1 = ContactDetails(
           mgdRegNumber = "111",
           nameLine1    = Some("111"),
           nameLine2    = Some("111"),
@@ -83,7 +83,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
           "emailAddr"         -> "111"
         )
 
-        val value2 = CorrespondenceDetails(
+        val value2 = ContactDetails(
           mgdRegNumber = "222",
           nameLine1    = Some("222"),
           nameLine2    = Some("222"),
@@ -140,12 +140,12 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
 
         PartnerDetailsCorrespondenceDetailsSectionPage(businessNumber1).path
           .asSingleJson(json)
-          .validate[CorrespondenceDetails]
+          .validate[ContactDetails]
           .get mustEqual value1
 
         PartnerDetailsCorrespondenceDetailsSectionPage(businessNumber2).path
           .asSingleJson(json)
-          .validate[CorrespondenceDetails]
+          .validate[ContactDetails]
           .get mustEqual value2
       }
 
@@ -168,7 +168,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
 
       "be able to read and write PartnerDetailsCorrespondenceDetailsSectionPage values with correct index" in {
 
-        val value1 = CorrespondenceDetails(
+        val value1 = ContactDetails(
           mgdRegNumber = "111",
           nameLine1    = Some("111"),
           nameLine2    = Some("111"),
@@ -212,7 +212,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
           "emailAddr"         -> "111"
         )
 
-        val value2 = CorrespondenceDetails(
+        val value2 = ContactDetails(
           mgdRegNumber = "222",
           nameLine1    = Some("222"),
           nameLine2    = Some("222"),
@@ -269,12 +269,12 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
 
         PartnerDetailsCorrespondenceDetailsSectionPage(newPartnersIndex1).path
           .asSingleJson(json)
-          .validate[CorrespondenceDetails]
+          .validate[ContactDetails]
           .get mustEqual value1
 
         PartnerDetailsCorrespondenceDetailsSectionPage(newPartnersIndex2).path
           .asSingleJson(json)
-          .validate[CorrespondenceDetails]
+          .validate[ContactDetails]
           .get mustEqual value2
       }
 

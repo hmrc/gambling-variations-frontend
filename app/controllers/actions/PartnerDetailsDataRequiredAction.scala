@@ -21,7 +21,7 @@ import controllers.routes
 import models.BusinessChangeAddrOption.reads
 import models.BusinessType.Soleproprietor
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessPartnerDetails, BusinessType, CorrespondenceDetails, PartnerDetails, PartnersDetails, SoleProprietorName, SoleProprietorPartnerDetails, UserAnswers}
+import models.{BusinessPartnerDetails, BusinessType, ContactDetails, PartnerDetails, PartnersDetails, SoleProprietorName, SoleProprietorPartnerDetails, UserAnswers}
 import pages.*
 import pages.partnerdetails.*
 import play.api.Logging
@@ -119,7 +119,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsDateOfLeavingPage(partnerBusinessNumber), partnerDetails.dateOfLeaving)
 
     updatedAnswers <-
-      updatedAnswers.setOriginalIfDefined(PartnerDetailsCorrespondenceDetailsSectionPage(partnerBusinessNumber), partnerDetails.correspondenceDetails)
+      updatedAnswers.setOriginalIfDefined(PartnerDetailsCorrespondenceDetailsSectionPage(partnerBusinessNumber), partnerDetails.contactDetails)
 
     updatedAnswers <-
       updatedAnswers.setOriginalIfDefined(PartnerDetailsDateOfIncorporationPage(partnerBusinessNumber), partnerDetails.dateOfIncorporation)

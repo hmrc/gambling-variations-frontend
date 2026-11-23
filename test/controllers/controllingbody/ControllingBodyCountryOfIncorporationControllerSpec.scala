@@ -19,14 +19,12 @@ package controllers.controllingbody
 import base.SpecBase
 import forms.controllingbody.ControllingBodyCountryOfIncorporationFormProvider
 import models.{BusinessType, NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyCountryOfIncorporationPage, ControllingBodyIsUkIncorporatedPage}
 import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -35,8 +33,6 @@ import views.html.controllingbody.ControllingBodyCountryOfIncorporationView
 import scala.concurrent.Future
 
 class ControllingBodyCountryOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
-
-  def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ControllingBodyCountryOfIncorporationFormProvider()
   val form = formProvider()
@@ -106,7 +102,7 @@ class ControllingBodyCountryOfIncorporationControllerSpec extends SpecBase with 
       }
     }
 
-    "must redirect to the next page when valid data is submitted" in {
+    "must redirect to foreign corporate reference when a valid country is submitted for a new corporate body" in {
 
       val mockSessionRepository = mock[SessionRepository]
 
@@ -116,7 +112,6 @@ class ControllingBodyCountryOfIncorporationControllerSpec extends SpecBase with 
       val application =
         applicationBuilder(userAnswers = Some(noAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
@@ -130,7 +125,7 @@ class ControllingBodyCountryOfIncorporationControllerSpec extends SpecBase with 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual routes.ControllingBodyForeignCorpRefController.onPageLoad().url
       }
     }
 

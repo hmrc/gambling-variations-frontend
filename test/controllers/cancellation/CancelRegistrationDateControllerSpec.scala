@@ -18,15 +18,16 @@ package controllers.cancellation
 
 import base.SpecBase
 import connectors.GamblingConnector
-import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl, FakeAgentAuthorisedAction, FakeAuthenticatedAction, FakeDataRetrievalAction}
+import controllers.actions.*
 import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
-import models.{BusinessDetails, NormalMode, RegistrationStatus, UserAnswers}
+import models.{BusinessDetails, BusinessType, NormalMode, RegistrationStatus, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.cancellation.CancelRegistrationDatePage
+import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage}
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -93,8 +94,17 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
       .onPageLoad(NormalMode)
       .url
 
-  override val emptyUserAnswers =
+  override val emptyUserAnswers: UserAnswers =
     UserAnswers(userAnswersId)
+      .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
+      .success
+      .value
+      .setOriginal(GroupMemberPage, true)
+      .success
+      .value
+      .setOriginal(DateOfRegistrationPage, registrationDate)
+      .success
+      .value
 
   private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(
@@ -211,14 +221,13 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
       }
 
       "must populate the view when the question has previously been answered" in {
-        val userAnswers =
-          UserAnswers(userAnswersId)
-            .set(
-              CancelRegistrationDatePage,
-              validAnswer
-            )
-            .success
-            .value
+        val userAnswers = emptyUserAnswers
+          .set(
+            CancelRegistrationDatePage,
+            validAnswer
+          )
+          .success
+          .value
 
         val application =
           buildApplication(
@@ -254,9 +263,11 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
       }
 
       "must redirect to SystemError when the business details do not contain a registration date" in {
+        val userAnswers = emptyUserAnswers.remove(DateOfRegistrationPage).success.value
+
         val application =
           buildApplication(
-            userAnswers     = Some(emptyUserAnswers),
+            userAnswers     = Some(userAnswers),
             businessDetails = businessDetailsWithoutRegistrationDate
           )
 
@@ -273,7 +284,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
         }
       }
 
-      "must return OK when no existing user answers are found" in {
+      "must redirect when no existing user answers are found" in {
         val application =
           buildApplication(
             userAnswers     = None,
@@ -284,7 +295,10 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
           val result =
             route(application, getRequest()).value
 
-          status(result) mustEqual OK
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url
         }
       }
     }

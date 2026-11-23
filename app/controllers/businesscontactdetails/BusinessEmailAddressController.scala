@@ -18,7 +18,7 @@ package controllers.businesscontactdetails
 
 import controllers.actions.*
 import controllers.routes
-import forms.EmailAddressFormProvider
+import forms.businesscontactdetails.EmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.GroupMemberPage

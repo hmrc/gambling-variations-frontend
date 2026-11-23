@@ -17,7 +17,7 @@
 package navigation
 
 import controllers.controllingbody.routes as controllingBodyRoutes
-import models.BusinessType.{LimitedLiabilityPartnership, Partnership}
+import models.BusinessType.{LimitedLiabilityPartnership, Partnership, Unincorporatedbody}
 import models.{BusinessType, UserAnswers}
 import pages.Page
 import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodyBusinessTypePage, ControllingBodyCrnPage, ControllingBodyDateOfIncorporationPage, ControllingBodyPreviousBusinessTypePage, ControllingBodyUtrPage}
@@ -33,7 +33,8 @@ object ControllingBodyTypeChangeNavigator {
   def typeChangeRoutes(answers: UserAnswers): PartialFunction[Page, Call] =
     (answers.get(ControllingBodyPreviousBusinessTypePage), answers.get(ControllingBodyBusinessTypePage)) match {
       case (Some(previous), Some(LimitedLiabilityPartnership)) if previous != LimitedLiabilityPartnership => changeToLlpRoutes(previous)
-      case _                                                                                              => PartialFunction.empty
+      case (Some(previous), Some(Unincorporatedbody)) if previous != Unincorporatedbody => changeToUnincorporatedBodyRoutes(previous)
+      case _                                                                            => PartialFunction.empty
     }
 
   // CB-BN-LLP, CB-DIN and CB-CR, then CB-UTR only when the previous type was a partnership, and then CB-CYA.
@@ -46,6 +47,15 @@ object ControllingBodyTypeChangeNavigator {
       controllingBodyRoutes.ControllingBodyUTRController.onPageLoad()
     case ControllingBodyCrnPage =>
       controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+    case ControllingBodyUtrPage if previous == Partnership =>
+      controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+  }
+
+  // CB-BN-UB, then CB-UTR only when the previous type was a partnership, and then CB-CYA. From the other types the
+  // normal route already takes CB-BN-UB to CB-CYA.
+  private def changeToUnincorporatedBodyRoutes(previous: BusinessType): PartialFunction[Page, Call] = {
+    case ControllingBodyBusinessNamePage if previous == Partnership =>
+      controllingBodyRoutes.ControllingBodyUTRController.onPageLoad()
     case ControllingBodyUtrPage if previous == Partnership =>
       controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
   }

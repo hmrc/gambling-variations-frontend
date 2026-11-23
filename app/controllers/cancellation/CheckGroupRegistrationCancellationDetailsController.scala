@@ -14,50 +14,29 @@
  * limitations under the License.
  */
 
-package controllers.businesscontactdetails
+package controllers.cancellation
 
-import controllers.actions.*
-import controllers.routes
-import pages.GroupMemberPage
-import pages.contactdetails.*
+import controllers.actions.{AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.FlagsUtil.checkFlag
-import views.html.businesscontactdetails.CheckContactDetailsView
+import viewmodels.checkAnswers.cancellation.CheckGroupRegistrationCancellationDetailsViewModel
+import views.html.cancellation.CheckGroupRegistrationCancellationDetailsView
 
 import javax.inject.Inject
 
-class CheckContactDetailsController @Inject() (
+class CheckGroupRegistrationCancellationDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: BusinessContactDetailsDataRequiredAction,
+  requireData: BusinessDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: CheckContactDetailsView
+  view: CheckGroupRegistrationCancellationDetailsView
 ) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    request.userAnswers.get(GroupMemberPage) match {
-      case Some(true) =>
-        Redirect(routes.AccessDeniedController.onPageLoad())
-      case Some(false) =>
-        val ua = request.userAnswers
-
-        val showChangeMessage: Boolean = checkFlag(ua, ContactDetailsChangesPage, BusinessContactDetailsSubmittedPage)
-
-        Ok(
-          view(
-            ua.get(BusinessContactNumberPage).flatMap(_.phoneNumber),
-            ua.get(BusinessContactNumberPage).flatMap(_.mobilePhoneNumber),
-            ua.get(BusinessFaxNumberPage),
-            ua.get(BusinessEmailAddressPage),
-            showChangeMessage
-          )
-        )
-      case None =>
-        Redirect(routes.SystemErrorController.onPageLoad())
-    }
+    val summaryList = CheckGroupRegistrationCancellationDetailsViewModel.summaryList(request.userAnswers)
+    Ok(view(summaryList))
   }
 }

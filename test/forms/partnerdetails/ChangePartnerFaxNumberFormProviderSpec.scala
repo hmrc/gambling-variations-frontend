@@ -16,8 +16,8 @@
 
 package forms.partnerdetails
 
-import forms.FaxNumberFormProvider
 import forms.behaviours.StringFieldBehaviours
+import forms.businesscontactdetails.FaxNumberFormProvider
 import org.scalacheck.Gen
 import play.api.data.{Form, FormError}
 

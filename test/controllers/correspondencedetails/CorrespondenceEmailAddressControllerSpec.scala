@@ -18,7 +18,7 @@ package controllers.correspondencedetails
 
 import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
-import forms.EmailAddressFormProvider
+import forms.businesscontactdetails.EmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

@@ -28,7 +28,7 @@ import navigation.PartnerDetailsNavigator.{partnerDetailsCheckRoutes, partnerDet
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
-import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage, RegistrationCancellationDeclarationPage}
+import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage, RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
 import pages.contactdetails.*
 import pages.controllingbody.*
 import pages.correspondencedetails.*
@@ -64,11 +64,20 @@ class Navigator @Inject() () {
     case ControllingBodyDateOfBirthPage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyDateOfIncorporationPage =>
-      _ => routes.IndexController.onPageLoad() // TODO: Connect the next controlling body screen when the journey is built.
+      // DTR-9544: add flow; CB-CYA navigation is covered by follow-up tickets.
+      answers =>
+        val isCorporateBodyOrLlp =
+          answers
+            .get(ControllingBodyBusinessTypePage)
+            .exists(businessType => businessType == Corporatebody || businessType == LimitedLiabilityPartnership)
+        if (isCorporateBodyOrLlp) controllers.controllingbody.routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
+        else routes.SystemErrorController.onPageLoad()
     case ControllingBodyIsUkIncorporatedPage =>
-      userAnswers => navigateControllingBodyIsUkIncorporatedPage(userAnswers)
-    case ControllingBodyCrnPage =>
-      _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-UTR when the controlling body journey is built.
+      answers => navigateControllingBodyIsUkIncorporatedPage(answers)
+    case ControllingBodyCountryOfIncorporationPage =>
+      _ => controllers.controllingbody.routes.ControllingBodyForeignCorpRefController.onPageLoad()
+    case ControllingBodyCrnPage | ControllingBodyForeignCorpRefPage =>
+      _ => controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
     case ControllingBodySameAsRepYesNoPage =>
       userAnswers => navigateControllingBodySameAsRepYesNoPage(userAnswers)
     case ControllingBodyNotProvidedYesNoPage =>
@@ -94,15 +103,15 @@ class Navigator @Inject() () {
     case TradingNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessFaxNumberPage =>
-      _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
+      _ => controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad()
     case RemoveFaxNumberPage =>
-      _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
+      _ => controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad()
     case RemoveEmailAddressPage =>
-      _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
+      _ => controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad()
     case BusinessContactNumberPage =>
-      _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
+      _ => controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad()
     case BusinessEmailAddressPage =>
-      _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
+      _ => controllers.businesscontactdetails.routes.CheckBusinessContactDetailsController.onPageLoad()
     case BusinessTradeClassPage =>
       _ => controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
     case IsSeasonalBusinessPage =>
@@ -260,6 +269,8 @@ class Navigator @Inject() () {
       _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
     case RegistrationCancellationDeclarationPage =>
       _ => controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoad()
+    case RegistrationCancellationDatePage =>
+      _ => controllers.cancellation.routes.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -277,6 +288,9 @@ class Navigator @Inject() () {
 
     case CancelRegistrationDatePage =>
       _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+
+    case RegistrationCancellationDatePage =>
+      _ => controllers.cancellation.routes.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
 
     case ReasonForCancellationPage =>
       userAnswers => navigateCheckReasonForCancellationPage(userAnswers)
@@ -613,14 +627,11 @@ class Navigator @Inject() () {
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigateControllingBodyIsUkIncorporatedPage(userAnswers: UserAnswers): Call =
-    userAnswers
-      .get(ControllingBodyIsUkIncorporatedPage)
-      .map {
-        case "1" => routes.IndexController.onPageLoad() // TODO later -> DateOfIncorporation Screen
-        case "0" => routes.IndexController.onPageLoad() // TODO later -> CountryOfIncorporation Screen
-        case _   => routes.SystemErrorController.onPageLoad()
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
+    (userAnswers.get(ControllingBodyBusinessTypePage), userAnswers.get(ControllingBodyIsUkIncorporatedPage)) match {
+      case (Some(Corporatebody), Some("1")) => controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+      case (Some(Corporatebody), Some("0")) => controllers.controllingbody.routes.ControllingBodyCountryOfIncorporationController.onPageLoad()
+      case _                                => routes.SystemErrorController.onPageLoad()
+    }
 }
 
 private def navigateControllingBodySameAsRepYesNoPage(answers: UserAnswers): Call =

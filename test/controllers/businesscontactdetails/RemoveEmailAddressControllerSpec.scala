@@ -18,7 +18,7 @@ package controllers.businesscontactdetails
 
 import base.SpecBase
 import controllers.{LoadedBusinessContactDetails, routes}
-import forms.RemoveEmailAddressFormProvider
+import forms.businesscontactdetails.RemoveEmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import org.mockito.ArgumentCaptor

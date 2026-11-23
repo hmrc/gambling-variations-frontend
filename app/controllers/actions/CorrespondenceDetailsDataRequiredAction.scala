@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{CorrespondenceDetails, UserAnswers}
+import models.{ContactDetails, UserAnswers}
 import pages.*
 import pages.correspondencedetails.{CorrespondenceAdditionalInformationPage, CorrespondenceAdditionalNamePage, CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceContactNumberPage, CorrespondenceDetailsSection, CorrespondenceEmailPage, CorrespondenceFaxNumberPage, CorrespondenceNamePage}
 import play.api.Logging
@@ -89,7 +89,7 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setCorrespondenceDetails(correspondenceDetails: CorrespondenceDetails, answers: UserAnswers): Try[UserAnswers] = {
+  private def setCorrespondenceDetails(correspondenceDetails: ContactDetails, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Correspondence Details")
     val loadedAnswers = answers.withSectionLoaded(CorrespondenceDetailsSection, Instant.now(clock))
     for {
