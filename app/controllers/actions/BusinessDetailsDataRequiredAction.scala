@@ -140,6 +140,11 @@ class BusinessDetailsDataRequiredActionImpl @Inject() (
                           details.groupReg
                         )
 
+      updatedAnswers <- updatedAnswers.set(
+                          RegistrationStatusPage,
+                          details.currentlyRegistered
+                        )
+
       updatedAnswers <- updatedAnswers.setIfDefined(
                           DateOfRegistrationPage,
                           details.dateOfRegistration

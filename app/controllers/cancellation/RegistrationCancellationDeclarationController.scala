@@ -20,6 +20,7 @@ import controllers.Execution.trampoline
 import controllers.actions.*
 import models.NormalMode
 import navigation.Navigator
+import pages.GroupMemberPage
 import pages.cancellation.RegistrationCancellationDeclarationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -42,11 +43,14 @@ class RegistrationCancellationDeclarationController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    Ok(view())
+  def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    request.userAnswers.get(GroupMemberPage) match {
+      case Some(flag) => Ok(view(flag))
+      case None       => Redirect(controllers.routes.SystemErrorController.onPageLoad().url)
+    }
   }
 
-  def onSubmit: Action[AnyContent] =
+  def onSubmit(): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(RegistrationCancellationDeclarationPage, true))
