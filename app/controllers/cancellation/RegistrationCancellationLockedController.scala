@@ -25,9 +25,9 @@ import views.html.cancellation.RegistrationCancellationLockedView
 
 import javax.inject.Inject
 
-//TODO add view spec
 class RegistrationCancellationLockedController @Inject() (
   override val messagesApi: MessagesApi,
+  appConfig: FrontendAppConfig,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessDetailsDataRequiredAction,
@@ -37,8 +37,7 @@ class RegistrationCancellationLockedController @Inject() (
     with CancellationEntrypointDecider
     with I18nSupport {
 
-  // TODO checking here
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    checkScreen(request.userAnswers, CurrentScreen.Locked)(Ok(view()))
+    checkScreen(request.userAnswers, CurrentScreen.Locked)(Ok(view(mode, appConfig.gamblingManagementHomeUrl)))
   }
 }

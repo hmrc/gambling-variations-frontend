@@ -22,17 +22,15 @@ import pages.cancellation.RegistrationCancellationDeclarationPage
 import play.api.mvc.Result
 import play.api.mvc.Results.Redirect
 
-//TODO is it worth it?
 trait CancellationEntrypointDecider {
 
-  // TODO name
   enum CurrentScreen {
     case Cancel, Locked, Warning
   }
 
   def checkScreen(userAnswers: UserAnswers, currentScreen: CurrentScreen)(render: => Result): Result = {
     val validScreen: CurrentScreen = determineValidScreen(userAnswers)
-    println("currentSceen: " + currentScreen)
+    println("currentScreen: " + currentScreen)
     println("validScreen: " + validScreen)
 
     if (currentScreen == validScreen) {
@@ -47,22 +45,16 @@ trait CancellationEntrypointDecider {
   }
 
   private def determineValidScreen(userAnswers: UserAnswers): CurrentScreen = {
-
-    // User submitted cancellation, but if isAlreadyCancelled is false means HMRC didn't approve it yet and show warninig
-    val registrationAlreadyCancelled = userAnswers.get(RegistrationCancellationDeclarationPage).contains(true)
-
-    // HMRC already cancelled, has to go to locked
-    val isAlreadyCancelled = userAnswers.get(RegistrationStatusPage).exists {
+    val hmrcConfirmedCancellation = userAnswers.get(RegistrationStatusPage).exists {
       case RegistrationStatus.Cancelled => true
       case _                            => false
     }
 
-    println("registrationAlreadyCancelled: " + registrationAlreadyCancelled)
-    println("isAlreadyCancelled: " + isAlreadyCancelled)
+    lazy val userHasCancelled = userAnswers.get(RegistrationCancellationDeclarationPage).contains(true)
 
-    if (isAlreadyCancelled) {
+    if (hmrcConfirmedCancellation) {
       CurrentScreen.Locked
-    } else if (registrationAlreadyCancelled) {
+    } else if (userHasCancelled) {
       CurrentScreen.Warning
     } else {
       CurrentScreen.Cancel

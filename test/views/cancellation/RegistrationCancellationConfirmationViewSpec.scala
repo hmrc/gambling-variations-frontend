@@ -18,6 +18,7 @@ package views.cancellation
 
 import base.SpecBase
 import forms.cancellation.ChangeGroupRegistrationNumberFormProvider
+import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
@@ -50,7 +51,7 @@ class RegistrationCancellationConfirmationViewSpec extends SpecBase {
 
     "must render page correctly" in new Setup {
 
-      val html = view(redirectUrl, referenceNumber)(request, messages)
+      val html = view(NormalMode, redirectUrl, referenceNumber)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
 
       doc.title must include(
