@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import base.SpecBase
 import connectors.GamblingConnector
-import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl, FakeAgentAuthorisedAction, FakeAuthenticatedAction, FakeDataRetrievalAction}
+import controllers.actions.*
 import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
 import models.{BusinessDetails, BusinessType, NormalMode, RegistrationStatus, UserAnswers}
@@ -26,8 +26,8 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage, RegistrationStatusPage}
-import pages.cancellation.{CancelRegistrationDatePage, RegistrationCancellationDatePage}
+import pages.cancellation.CancelRegistrationDatePage
+import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage}
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -94,8 +94,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
       .onPageLoad(NormalMode)
       .url
 
-  private val dateOfCancellation: LocalDate = LocalDate.of(2022, 1, 15)
-  override val emptyUserAnswers =
+  override val emptyUserAnswers: UserAnswers =
     UserAnswers(userAnswersId)
       .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
       .success
