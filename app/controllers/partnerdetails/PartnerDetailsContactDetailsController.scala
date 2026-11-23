@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import controllers.actions.*
-import forms.ContactNumberFormProvider
+import forms.businesscontactdetails.BusinessContactNumberFormProvider
 import models.{ContactNumber, Mode}
 import navigation.Navigator
 import pages.partnerdetails.PartnerDetailsContactNumberPage
@@ -39,7 +39,7 @@ class PartnerDetailsContactDetailsController @Inject() (
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
-  formProvider: ContactNumberFormProvider,
+  formProvider: BusinessContactNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsContactDetailsView
 )(implicit ec: ExecutionContext)

@@ -18,7 +18,7 @@ package controllers.businesscontactdetails
 
 import controllers.actions.*
 import controllers.routes
-import forms.ContactNumberFormProvider
+import forms.businesscontactdetails.BusinessContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.GroupMemberPage
@@ -40,7 +40,7 @@ class BusinessContactNumberController @Inject() (
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessContactDetailsDataRequiredAction,
-  formProvider: ContactNumberFormProvider,
+  formProvider: BusinessContactNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: BusinessContactNumberView
 )(implicit ec: ExecutionContext)

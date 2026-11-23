@@ -17,7 +17,7 @@
 package controllers.tradingdetails
 
 import controllers.actions.*
-import forms.OtherTradeClassFormProvider
+import forms.tradingdetails.OtherTradeClassFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.tradingdetails.*

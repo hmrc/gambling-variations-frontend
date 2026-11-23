@@ -18,7 +18,7 @@ package controllers.businesscontactdetails
 
 import controllers.actions.*
 import controllers.routes
-import forms.RemoveEmailAddressFormProvider
+import forms.businesscontactdetails.RemoveEmailAddressFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.GroupMemberPage

@@ -17,7 +17,7 @@
 package controllers.tradingdetails
 
 import controllers.actions.*
-import forms.AssociatedRegNumberFormProvider
+import forms.tradingdetails.AssociatedRegNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.*
