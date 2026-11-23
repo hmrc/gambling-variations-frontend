@@ -19,7 +19,7 @@ package views.cancellation
 import base.SpecBase
 import controllers.cancellation.routes
 import models.CheckMode
-import pages.cancellation.RegistrationCancellationDatePage
+import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{AnyContent, Request}
 import play.api.test.FakeRequest
@@ -41,7 +41,7 @@ class CheckGroupRegistrationCancellationDetailsViewSpec extends SpecBase {
   private val view = application.injector.instanceOf[CheckGroupRegistrationCancellationDetailsView]
 
   private val userAnswers =
-    emptyUserAnswers.set(RegistrationCancellationDatePage, LocalDate.of(2026, 11, 20)).success.value
+    emptyUserAnswers.set(CancelRegistrationDatePage, LocalDate.of(2026, 11, 20)).success.value
 
   private val document = org.jsoup.Jsoup.parse(
     view(CheckGroupRegistrationCancellationDetailsViewModel.summaryList(userAnswers)).toString

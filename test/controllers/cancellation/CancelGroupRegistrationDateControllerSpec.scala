@@ -26,7 +26,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.cancellation.RegistrationCancellationDatePage
+import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -160,7 +160,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
       "must populate the view when the question has previously been answered" in {
 
-        val userAnswers = UserAnswers(userAnswersId).set(RegistrationCancellationDatePage, validAnswer).success.value
+        val userAnswers = UserAnswers(userAnswersId).set(CancelRegistrationDatePage, validAnswer).success.value
 
         val application = buildApplication(
           userAnswers     = Some(userAnswers),
@@ -238,7 +238,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
           verify(mockSessionRepository).set(
             org.mockito.ArgumentMatchers.argThat[UserAnswers] { answers =>
-              answers.get(RegistrationCancellationDatePage).contains(validAnswer)
+              answers.get(CancelRegistrationDatePage).contains(validAnswer)
             }
           )
         }
@@ -487,7 +487,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
           verify(mockSessionRepository).set(
             org.mockito.ArgumentMatchers.argThat[UserAnswers] { answers =>
-              answers.get(RegistrationCancellationDatePage).contains(validAnswer)
+              answers.get(CancelRegistrationDatePage).contains(validAnswer)
             }
           )
         }

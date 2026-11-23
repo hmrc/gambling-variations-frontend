@@ -19,7 +19,7 @@ package viewmodels.checkAnswers.cancellation
 import base.SpecBase
 import controllers.cancellation.routes
 import models.CheckMode
-import pages.cancellation.RegistrationCancellationDatePage
+import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
@@ -34,7 +34,7 @@ class CheckGroupRegistrationCancellationDetailsViewModelSpec extends SpecBase {
     application.injector.instanceOf[MessagesApi].preferred(FakeRequest())
 
   private val userAnswers =
-    emptyUserAnswers.set(RegistrationCancellationDatePage, LocalDate.of(2026, 11, 20)).success.value
+    emptyUserAnswers.set(CancelRegistrationDatePage, LocalDate.of(2026, 11, 20)).success.value
 
   "CheckGroupRegistrationCancellationDetailsViewModelSpec" - {
 
@@ -54,7 +54,7 @@ class CheckGroupRegistrationCancellationDetailsViewModelSpec extends SpecBase {
       }
 
       "not show a leading zero on the day" in {
-        val answers = emptyUserAnswers.set(RegistrationCancellationDatePage, LocalDate.of(2026, 11, 2)).success.value
+        val answers = emptyUserAnswers.set(CancelRegistrationDatePage, LocalDate.of(2026, 11, 2)).success.value
         val row = CheckGroupRegistrationCancellationDetailsViewModel.summaryList(answers).rows.head
         row.value.content mustBe Text("2 Nov 2026")
       }

@@ -30,14 +30,14 @@
 
 @(form: Form[_], dateFormatted: String, isGroupFlag: Boolean, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("cancelGroupRegistrationWarning.title"), Some(if(isGroupFlag){messages("cancelGroupRegistrationDate.caption")}else{messages("cancelGroupRegistrationDate.caption")}))) {
+@layout(pageTitle = titleNoForm(messages("cancelGroupRegistrationWarning.title"), Some(if(isGroupFlag){messages("cancelGroupRegistrationDate.caption")}else{messages("registrationCancellationDeclaration.caption")}))) {
     @formHelper(action = controllers.cancellation.routes.RegistrationCancellationWarningController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
         }
 
-        @caption(messages("cancelGroupRegistrationDate.caption"))
+        @if(isGroupFlag){@caption(messages("cancelGroupRegistrationDate.caption"))}else{@caption(messages("registrationCancellationDeclaration.caption"))}
 
         @h1("cancelGroupRegistrationWarning.heading")
 

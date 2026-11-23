@@ -28,7 +28,7 @@ import models.controllingbody.ControllingBodyChangeOption.*
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
-import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage, RegistrationCancellationDatePage}
+import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage}
 import pages.contactdetails.*
 import pages.controllingbody.*
 import pages.correspondencedetails.*
@@ -398,13 +398,13 @@ class NavigatorSpec extends SpecBase {
                 .onPageLoad()
           }
 
-          "should route RegistrationCancellationDatePage to group cancellation check answers in NormalMode" in {
-            navigator.nextPage(RegistrationCancellationDatePage, NormalMode, emptyAnswers) mustBe
+          "should route CancelRegistrationDatePage to group cancellation check answers in NormalMode" in {
+            navigator.nextPage(CancelRegistrationDatePage, NormalMode, emptyAnswers) mustBe
               controllers.cancellation.routes.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
           }
 
-          "should route RegistrationCancellationDatePage to group cancellation check answers in CheckMode" in {
-            navigator.nextPage(RegistrationCancellationDatePage, CheckMode, emptyAnswers) mustBe
+          "should route CancelRegistrationDatePage to group cancellation check answers in CheckMode" in {
+            navigator.nextPage(CancelRegistrationDatePage, CheckMode, emptyAnswers) mustBe
               controllers.cancellation.routes.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
           }
         }

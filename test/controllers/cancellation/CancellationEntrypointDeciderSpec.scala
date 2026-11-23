@@ -21,7 +21,7 @@ import forms.cancellation.CancelRegistrationDateFormProvider
 import models.{BusinessType, NormalMode, RegistrationStatus, UserAnswers}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage, RegistrationStatusPage}
-import pages.cancellation.{RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
+import pages.cancellation.{CancelRegistrationDatePage, RegistrationCancellationDeclarationPage}
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -88,7 +88,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
     .setOriginal(DateOfRegistrationPage, registrationDate)
     .success
     .value
-    .setOriginal(RegistrationCancellationDatePage, dateOfCancellation)
+    .setOriginal(CancelRegistrationDatePage, dateOfCancellation)
     .success
     .value
 

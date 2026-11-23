@@ -19,18 +19,18 @@ package pages.cancellation
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-class RegistrationCancellationDatePageSpec extends PlaySpec {
+class CancelRegistrationDatePageSpec extends PlaySpec {
 
-  "RegistrationCancellationDatePage" must {
+  "CancelRegistrationDatePage" must {
 
     "have the correct path" in {
 
-      RegistrationCancellationDatePage.path mustEqual (JsPath \ "registrationCancellationDate")
+      CancelRegistrationDatePage.path mustEqual (JsPath \ "registrationCancellationDate")
     }
 
     "have the correct toString value" in {
 
-      RegistrationCancellationDatePage.toString mustEqual "registrationCancellationDate"
+      CancelRegistrationDatePage.toString mustEqual "registrationCancellationDate"
     }
   }
 }

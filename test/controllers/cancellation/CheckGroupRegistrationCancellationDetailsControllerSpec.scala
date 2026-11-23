@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import base.SpecBase
 import models.BusinessType
-import pages.cancellation.RegistrationCancellationDatePage
+import pages.cancellation.CancelRegistrationDatePage
 import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
@@ -42,7 +42,7 @@ class CheckGroupRegistrationCancellationDetailsControllerSpec extends SpecBase {
           .set(GroupMemberPage, true)
           .success
           .value
-          .set(RegistrationCancellationDatePage, LocalDate.of(2026, 11, 20))
+          .set(CancelRegistrationDatePage, LocalDate.of(2026, 11, 20))
           .success
           .value
 
