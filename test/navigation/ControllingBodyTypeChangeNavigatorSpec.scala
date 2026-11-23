@@ -201,4 +201,109 @@ class ControllingBodyTypeChangeNavigatorSpec extends SpecBase {
         controllingBodyRoutes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
     }
   }
+
+  "Navigator, when an existing controlling body is changed to a sole proprietor" - {
+
+    "from Partnership" - {
+
+      val changed = answers(Soleproprietor, Some(Partnership))
+
+      "must route CB-DOB to CB-NI-SC" in {
+        navigator.nextPage(ControllingBodyDateOfBirthPage, NormalMode, changed) mustBe
+          controllingBodyRoutes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+      }
+
+      "must route CB-NI-SC to CB-NI when Yes is selected" in {
+        val answersWithYes = changed
+          .set(ControllingBodyAddNINumberYesNoPage, true)
+          .success
+          .value
+
+        navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answersWithYes) mustBe
+          controllingBodyRoutes.ControllingBodyNINumberController.onPageLoad()
+      }
+
+      "must route CB-NI-SC to CB-UTR when No is selected" in {
+        val answersWithNo = changed
+          .set(ControllingBodyAddNINumberYesNoPage, false)
+          .success
+          .value
+
+        navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answersWithNo) mustBe
+          controllingBodyRoutes.ControllingBodyUTRController.onPageLoad()
+      }
+
+      "must route CB-NI to CB-UTR" in {
+        navigator.nextPage(ControllingBodyNinoPage, NormalMode, changed) mustBe
+          controllingBodyRoutes.ControllingBodyUTRController.onPageLoad()
+      }
+
+      "must route CB-UTR to CB-CYA" in {
+        navigator.nextPage(ControllingBodyUtrPage, NormalMode, changed) mustBe
+          controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+      }
+    }
+
+    Seq(Unincorporatedbody, Corporatebody, LimitedLiabilityPartnership).foreach { previous =>
+      s"from $previous" - {
+
+        val changed = answers(Soleproprietor, Some(previous))
+
+        "must route CB-DOB to CB-NI-SC" in {
+          navigator.nextPage(ControllingBodyDateOfBirthPage, NormalMode, changed) mustBe
+            controllingBodyRoutes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+        }
+
+        "must route CB-NI-SC to CB-NI when Yes is selected" in {
+          val answersWithYes = changed
+            .set(ControllingBodyAddNINumberYesNoPage, true)
+            .success
+            .value
+
+          navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answersWithYes) mustBe
+            controllingBodyRoutes.ControllingBodyNINumberController.onPageLoad()
+        }
+
+        "must route CB-NI-SC to CB-CYA when No is selected" in {
+          val answersWithNo = changed
+            .set(ControllingBodyAddNINumberYesNoPage, false)
+            .success
+            .value
+
+          navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answersWithNo) mustBe
+            controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+        }
+
+        "must route CB-NI to CB-CYA" in {
+          navigator.nextPage(ControllingBodyNinoPage, NormalMode, changed) mustBe
+            controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+        }
+      }
+    }
+
+    "must keep the normal routes of pages outside the mini-flow" in {
+      val changed = answers(Soleproprietor, Some(Partnership))
+
+      navigator.nextPage(ControllingBodyEmailPage, NormalMode, changed) mustBe
+        controllingBodyRoutes.CheckControllingBodyDetailsController.onPageLoad()
+
+      navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, changed) mustBe
+        controllingBodyRoutes.ChangeControllingBodyNameController.onPageLoad(Soleproprietor)
+    }
+
+    "must not change the routes in check mode" in {
+      val changed = answers(Soleproprietor, Some(Partnership))
+
+      navigator.nextPage(ControllingBodyBusinessNamePage, CheckMode, changed) mustBe
+        routes.ChangeRegistrationDetailsController.onPageLoad()
+    }
+
+    "must keep the normal route from CB-UTR when previous type was not Partnership" in {
+      val changed = answers(Soleproprietor, Some(Corporatebody))
+
+      navigator.nextPage(ControllingBodyUtrPage, NormalMode, changed) mustBe
+        controllingBodyRoutes.ControllingBodyVATScreenerController.onPageLoad()
+    }
+  }
+
 }
