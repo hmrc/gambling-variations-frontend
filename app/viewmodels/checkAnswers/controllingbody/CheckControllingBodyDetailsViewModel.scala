@@ -62,13 +62,20 @@ case class CheckControllingBodyDetailsViewModel(
                                                  faxNumber: Option[String] = None,
                                                  addEmailAddress: Option[Boolean] = None,
                                                  emailAddress: Option[String] = None,
-                                                 hasContinued: Boolean = false
+                                                 hasContinued: Boolean = false,
+                                                 isChangeFlow: Boolean = false
                                                ) {
 
   import CheckControllingBodyDetailsViewModel.*
 
   private val isSoleProprietor: Boolean = businessType.contains(Soleproprietor)
   private val isCorporateBody: Boolean = businessType.contains(Corporatebody)
+
+  // Existing details are immutable in the change flow, and can be edited in the add flow
+  private val isLocked: Boolean = isChangeFlow
+
+  // Remove links appear once the user has continued in the add flow, and straight away in the change flow
+  private val showRemove: Boolean = hasContinued || isChangeFlow
 
   // A corporate body is first asked whether it is incorporated in the UK. A limited liability partnership is not asked, since it is always
   // incorporated in the UK, so its incorporation details are shown whatever the loaded flag says
@@ -89,18 +96,18 @@ case class CheckControllingBodyDetailsViewModel(
     case LimitedLiabilityPartnership => MandatoryDetail.text("limitedLiabilityPartnershipName", businessName, nameUrl(LimitedLiabilityPartnership))
   }
 
-  // Immutable once provided
+  // Immutable in the change flow
   private val dateOfBirthDetail: Option[MandatoryDetail] =
-    Option.when(isSoleProprietor)(MandatoryDetail.date("soleProprietorDOB", dateOfBirth, dateOfBirthUrl, locked = true))
+    Option.when(isSoleProprietor)(MandatoryDetail.date("soleProprietorDOB", dateOfBirth, dateOfBirthUrl, locked = isLocked))
 
-  // Immutable once provided
+  // Immutable in the change flow
   private val isUkIncorporatedDetail: Option[MandatoryDetail] =
     Option.when(isCorporateBody) {
       MandatoryDetail(
         "isIncorporated",
         isUkIncorporated.map(answer => messages => Text(yesNo(answer)(messages))),
         isUkIncorporatedUrl,
-        locked = true
+        locked = isLocked
       )
     }
 
@@ -110,13 +117,13 @@ case class CheckControllingBodyDetailsViewModel(
   private val foreignCorporateRefDetail: Option[MandatoryDetail] =
     Option.when(showNonUkIncorporation)(MandatoryDetail.text("foreignCorporateRef", foreignCorporateRef, foreignCorporateRefUrl))
 
-  // Immutable once provided
+  // Immutable in the change flow
   private val dateOfIncorporationDetail: Option[MandatoryDetail] =
-    Option.when(showUkIncorporation)(MandatoryDetail.date("dateOfInc", dateOfIncorporation, dateOfIncorporationUrl, locked = true))
+    Option.when(showUkIncorporation)(MandatoryDetail.date("dateOfInc", dateOfIncorporation, dateOfIncorporationUrl, locked = isLocked))
 
-  // Immutable once provided
+  // Immutable in the change flow
   private val crnDetail: Option[MandatoryDetail] =
-    Option.when(showUkIncorporation)(MandatoryDetail.text("companyRegNumber", crn, crnUrl, locked = true))
+    Option.when(showUkIncorporation)(MandatoryDetail.text("companyRegNumber", crn, crnUrl, locked = isLocked))
 
   // A partnership is not asked for a Unique Taxpayer Reference
   private val utrDetail: Option[MandatoryDetail] =
@@ -166,7 +173,7 @@ case class CheckControllingBodyDetailsViewModel(
         screenerRow("addTradingName", addTradingName, addTradingNameUrl),
         optionalRow("tradingName", addTradingName, tradingName, tradingNameUrl, Some(removeTradingNameUrl)),
         Option.when(isSoleProprietor)(screenerRow("addNino", addNino, addNinoUrl)).flatten,
-        Option.when(isSoleProprietor)(optionalRow("nino", addNino, nino, ninoUrl, locked = true)).flatten,
+        Option.when(isSoleProprietor)(optionalRow("nino", addNino, nino, ninoUrl, locked = isLocked)).flatten,
         isUkIncorporatedDetail.map(_.row),
         countryOfIncorporationDetail.map(_.row),
         foreignCorporateRefDetail.map(_.row),
@@ -174,7 +181,7 @@ case class CheckControllingBodyDetailsViewModel(
         crnDetail.map(_.row),
         utrDetail.map(_.row),
         screenerRow("addVat", addVrn, addVrnUrl),
-        optionalRow("vat", addVrn, vrn, vrnUrl, locked = true)
+        optionalRow("vat", addVrn, vrn, vrnUrl, locked = isLocked)
       ).flatten
     )
 
@@ -209,7 +216,8 @@ case class CheckControllingBodyDetailsViewModel(
     answer.map(value => changeableRow(key, Text(yesNo(value)), href))
 
   // An optional detail is hidden once its screener has been answered no, otherwise it is shown with "Not provided" in place of missing data.
-  // Once the user has continued from the page, a detail that holds data can also be removed. A locked detail that holds data has no actions.
+  // A detail that holds data can also be removed once the user has continued in the add flow, or straight away in the change flow.
+  // A locked detail that holds data has no actions.
   private def optionalRow(
                            key: String,
                            screenerAnswer: Option[Boolean],
@@ -227,7 +235,7 @@ case class CheckControllingBodyDetailsViewModel(
             key,
             Text(value.getOrElse(messages("site.notProvided"))),
             href,
-            removeHref.filter(_ => hasContinued && value.isDefined)
+            removeHref.filter(_ => showRemove && value.isDefined)
           )
       }
     }
@@ -324,7 +332,7 @@ object CheckControllingBodyDetailsViewModel {
   private def yesNo(answer: Boolean)(implicit messages: Messages): String =
     if (answer) messages("site.yes") else messages("site.no")
 
-  def from(answers: UserAnswers): CheckControllingBodyDetailsViewModel = {
+  def from(answers: UserAnswers, isChangeFlow: Boolean = false): CheckControllingBodyDetailsViewModel = {
 
     def text(page: QuestionPage[String]): Option[String] =
       answers.get(page).map(_.trim).filter(_.nonEmpty)
@@ -361,7 +369,8 @@ object CheckControllingBodyDetailsViewModel {
       faxNumber              = text(ControllingBodyFaxNumberPage),
       addEmailAddress        = answers.get(ControllingBodyAddEmailAddressYesNoPage),
       emailAddress           = text(ControllingBodyEmailPage),
-      hasContinued           = answers.get(ControllingBodyContinuePage).getOrElse(false)
+      hasContinued           = answers.get(ControllingBodyContinuePage).getOrElse(false),
+      isChangeFlow           = isChangeFlow
     )
   }
 }

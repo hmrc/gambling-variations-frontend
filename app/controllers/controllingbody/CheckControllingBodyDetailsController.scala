@@ -17,7 +17,9 @@
 package controllers.controllingbody
 
 import controllers.actions.{AuthorisedAction, ControllingBodyDetailsDataRequiredAction, DataRetrievalAction}
-import pages.controllingbody.ControllingBodyContinuePage
+import models.UserAnswers
+import models.controllingbody.ControllingBodyChangeOption
+import pages.controllingbody.{ControllingBodyChangeScreenerPage, ControllingBodyContinuePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -42,11 +44,11 @@ class CheckControllingBodyDetailsController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    Ok(view(CheckControllingBodyDetailsViewModel.from(request.userAnswers)))
+    Ok(view(CheckControllingBodyDetailsViewModel.from(request.userAnswers, isChangeFlow(request.userAnswers))))
   }
 
   def onSubmit: Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val viewModel = CheckControllingBodyDetailsViewModel.from(request.userAnswers)
+    val viewModel = CheckControllingBodyDetailsViewModel.from(request.userAnswers, isChangeFlow(request.userAnswers))
 
     if (viewModel.isMissingMandatoryDetails) {
       Future.successful(Redirect(viewModel.continueUrl))
@@ -57,4 +59,8 @@ class CheckControllingBodyDetailsController @Inject() (
       } yield Redirect(viewModel.continueUrl)
     }
   }
+
+  // The user chose to change the existing controlling body details on the screener, rather than add a new one
+  private def isChangeFlow(answers: UserAnswers): Boolean =
+    answers.get(ControllingBodyChangeScreenerPage).contains(ControllingBodyChangeOption.EditDetails)
 }
