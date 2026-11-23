@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import base.SpecBase
 import forms.cancellation.CancelRegistrationDateFormProvider
-import models.{BusinessType, NormalMode, RegistrationStatus}
+import models.{BusinessType, NormalMode, RegistrationStatus, UserAnswers}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage, RegistrationStatusPage}
 import pages.cancellation.{RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
@@ -74,12 +74,9 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
     registrationDate.plusDays(numberOfDays / 2)
   }
 
-  private val validAnswer =
-    LocalDate.of(2017, 1, 27)
-
   def onwardRoute: Call = Call("GET", "/foo")
 
-  override val emptyUserAnswers = super.emptyUserAnswers
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
     .success
     .value
