@@ -17,7 +17,7 @@
 package controllers.controllingbody
 
 import controllers.actions.*
-import forms.EmailAddressFormProvider
+import forms.businesscontactdetails.EmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.controllingbody.{ControllingBodyChangesPage, ControllingBodyEmailPage, ControllingBodySubmittedPage}

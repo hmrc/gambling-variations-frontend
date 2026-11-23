@@ -17,7 +17,7 @@
 package views.controllingbody
 
 import base.SpecBase
-import forms.EmailAddressFormProvider
+import forms.businesscontactdetails.EmailAddressFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

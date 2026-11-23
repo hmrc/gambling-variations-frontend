@@ -17,7 +17,7 @@
 package controllers.controllingbody
 
 import controllers.actions.*
-import forms.ContactNumberFormProvider
+import forms.businesscontactdetails.BusinessContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.controllingbody.{ControllingBodyChangesPage, ControllingBodyContactDetailsPage, ControllingBodySubmittedPage}
@@ -38,7 +38,7 @@ class ControllingBodyContactDetailsController @Inject() (
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: ControllingBodyDetailsDataRequiredAction,
-  formProvider: ContactNumberFormProvider,
+  formProvider: BusinessContactNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ControllingBodyContactDetailsView
 )(implicit ec: ExecutionContext)

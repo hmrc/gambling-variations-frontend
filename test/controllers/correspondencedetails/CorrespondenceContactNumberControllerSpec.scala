@@ -18,7 +18,7 @@ package controllers.correspondencedetails
 
 import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
-import forms.ContactNumberFormProvider
+import forms.businesscontactdetails.BusinessContactNumberFormProvider
 import models.{ContactNumber, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -40,7 +40,7 @@ class CorrespondenceContactNumberControllerSpec extends SpecBase with MockitoSug
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ContactNumberFormProvider()
+  val formProvider = new BusinessContactNumberFormProvider()
   val form = formProvider("correspondenceContactNumber")
 
   val data = Json.obj(

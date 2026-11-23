@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import controllers.businesscontactdetails.LoadedPartnerDetails
-import forms.ContactNumberFormProvider
+import forms.businesscontactdetails.BusinessContactNumberFormProvider
 import models.{CheckMode, ContactNumber, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
@@ -36,7 +36,7 @@ import scala.concurrent.Future
 
 class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  val formProvider = new ContactNumberFormProvider()
+  val formProvider = new BusinessContactNumberFormProvider()
 
   val form: Form[ContactNumber] = formProvider("partnerContactDetails")
   private val phoneAndMobileNumber = "123456789"

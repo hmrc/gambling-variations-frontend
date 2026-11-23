@@ -17,7 +17,7 @@
 package views.businesscontactdetails
 
 import base.SpecBase
-import forms.RemoveEmailAddressFormProvider
+import forms.businesscontactdetails.RemoveEmailAddressFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
