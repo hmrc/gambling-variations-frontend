@@ -25,19 +25,25 @@ import play.api.mvc.Results.Redirect
 trait CancellationEntrypointDecider {
 
   enum CurrentScreen {
-    case Cancel, Locked, Warning
+    case Cancel, Locked, Warning, CancelGroup, LockedGroup, WarningGroup
   }
 
-  def checkScreen(userAnswers: UserAnswers, currentScreen: CurrentScreen)(render: => Result): Result = {
+  def checkScreen(userAnswers: UserAnswers, currentScreen: CurrentScreen, isGroup: Boolean)(render: => Result): Result = {
     val validScreen: CurrentScreen = determineValidScreen(userAnswers)
 
     if (currentScreen == validScreen) {
       render
     } else {
       Redirect(validScreen match {
-        case CurrentScreen.Cancel  => controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode)
-        case CurrentScreen.Locked  => controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad()
-        case CurrentScreen.Warning => controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad()
+        case CurrentScreen.Cancel => 
+          if isGroup then ??? 
+          else controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode)
+        case CurrentScreen.Locked =>
+          if isGroup then ??? //TODO missing screen
+          else controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad()
+        case CurrentScreen.Warning =>
+          if isGroup then controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoadGroup()
+          else controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad()
       })
     }
   }

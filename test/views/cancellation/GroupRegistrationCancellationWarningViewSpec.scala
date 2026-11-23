@@ -23,6 +23,7 @@ import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import views.html.cancellation.GroupRegistrationCancellationWarningView
 
+//TODO move to another class
 class GroupRegistrationCancellationWarningViewSpec extends SpecBase {
 
   trait Setup {

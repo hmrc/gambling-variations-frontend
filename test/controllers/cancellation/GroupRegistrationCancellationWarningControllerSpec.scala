@@ -23,6 +23,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.cancellation.GroupRegistrationCancellationWarningView
 
+//TODO move to another class
 class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
 
   override val emptyUserAnswers: UserAnswers =

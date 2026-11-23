@@ -25,18 +25,19 @@ import views.html.cancellation.GroupRegistrationCancellationWarningView
 
 import javax.inject.Inject
 
-class GroupRegistrationCancellationWarningController @Inject() (
-  override val messagesApi: MessagesApi,
-  authorise: AuthorisedAction,
-  getData: DataRetrievalAction,
-  requireData: BusinessDetailsDataRequiredAction,
-  appConfig: FrontendAppConfig,
-  val controllerComponents: MessagesControllerComponents,
-  view: GroupRegistrationCancellationWarningView
-) extends FrontendBaseController
-    with I18nSupport {
-
-  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    Ok(view(appConfig.gamblingManagementHomeUrl))
-  }
-}
+//TODO try to remove it and move to another controller
+//class GroupRegistrationCancellationWarningController @Inject() (
+//  override val messagesApi: MessagesApi,
+//  authorise: AuthorisedAction,
+//  getData: DataRetrievalAction,
+//  requireData: BusinessDetailsDataRequiredAction,
+//  appConfig: FrontendAppConfig,
+//  val controllerComponents: MessagesControllerComponents,
+//  view: GroupRegistrationCancellationWarningView
+//) extends FrontendBaseController
+//    with I18nSupport {
+//
+//  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+//    Ok(view(appConfig.gamblingManagementHomeUrl))
+//  }
+//}

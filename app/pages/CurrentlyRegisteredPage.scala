@@ -18,6 +18,7 @@ package pages
 
 import play.api.libs.json.JsPath
 
+//TODO try to delete maybe
 case object CurrentlyRegisteredPage extends QuestionPage[Int] {
 
   override def path: JsPath = JsPath \ toString

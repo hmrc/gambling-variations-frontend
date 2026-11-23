@@ -399,6 +399,8 @@ GET        /cancel-registration/already-cancelled                       controll
 
 GET        /cancel-registration/submitted                       controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad(mode: Mode = NormalMode)
 
+GET        /cancel-group-registration/already-cancelled                       controllers.cancellation.RegistrationCancellationWarningController.onPageLoadGroup(mode: Mode = NormalMode)
+
 GET        /cancel-registration/declaration                      controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad()
 POST       /cancel-registration/declaration                      controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit()
 
