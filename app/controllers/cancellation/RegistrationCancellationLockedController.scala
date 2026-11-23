@@ -16,6 +16,7 @@
 
 package controllers.cancellation
 
+import config.FrontendAppConfig
 import controllers.actions.*
 import models.Mode
 import play.api.i18n.{I18nSupport, MessagesApi}

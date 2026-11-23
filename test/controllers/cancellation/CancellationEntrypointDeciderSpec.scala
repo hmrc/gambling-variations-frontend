@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import base.SpecBase
 import forms.cancellation.CancelRegistrationDateFormProvider
-import models.{BusinessType, NormalMode, RegistrationStatus}
+import models.{BusinessType, NormalMode, RegistrationStatus, UserAnswers}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage, RegistrationStatusPage}
 import pages.cancellation.{RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
@@ -79,11 +79,13 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  override val emptyUserAnswers = super.emptyUserAnswers
+  private val isGroupFlag: Boolean = true
+
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
     .success
     .value
-    .setOriginal(GroupMemberPage, true)
+    .setOriginal(GroupMemberPage, isGroupFlag)
     .success
     .value
     .setOriginal(DateOfRegistrationPage, registrationDate)
@@ -111,13 +113,13 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
     .success
     .value
 
-  lazy val cancelRegistrationDateRoute =
+  lazy val cancelRegistrationDateRoute: String =
     controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
 
-  lazy val registrationCancellationLockedRoute =
+  lazy val registrationCancellationLockedRoute: String =
     controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url
 
-  lazy val registrationCancellationDeclarationRoute =
+  lazy val registrationCancellationDeclarationRoute: String =
     controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url
 
   private val formProvider = new CancelRegistrationDateFormProvider()
@@ -280,6 +282,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
           view(
             form,
             dateFormatter.format(dateOfCancellation),
+            isGroupFlag,
             NormalMode
           )(
             request,

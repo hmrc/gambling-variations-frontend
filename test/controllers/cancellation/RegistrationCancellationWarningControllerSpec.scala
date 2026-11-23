@@ -39,6 +39,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
   private val currentDate = LocalDate.of(2026, 11, 3)
 
   private val currentDateFormatted = dateFormatter.format(currentDate)
+  private val isGroupFlag: Boolean = false
 
   private val formProvider = new RegistrationCancellationWarningFormProvider()
 
@@ -54,7 +55,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
     .setOriginal(RegistrationCancellationDatePage, currentDate)
     .success
     .value
-    .setOriginal(GroupMemberPage, false)
+    .setOriginal(GroupMemberPage, isGroupFlag)
     .success
     .value
     .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
@@ -81,7 +82,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form, currentDateFormatted, NormalMode)(request, messages(application)).toString
+            view(form, currentDateFormatted, isGroupFlag, NormalMode)(request, messages(application)).toString
         }
       }
 
@@ -100,7 +101,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form.fill(true), currentDateFormatted, NormalMode)(request, messages(application)).toString
+            view(form.fill(true), currentDateFormatted, isGroupFlag, NormalMode)(request, messages(application)).toString
         }
       }
 
@@ -167,7 +168,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, currentDateFormatted, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, currentDateFormatted, isGroupFlag, NormalMode)(request, messages(application)).toString
         }
       }
 
