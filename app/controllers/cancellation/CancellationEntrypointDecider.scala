@@ -30,8 +30,6 @@ trait CancellationEntrypointDecider {
 
   def checkScreen(userAnswers: UserAnswers, currentScreen: CurrentScreen)(render: => Result): Result = {
     val validScreen: CurrentScreen = determineValidScreen(userAnswers)
-    println("currentScreen: " + currentScreen)
-    println("validScreen: " + validScreen)
 
     if (currentScreen == validScreen) {
       render
