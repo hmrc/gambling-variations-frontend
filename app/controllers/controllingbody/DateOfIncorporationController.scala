@@ -18,9 +18,10 @@ package controllers.controllingbody
 
 import controllers.actions.*
 import forms.controllingbody.DateOfIncorporationFormProvider
+import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership}
 import models.NormalMode
 import navigation.Navigator
-import pages.controllingbody.{ControllingBodyChangesPage, ControllingBodyDateOfIncorporationPage, ControllingBodySubmittedPage}
+import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodyDateOfIncorporationPage, ControllingBodySubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,34 +47,36 @@ class DateOfIncorporationController @Inject() (
     with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    request.userAnswers.get(ControllingBodyBusinessTypePage) match {
+      case Some(Corporatebody) | Some(LimitedLiabilityPartnership) =>
+        val form = formProvider()
+        val preparedForm = request.userAnswers.get(ControllingBodyDateOfIncorporationPage).fold(form)(form.fill)
+        Ok(view(preparedForm))
 
-    val form = formProvider()
-
-    val preparedForm = request.userAnswers.get(ControllingBodyDateOfIncorporationPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+      case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
     }
-
-    Ok(view(preparedForm))
   }
 
   def onSubmit(): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
-    val form = formProvider()
+    request.userAnswers.get(ControllingBodyBusinessTypePage) match {
+      case Some(Corporatebody) | Some(LimitedLiabilityPartnership) =>
+        formProvider()
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+            value =>
+              val isChanged = checkIfChanged(value, request.userAnswers, ControllingBodyDateOfIncorporationPage, ControllingBodyChangesPage)
 
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-        value =>
-          val isChanged = checkIfChanged(value, request.userAnswers, ControllingBodyDateOfIncorporationPage, ControllingBodyChangesPage)
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyDateOfIncorporationPage, value))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(ControllingBodySubmittedPage, true))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(ControllingBodyChangesPage, isChanged))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, updatedAnswers))
+          )
 
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyDateOfIncorporationPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ControllingBodySubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ControllingBodyChangesPage, isChanged))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, updatedAnswers))
-      )
+      case _ => Future.successful(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
+    }
   }
 }
