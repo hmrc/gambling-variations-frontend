@@ -17,7 +17,7 @@
 package views.tradingdetails
 
 import base.SpecBase
-import forms.PreviousRegistrationNumbersFormProvider
+import forms.tradingdetails.PreviousRegistrationNumbersFormProvider
 import models.{NormalMode, RegistrationNumbers}
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*

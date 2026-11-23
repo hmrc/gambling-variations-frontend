@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.tradingdetails
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import models.BusinessTradeClass
 
-class BusinessTradeClassFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
 
-  def apply(): Form[BusinessTradeClass] =
+class SeasonalBusinessFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Boolean] =
     Form(
-      "value" -> enumerable[BusinessTradeClass]("businessTradeClass.error.required")
+      "value" -> boolean("seasonalBusiness.error.required")
     )
 }

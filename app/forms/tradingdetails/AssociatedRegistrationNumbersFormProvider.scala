@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.tradingdetails
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class PreviousRegistrationNumbersFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
+
+class AssociatedRegistrationNumbersFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "addPreviousRegistrationNumber" -> boolean("previousRegistrationNumbers.error.required")
+      "addAssociatedRegistrationNumber" -> boolean("associatedRegistrationNumbers.error.required")
     )
 }

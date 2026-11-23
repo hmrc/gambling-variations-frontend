@@ -17,7 +17,7 @@
 package controllers.tradingdetails
 
 import controllers.actions.*
-import forms.PreviousRegistrationNumberFormProvider
+import forms.tradingdetails.PreviousRegistrationNumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.tradingdetails.TradingDetailsChangesPage
