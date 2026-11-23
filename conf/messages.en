@@ -1815,3 +1815,11 @@ registrationCancellationLocked.heading = This registration has already been canc
 registrationCancellationLocked.caption = Cancel registration
 registrationCancellationLocked.p1 = You cannot submit a new cancellation request.
 registrationCancellationLocked.link = Return to your manage your Machine Games Duty
+
+checkGroupRegistrationCancellationDetails.title = Check your group cancellation details
+checkGroupRegistrationCancellationDetails.heading = Check your group cancellation details
+checkGroupRegistrationCancellationDetails.caption = Cancel group registration
+
+checkGroupRegistrationCancellationDetails.cancellationDate = Group registration cancellation date
+checkGroupRegistrationCancellationDetails.cancellationDate.change.hidden = group registration cancellation date
+
