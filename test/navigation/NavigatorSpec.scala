@@ -401,14 +401,14 @@ class NavigatorSpec extends SpecBase {
                 .onPageLoad()
           }
 
-          "should route CancelRegistrationDatePage to group cancellation check answers in NormalMode" ignore  {
+          "should route CancelRegistrationDatePage to group cancellation check answers in NormalMode" ignore {
             val answers = emptyAnswers.set(GroupMemberPage, true).success.value
 
             navigator.nextPage(CancelRegistrationDatePage, NormalMode, answers) mustBe
               controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
           }
 
-          "should route CancelRegistrationDatePage to group cancellation check answers in CheckMode" ignore  {
+          "should route CancelRegistrationDatePage to group cancellation check answers in CheckMode" ignore {
             val answers = emptyAnswers.set(GroupMemberPage, true).success.value
 
             navigator.nextPage(CancelRegistrationDatePage, CheckMode, answers) mustBe

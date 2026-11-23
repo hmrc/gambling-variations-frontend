@@ -365,17 +365,17 @@ GET        /change-registration-details/controlling-body-details/check          
 
 # CANCELLATION
 
-GET        /cancel-registration/why-are-you-cancelling                          controllers.cancellation.ReasonForCancellationController.onPageLoad(mode: Mode = NormalMode)
-POST       /cancel-registration/why-are-you-cancelling                          controllers.cancellation.ReasonForCancellationController.onSubmit(mode: Mode = NormalMode)
-
-GET        /cancel-registration/group-registration-number                       controllers.cancellation.ChangeGroupRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
-POST       /cancel-registration/group-registration-number                       controllers.cancellation.ChangeGroupRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
-
 GET        /cancel-registration/no-longer-liable                                controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/no-longer-liable                                controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = NormalMode)
 
 GET        /cancel-group-registration/no-longer-liable                          controllers.cancellation.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-group-registration/no-longer-liable                          controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = NormalMode)
+
+GET        /cancel-registration/why-are-you-cancelling                          controllers.cancellation.ReasonForCancellationController.onPageLoad(mode: Mode = NormalMode)
+POST       /cancel-registration/why-are-you-cancelling                          controllers.cancellation.ReasonForCancellationController.onSubmit(mode: Mode = NormalMode)
+
+GET        /cancel-registration/group-registration-number                       controllers.cancellation.ChangeGroupRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /cancel-registration/group-registration-number                       controllers.cancellation.ChangeGroupRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
 
 GET        /cancel-registration/reviewing-cancellation-request                  controllers.cancellation.RegistrationCancellationWarningController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/reviewing-cancellation-request                  controllers.cancellation.RegistrationCancellationWarningController.onSubmit(mode: Mode = NormalMode)
@@ -383,14 +383,15 @@ POST       /cancel-registration/reviewing-cancellation-request                  
 GET        /cancel-group-registration/reviewing-cancellation-request            controllers.cancellation.RegistrationCancellationWarningController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-group-registration/reviewing-cancellation-request            controllers.cancellation.RegistrationCancellationWarningController.onSubmit(mode: Mode = NormalMode)
 
+GET        /cancel-registration/already-cancelled                               controllers.cancellation.RegistrationCancellationLockedController.onPageLoad(mode: Mode = NormalMode)
+
 GET        /cancel-registration/check                                           controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoad(mode: Mode = NormalMode)
 GET        /cancel-group-registration/check                                     controllers.cancellation.CheckGroupRegistrationCancellationDetailsController.onPageLoad(mode: Mode = NormalMode)
-
-GET        /cancel-registration/already-cancelled                               controllers.cancellation.RegistrationCancellationLockedController.onPageLoad(mode: Mode = NormalMode)
-GET        /cancel-registration/submitted                                       controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad(mode: Mode = NormalMode)
 
 GET        /cancel-registration/declaration                                     controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad()
 POST       /cancel-registration/declaration                                     controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit()
 
 GET        /cancel-group-registration/declaration                               controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad()
 POST       /cancel-group-registration/declaration                               controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit()
+
+GET        /cancel-registration/submitted                                       controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad(mode: Mode = NormalMode)
