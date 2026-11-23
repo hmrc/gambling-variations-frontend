@@ -19,7 +19,7 @@ package controllers.controllingbody
 import base.SpecBase
 import controllers.controllingbody.routes.ControllingBodyContactDetailsController
 import forms.businesscontactdetails.BusinessContactNumberFormProvider
-import models.{ContactNumber, NormalMode, UserAnswers, ContactDetails}
+import models.{ContactDetails, ContactNumber, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
