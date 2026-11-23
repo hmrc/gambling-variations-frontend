@@ -74,9 +74,6 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
     registrationDate.plusDays(numberOfDays / 2)
   }
 
-  private val validAnswer =
-    LocalDate.of(2017, 1, 27)
-
   def onwardRoute: Call = Call("GET", "/foo")
 
   private val isGroupFlag: Boolean = true

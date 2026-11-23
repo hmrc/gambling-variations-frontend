@@ -22,17 +22,43 @@
         govukButton: GovukButton,
         h1:H1,
         p:Paragraph,
-        caption: Caption
+        caption: Caption,
+        bulletList: BulletList,
+        paragraphMessageWithLink: ParagraphMessageWithLink
 )
 
-@(mode: Mode)(implicit request: Request[_], messages: Messages)
+@(isGroupFlag: Boolean)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("registrationCancellationDeclaration.title"), Some(messages("registrationCancellationDeclaration.caption")))) {
+@layout(pageTitle = titleNoForm(messages("registrationCancellationDeclaration.title"), Some(if(isGroupFlag){messages("cancelGroupRegistrationDate.caption")}else{messages("registrationCancellationDeclaration.caption")}))) {
 
     @formHelper(action = controllers.cancellation.routes.RegistrationCancellationDeclarationController.onSubmit()) {
-        @caption(messages("registrationCancellationDeclaration.caption"))
-        @h1(messages("registrationCancellationDeclaration.heading"))
-        @p(messages("registrationCancellationDeclaration.p1"))
+        @if(!isGroupFlag) {
+            @caption(messages("registrationCancellationDeclaration.caption"))
+            @h1(messages("registrationCancellationDeclaration.heading"))
+            @p(messages("registrationCancellationDeclaration.p1"))
+        } else {
+            @caption(messages("cancelGroupRegistrationDate.caption"))
+            @h1(messages("registrationCancellationDeclaration.heading"))
+
+            @p("declaration.group.p1")
+            @bulletList(
+                Seq(
+                    messages("declaration.group.bp1"),
+                    messages("declaration.group.bp2"),
+                    messages("declaration.group.bp3"),
+                    messages("declaration.group.bp4"),
+                    messages("declaration.group.bp5"),
+                    messages("declaration.group.bp6"),
+                    messages("declaration.group.bp7"),
+                    messages("declaration.group.bp8")
+                )
+            )
+
+            @paragraphMessageWithLink(None, messages("declaration.group.link"), None, "https://www.gov.uk/guidance/machine-games-duty-excise-notice-452#group-registration")
+
+            @p("declaration.group.p2")
+            @p("registrationCancellationDeclaration.p1")
+        }
 
         @govukButton(
             ButtonViewModel(messages("registrationCancellationDeclaration.submit"))

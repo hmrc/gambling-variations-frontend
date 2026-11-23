@@ -17,7 +17,6 @@
 package controllers.cancellation
 
 import base.SpecBase
-import controllers.routes
 import forms.cancellation.RegistrationCancellationWarningFormProvider
 import models.{BusinessType, NormalMode, UserAnswers}
 import org.scalatestplus.mockito.MockitoSugar
