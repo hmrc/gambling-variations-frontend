@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package viewmodels
+package viewmodels.tradingdetails
 
 import models.Mode
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Key, SummaryListRow}
 import viewmodels.govuk.all.stringToText
 
 case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]], mode: Mode) {

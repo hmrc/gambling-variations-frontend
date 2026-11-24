@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.tradingdetails
+package viewmodels.tradingdetails
 
 import base.SpecBase
 import models.BusinessTradeClass
@@ -23,6 +23,7 @@ import pages.tradingdetails.{BusinessTradeClassPage, OtherTradeClassPage}
 import play.api.Application
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+import viewmodels.tradingdetails.CheckTradingDetailsViewModel
 
 class CheckTradingDetailsViewModelSpec extends SpecBase {
 

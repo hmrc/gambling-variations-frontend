@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.tradingdetails
+package viewmodels.tradingdetails
 
 import base.SpecBase
 import org.scalatest.matchers.must.Matchers.*
@@ -24,6 +24,7 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
+import viewmodels.tradingdetails.IsSeasonalBusinessSummary
 
 class IsSeasonalBusinessSummarySpec extends SpecBase {
 

@@ -26,7 +26,7 @@ import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkFlag
-import viewmodels.checkAnswers.tradingdetails.*
+import viewmodels.tradingdetails.*
 import views.html.tradingdetails.CheckTradingDetailsView
 
 import javax.inject.Inject
