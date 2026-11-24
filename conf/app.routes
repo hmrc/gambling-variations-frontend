@@ -11,7 +11,7 @@
 ->         /change-registration-details/trading-details             tradingdetails.Routes
 ->         /change-registration-details/controlling-body-details    controllingbodydetails.Routes
 ->         /change-registration-details/return-periods              returnperiods.Routes
-->         /cancel-registration                                     cancellations.Routes
+->         /cancel-registration                                     cancellation.Routes
 ->         /cancel-group-registration                               cancelgroup.Routes
 
 GET        /                                            controllers.IndexController.onPageLoad()

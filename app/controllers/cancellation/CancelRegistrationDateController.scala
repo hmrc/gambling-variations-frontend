@@ -54,7 +54,7 @@ class CancelRegistrationDateController @Inject() (
 
   def onLanding(regNumber: String): Action[AnyContent] =
     authenticate { request =>
-      Redirect(controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode))
+      Redirect(cancellations.routes.CancelRegistrationDateController.onPageLoad(NormalMode))
         .addingToSession(AuthorisedAction.sessionRegNumberKey -> regNumber)(request)
     }
 
