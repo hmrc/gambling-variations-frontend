@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.cancellation
 
 import controllers.cancellation.routes
-import models.{CheckMode, UserAnswers}
+import models.UserAnswers
 import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*

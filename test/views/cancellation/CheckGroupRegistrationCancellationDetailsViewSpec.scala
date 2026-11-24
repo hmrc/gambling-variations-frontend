@@ -70,7 +70,7 @@ class CheckGroupRegistrationCancellationDetailsViewSpec extends SpecBase {
 
     "must display a Change link to the group cancellation date page" in {
       val link = document.select(".govuk-summary-list__actions a")
-      link.attr("href") mustBe routes.CancelRegistrationDateController.onPageLoad().url
+      link.attr("href") mustBe routes.CancelRegistrationDateController.onPageLoadGroup().url
       link.select(".govuk-visually-hidden").text() mustBe
         messages(s"$msgKey.cancellationDate.change.hidden")
     }

@@ -135,8 +135,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
   private def businessDetailsWithoutRegistrationDate: BusinessDetails =
     businessDetails(None)
 
-  val messageKey: String = ""
-
+  val messageKey: String = "cancelGroupRegistrationWarning"
   val isGroup: Boolean = true
 
   "CancelGroupRegistrationDate Controller" - {
