@@ -19,7 +19,7 @@ package controllers.cancellation
 import controllers.actions.{AuthenticatedAction, AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
-import models.{Mode, NormalMode}
+import models.NormalMode
 import navigation.Navigator
 import pages.DateOfRegistrationPage
 import pages.cancellation.CancelRegistrationDatePage

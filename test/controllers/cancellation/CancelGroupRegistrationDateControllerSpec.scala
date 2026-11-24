@@ -21,12 +21,12 @@ import connectors.GamblingConnector
 import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl}
 import controllers.routes
 import forms.cancellation.CancelGroupRegistrationDateFormProvider
-import models.{BusinessDetails, BusinessType, RegistrationStatus, UserAnswers}
+import models.{BusinessDetails, RegistrationStatus, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage}
+import pages.GroupMemberPage
 import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.Messages
 import play.api.inject.bind

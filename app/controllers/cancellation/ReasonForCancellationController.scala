@@ -18,8 +18,8 @@ package controllers.cancellation
 
 import controllers.actions.*
 import forms.cancellation.ReasonForCancellationFormProvider
-import models.{Mode, NormalMode}
 import models.cancellation.ReasonForCancellation
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.cancellation.ReasonForCancellationPage
 import play.api.data.Form

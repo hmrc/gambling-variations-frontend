@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import controllers.actions.*
 import forms.cancellation.ChangeGroupRegistrationNumberFormProvider
-import models.{Mode, NormalMode}
+import models.NormalMode
 import navigation.Navigator
 import pages.cancellation.ChangeGroupRegistrationNumberPage
 import play.api.data.Form

@@ -16,7 +16,7 @@
 
 package controllers.cancellation
 
-import models.{Mode, RegistrationStatus, UserAnswers}
+import models.{RegistrationStatus, UserAnswers}
 import pages.cancellation.RegistrationCancellationDeclarationPage
 import pages.{GroupMemberPage, RegistrationStatusPage}
 import play.api.mvc.Result
