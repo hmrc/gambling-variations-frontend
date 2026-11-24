@@ -17,7 +17,7 @@
 package views.businessaddress
 
 import base.SpecBase
-import forms.RemoveBusinessAddressAddInfoFormProvider
+import forms.businessaddress.RemoveBusinessAddressAddInfoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.i18n.Messages

@@ -17,7 +17,7 @@
 package controllers.businessaddress
 
 import base.SpecBase
-import forms.BusinessUKAddrScreenerFormProvider
+import forms.businessaddress.BusinessUKAddrScreenerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any

@@ -17,7 +17,7 @@
 package views.businessaddress
 
 import base.SpecBase
-import forms.BusinessNonUKAddressFormProvider
+import forms.businessaddress.BusinessNonUKAddressFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

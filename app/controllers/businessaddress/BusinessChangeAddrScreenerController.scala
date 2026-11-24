@@ -17,7 +17,7 @@
 package controllers.businessaddress
 
 import controllers.actions.*
-import forms.BusinessChangeAddrScreenerFormProvider
+import forms.businessaddress.BusinessChangeAddrScreenerFormProvider
 import models.{BusinessChangeAddrOption, Mode}
 import navigation.Navigator
 import pages.businessaddress.{BusinessAddressChangeFlowPage, BusinessAddressUkPage, BusinessChangeAddrScreenerPage}
