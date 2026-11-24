@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businessaddress
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class BusinessUKAddrScreenerFormProvider @Inject() extends Mappings {
+class BusinessAddrInfoScreenerFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "businessUKAddrScreener" -> boolean("businessUKAddrScreener.error.required")
+      "businessAddrInfoScreener" -> boolean("businessAddrInfoScreener.error.required")
     )
 }

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businessaddress
 
 import forms.behaviours.StringFieldBehaviours
+import forms.businessaddress.BusinessUKAddressFormProvider
 import models.Address
 import play.api.data.FormError
 

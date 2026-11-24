@@ -17,7 +17,7 @@
 package controllers.businessaddress
 
 import controllers.actions.*
-import forms.RemoveBusinessAddressAddInfoFormProvider
+import forms.businessaddress.RemoveBusinessAddressAddInfoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.businessaddress.*

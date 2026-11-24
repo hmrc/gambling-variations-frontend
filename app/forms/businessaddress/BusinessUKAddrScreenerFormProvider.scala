@@ -14,28 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businessaddress
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class BusinessAddressAdditionalInfoFormProvider @Inject() extends Mappings {
+class BusinessUKAddrScreenerFormProvider @Inject() extends Mappings {
 
-  private val businessAddressAdditionalInfoRegex = "^[A-Za-z0-9 -']+$"
-  private val maxL = 100
-  def apply(): Form[String] =
+  def apply(): Form[Boolean] =
     Form(
-      "businessAddressAdditionalInfo" -> text("businessAddressAdditionalInfo.error.required")
-        .verifying(
-          maxLength(maxL, "businessAddressAdditionalInfo.error.length")
-        )
-        .verifying(
-          regexp(
-            businessAddressAdditionalInfoRegex,
-            "businessAddressAdditionalInfo.error.invalid"
-          )
-        )
+      "businessUKAddrScreener" -> boolean("businessUKAddrScreener.error.required")
     )
 }

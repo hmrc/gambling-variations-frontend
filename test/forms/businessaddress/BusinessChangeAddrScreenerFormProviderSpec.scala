@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businessaddress
 
-import forms.behaviours.BooleanFieldBehaviours
+import forms.behaviours.OptionFieldBehaviours
+import forms.businessaddress.BusinessChangeAddrScreenerFormProvider
+import models.BusinessChangeAddrOption
 import play.api.data.FormError
 
-class BusinessAddrInfoScreenerFormProviderSpec extends BooleanFieldBehaviours {
+class BusinessChangeAddrScreenerFormProviderSpec extends OptionFieldBehaviours {
 
-  val requiredKey = "businessAddrInfoScreener.error.required"
-  val invalidKey = "error.boolean"
+  val requiredKey = "businessChangeAddrScreener.error.required"
 
-  val form = new BusinessAddrInfoScreenerFormProvider()()
+  val form = new BusinessChangeAddrScreenerFormProvider()()
 
-  ".businessAddrInfoScreener" - {
+  ".businessChangeAddrScreener" - {
 
-    val fieldName = "businessAddrInfoScreener"
+    val fieldName = "businessChangeAddrScreener"
 
-    behave like booleanField(
+    behave like optionsField[BusinessChangeAddrOption](
       form,
       fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+      validValues  = BusinessChangeAddrOption.values,
+      invalidError = FormError(fieldName, "error.invalid")
     )
 
     behave like mandatoryField(

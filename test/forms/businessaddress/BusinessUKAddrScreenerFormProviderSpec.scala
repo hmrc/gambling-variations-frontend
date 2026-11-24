@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businessaddress
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.businessaddress.BusinessUKAddrScreenerFormProvider
 import play.api.data.FormError
 
-class RemoveBusinessAddressAddInfoFormProviderSpec extends BooleanFieldBehaviours {
+class BusinessUKAddrScreenerFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "removeBusinessAddressAddInfo.error.required"
+  val requiredKey = "businessUKAddrScreener.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new RemoveBusinessAddressAddInfoFormProvider()()
+  val form = new BusinessUKAddrScreenerFormProvider()()
 
-  ".value" - {
+  ".businessUKAddrScreener" - {
 
-    val fieldName = "value"
+    val fieldName = "businessUKAddrScreener"
 
     behave like booleanField(
       form,

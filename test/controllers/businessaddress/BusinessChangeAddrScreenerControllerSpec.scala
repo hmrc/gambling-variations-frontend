@@ -17,7 +17,7 @@
 package controllers.businessaddress
 
 import base.SpecBase
-import forms.BusinessChangeAddrScreenerFormProvider
+import forms.businessaddress.BusinessChangeAddrScreenerFormProvider
 import models.BusinessChangeAddrOption.EditCurrentAddress
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
