@@ -18,7 +18,7 @@ package controllers.businessname
 
 import controllers.actions.*
 import controllers.routes
-import forms.BusinessTradingNameFormProvider
+import forms.businessname.BusinessTradingNameFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.businessname.{BusinessNameChangesPage, BusinessNameSubmittedPage, TradingNamePage}

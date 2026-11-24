@@ -17,7 +17,7 @@
 package views.businessname
 
 import base.SpecBase
-import forms.RemoveTradeNameFormProvider
+import forms.businessname.RemoveTradeNameFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

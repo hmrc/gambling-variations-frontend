@@ -18,7 +18,7 @@ package controllers.businessname
 
 import base.SpecBase
 import controllers.routes
-import forms.RemoveTradeNameFormProvider
+import forms.businessname.RemoveTradeNameFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

@@ -17,7 +17,7 @@
 package views.partnerdetails
 
 import base.SpecBase
-import forms.SoleProprietorNameFormProvider
+import forms.businessname.SoleProprietorNameFormProvider
 import models.{NormalMode, SoleProprietorName}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}

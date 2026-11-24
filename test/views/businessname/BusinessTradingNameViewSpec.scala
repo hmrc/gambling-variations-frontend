@@ -17,7 +17,7 @@
 package views.businessname
 
 import base.SpecBase
-import forms.BusinessTradingNameFormProvider
+import forms.businessname.BusinessTradingNameFormProvider
 import models.{BusinessType, NormalMode}
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
