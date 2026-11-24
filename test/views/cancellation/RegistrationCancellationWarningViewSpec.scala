@@ -102,7 +102,8 @@ class RegistrationCancellationWarningViewSpec extends SpecBase {
       val boundForm =
         form.bind(Map("reasonForCancellation" -> ""))
 
-      val html = view(boundForm, currentDateFormatted, false)(request, messages)
+      val key: String = ""
+      val html = view(boundForm, currentDateFormatted, key)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
 
       doc

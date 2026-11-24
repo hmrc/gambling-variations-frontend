@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import base.SpecBase
 import models.{BusinessType, UserAnswers}
-import pages.{BusinessTypePage, CurrentlyRegisteredPage, GroupMemberPage}
+import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.cancellation.GroupRegistrationCancellationWarningView
@@ -34,9 +34,6 @@ class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
       .set(GroupMemberPage, false)
       .success
       .value
-      .set(CurrentlyRegisteredPage, 1)
-      .success
-      .value
 
   "GroupRegistrationCancellationWarning Controller" - {
 
@@ -50,7 +47,7 @@ class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
         val request =
           FakeRequest(
             GET,
-            routes.GroupRegistrationCancellationWarningController.onPageLoad().url
+            routes.RegistrationCancellationWarningController.onPageLoad().url
           )
 
         val result = route(application, request).value

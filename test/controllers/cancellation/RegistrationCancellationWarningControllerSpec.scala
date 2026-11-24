@@ -39,6 +39,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
   private val currentDateFormatted = dateFormatter.format(currentDate)
   private val isGroupFlag: Boolean = false
+  private val messageKey: String = ""
 
   private val formProvider = new RegistrationCancellationWarningFormProvider()
 
@@ -81,7 +82,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form, currentDateFormatted, isGroupFlag)(request, messages(application)).toString
+            view(form, currentDateFormatted, messageKey)(request, messages(application)).toString
         }
       }
 
@@ -100,7 +101,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form.fill(true), currentDateFormatted, isGroupFlag)(request, messages(application)).toString
+            view(form.fill(true), currentDateFormatted, messageKey)(request, messages(application)).toString
         }
       }
 
@@ -167,7 +168,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, currentDateFormatted, isGroupFlag)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, currentDateFormatted, messageKey)(request, messages(application)).toString
         }
       }
 

@@ -74,6 +74,9 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
     registrationDate.plusDays(numberOfDays / 2)
   }
 
+  val messageKey: String = ""
+  val isGroup: Boolean = true
+
   private val validAnswer =
     LocalDate.of(2017, 1, 27)
 
@@ -211,7 +214,9 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
               form,
               registrationDate,
               firstInvalidDate,
-              middleOfDateRange
+              middleOfDateRange,
+              messageKey,
+              isGroup
             )(
               request,
               messages(application)
@@ -252,7 +257,9 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
               form.fill(validAnswer),
               registrationDate,
               firstInvalidDate,
-              middleOfDateRange
+              middleOfDateRange,
+              messageKey,
+              isGroup
             )(
               request,
               messages(application)
@@ -436,7 +443,9 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
               boundForm,
               registrationDate,
               firstInvalidDate,
-              middleOfDateRange
+              middleOfDateRange,
+              messageKey,
+              isGroup
             )(
               request,
               messages(application)
@@ -478,7 +487,9 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
               boundForm,
               registrationDate,
               firstInvalidDate,
-              middleOfDateRange
+              middleOfDateRange,
+              messageKey,
+              isGroup
             )(
               request,
               messages(application)
@@ -598,7 +609,6 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
         new FakeDataRetrievalAction(None),
         mock[BusinessDetailsDataRequiredAction],
         mock[CancelRegistrationDateFormProvider],
-        mock[GamblingConnector],
         fixedClock,
         cc,
         mock[CancelRegistrationDateView]

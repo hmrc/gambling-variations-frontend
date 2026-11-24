@@ -34,7 +34,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
-import views.html.cancellation.CancelGroupRegistrationDateView
+import views.html.cancellation.CancelRegistrationDateView
 
 import java.time.temporal.ChronoUnit
 import java.time.{Clock, Instant, LocalDate, ZoneOffset}
@@ -72,7 +72,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
   private val onwardRoute = Call("GET", "/foo")
 
   private lazy val cancelGroupRegistrationDateRoute =
-    controllers.cancellation.routes.CancelGroupRegistrationDateController.onPageLoad().url
+    controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
 
   override val emptyUserAnswers = UserAnswers(userAnswersId)
 
@@ -135,6 +135,10 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
   private def businessDetailsWithoutRegistrationDate: BusinessDetails =
     businessDetails(None)
 
+  val messageKey: String = ""
+
+  val isGroup: Boolean = true
+
   "CancelGroupRegistrationDate Controller" - {
 
     "onPageLoad" - {
@@ -151,11 +155,11 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
           val result = route(application, request).value
 
-          val view = application.injector.instanceOf[CancelGroupRegistrationDateView]
+          val view = application.injector.instanceOf[CancelRegistrationDateView]
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
+            view(form, registrationDate, firstInvalidDate, middleOfDateRange, messageKey, isGroup)(request, messages(application)).toString
         }
       }
 
@@ -171,13 +175,15 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
         running(application) {
           val request = getRequest
 
-          val view = application.injector.instanceOf[CancelGroupRegistrationDateView]
+          val view = application.injector.instanceOf[CancelRegistrationDateView]
 
           val result = route(application, getRequest).value
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form.fill(validAnswer), registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
+            view(form.fill(validAnswer), registrationDate, firstInvalidDate, middleOfDateRange, messageKey, isGroup)(request,
+                                                                                                                     messages(application)
+                                                                                                                    ).toString
         }
       }
 
@@ -317,11 +323,11 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
           val result = route(application, request).value
 
-          val view = application.injector.instanceOf[CancelGroupRegistrationDateView]
+          val view = application.injector.instanceOf[CancelRegistrationDateView]
 
           status(result) mustEqual BAD_REQUEST
           contentAsString(result) mustEqual
-            view(boundForm, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
+            view(boundForm, registrationDate, firstInvalidDate, middleOfDateRange, messageKey, isGroup)(request, messages(application)).toString
         }
       }
 
@@ -345,11 +351,11 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
           val result = route(application, request).value
 
-          val view = application.injector.instanceOf[CancelGroupRegistrationDateView]
+          val view = application.injector.instanceOf[CancelRegistrationDateView]
 
           status(result) mustEqual BAD_REQUEST
           contentAsString(result) mustEqual
-            view(boundForm, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
+            view(boundForm, registrationDate, firstInvalidDate, middleOfDateRange, messageKey, isGroup)(request, messages(application)).toString
         }
       }
 

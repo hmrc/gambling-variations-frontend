@@ -62,7 +62,7 @@ class CheckGroupRegistrationCancellationDetailsViewModelSpec extends SpecBase {
         val action =
           CheckGroupRegistrationCancellationDetailsViewModel.summaryList(userAnswers).rows.head.actions.value.items.head
 
-        action.href mustBe routes.CancelGroupRegistrationDateController.onPageLoad().url
+        action.href mustBe routes.CancelRegistrationDateController.onPageLoad().url
         action.content mustBe Text(messages("site.change"))
         action.visuallyHiddenText mustBe Some(
           messages("checkGroupRegistrationCancellationDetails.cancellationDate.change.hidden")

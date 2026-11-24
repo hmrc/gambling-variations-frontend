@@ -408,13 +408,6 @@ class NavigatorSpec extends SpecBase {
               controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
           }
 
-          "should route CancelRegistrationDatePage to group cancellation check answers in CheckMode" ignore {
-            val answers = emptyAnswers.set(GroupMemberPage, true).success.value
-
-            navigator.nextPage(CancelRegistrationDatePage, CheckMode, answers) mustBe
-              controllers.cancellation.routes.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
-          }
-
           "should route RegistrationCancellationDeclarationPage to non-group confirmation when not a group member" in {
             val userAnswers = emptyAnswers.set(GroupMemberPage, false).success.value
             navigator.nextPage(RegistrationCancellationDeclarationPage, NormalMode, userAnswers) mustBe

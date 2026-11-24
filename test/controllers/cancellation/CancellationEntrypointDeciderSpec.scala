@@ -77,6 +77,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
   def onwardRoute: Call = Call("GET", "/foo")
 
   private val isGroupFlag: Boolean = true
+  private val messageKey: String = ""
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
@@ -152,7 +153,9 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
             form,
             registrationDate,
             firstInvalidDate,
-            middleOfDateRange
+            middleOfDateRange,
+            messageKey,
+            isGroupFlag
           )(
             request,
             messages(application)
@@ -248,7 +251,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
           view(
             form,
             dateFormatter.format(dateOfCancellation),
-            isGroupFlag
+            messageKey
           )(
             request,
             messages(application)
@@ -341,7 +344,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(gamblingUrl)(request, messages(application)).toString
+          view(gamblingUrl, "msg")(request, messages(application)).toString
       }
 
     }

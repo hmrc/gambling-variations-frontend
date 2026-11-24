@@ -23,7 +23,7 @@ import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.cancellation.CancelGroupRegistrationDateView
+import views.html.cancellation.CancelRegistrationDateView
 
 import java.time.LocalDate
 
@@ -33,7 +33,7 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
 
     private val app = applicationBuilder().build()
 
-    val view: CancelGroupRegistrationDateView = app.injector.instanceOf[CancelGroupRegistrationDateView]
+    val view: CancelRegistrationDateView = app.injector.instanceOf[CancelRegistrationDateView]
 
     val registrationDate: LocalDate = LocalDate.of(2007, 3, 20)
 
@@ -56,14 +56,16 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
     def document(
       formToRender: play.api.data.Form[LocalDate] = form
     ): Document = {
+      val messageKey: String = ""
+      val isGroup: Boolean = true
 
-      val html = view(formToRender, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages)
+      val html = view(formToRender, registrationDate, firstInvalidDate, middleOfDateRange, messageKey, isGroup)(request, messages)
 
       Jsoup.parse(html.body)
     }
   }
 
-  "CancelGroupRegistrationDateView" - {
+  "CancelRegistrationDateView" - {
 
     "must render page correctly" in new Setup {
 
@@ -187,7 +189,7 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
       doc
         .select("form")
         .attr("action") mustBe
-        controllers.cancellation.routes.CancelGroupRegistrationDateController
+        controllers.cancellation.routes.CancelRegistrationDateController
           .onSubmit()
           .url
     }
