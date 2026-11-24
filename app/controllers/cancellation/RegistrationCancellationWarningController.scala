@@ -16,24 +16,26 @@
 
 package controllers.cancellation
 
-import config.FrontendAppConfig
 import controllers.actions.{AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import controllers.routes
 import forms.cancellation.RegistrationCancellationWarningFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.GroupMemberPage
-import pages.cancellation.{RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
+import pages.DateOfRegistrationPage
+import pages.cancellation.{RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDeclarationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.cancellation.{GroupRegistrationCancellationWarningView, RegistrationCancellationWarningView}
+import views.html.cancellation.RegistrationCancellationWarningView
 
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
+//TODO lock uses the same view, a few messsages maybe needs to be different. key is enough
+//https://jira.tools.tax.service.gov.uk/browse/DTR-9460
+//https://jira.tools.tax.service.gov.uk/browse/DTR-9459
 class RegistrationCancellationWarningController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
@@ -42,49 +44,44 @@ class RegistrationCancellationWarningController @Inject() (
   getData: DataRetrievalAction,
   requireData: BusinessDetailsDataRequiredAction,
   formProvider: RegistrationCancellationWarningFormProvider,
-  appConfig: FrontendAppConfig,
   val controllerComponents: MessagesControllerComponents,
-  view: RegistrationCancellationWarningView,
-  groupView: GroupRegistrationCancellationWarningView // TODO name
+  view: RegistrationCancellationWarningView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with CancellationEntrypointDecider
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    request.userAnswers
-      .get(GroupMemberPage)
-      .fold(
-        Redirect(routes.SystemErrorController.onPageLoad().url)
-      ) { isGroup =>
-        checkScreen(request.userAnswers, CurrentScreen.Warning, isGroup) {
-          request.userAnswers
-            .get(RegistrationCancellationDatePage)
-            .fold(Redirect(routes.SystemErrorController.onPageLoad())) { cancellationDate =>
-              val form = request.userAnswers
-                .get(RegistrationCancellationCancelAgainYesNoPage)
-                .fold(formProvider())(formProvider().fill)
+  private val groupKey = "cancelGroupRegistrationWarning"
+  private val nonGroupKey = "cancelRegistrationWarning"
 
-              Ok(view(form, dateFormatter.format(cancellationDate), mode))
-            }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    checkScreen(request.userAnswers, CurrentScreen.Warning, false, mode) {
+      request.userAnswers
+        .get(DateOfRegistrationPage)
+        .fold(Redirect(routes.SystemErrorController.onPageLoad())) { cancellationDate =>
+          val form = request.userAnswers
+            .get(RegistrationCancellationCancelAgainYesNoPage)
+            .fold(formProvider())(formProvider().fill)
+
+          Ok(view(form, dateFormatter.format(cancellationDate), nonGroupKey, mode))
         }
-      }
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData).async { implicit request =>
       val form = formProvider()
-      val cancellationDate = request.userAnswers.get(RegistrationCancellationDatePage)
 
-      cancellationDate
-        .map(systemDate =>
+      request.userAnswers
+        .get(DateOfRegistrationPage)
+        .fold(Future.successful(Redirect(routes.SystemErrorController.onPageLoad().url))) { systemDate =>
           form
             .bindFromRequest()
             .fold(
               formWithErrors =>
                 Future.successful(
                   BadRequest(
-                    view(formWithErrors, dateFormatter.format(systemDate), mode)
+                    view(formWithErrors, dateFormatter.format(systemDate), nonGroupKey, mode)
                   )
                 ),
               value =>
@@ -101,21 +98,33 @@ class RegistrationCancellationWarningController @Inject() (
                   navigator.nextPage(RegistrationCancellationDeclarationPage, mode, updatedAnswers)
                 )
             )
-        )
-        .getOrElse(Future.successful(Redirect(routes.SystemErrorController.onPageLoad().url)))
+        }
     }
   }
 
   def onPageLoadGroup(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     request.userAnswers
-      .get(GroupMemberPage)
-      .fold(
-        Redirect(routes.SystemErrorController.onPageLoad().url)
-      ) { isGroup =>
-        checkScreen(request.userAnswers, CurrentScreen.WarningGroup, isGroup) {
-          Ok(groupView(appConfig.gamblingManagementHomeUrl))
+      .get(DateOfRegistrationPage)
+      .fold(Redirect(routes.SystemErrorController.onPageLoad())) { cancellationDate =>
+        checkScreen(request.userAnswers, CurrentScreen.Warning, true, mode) {
+          val form = request.userAnswers
+            .get(RegistrationCancellationCancelAgainYesNoPage)
+            .fold(formProvider())(formProvider().fill)
+
+          Ok(view(form, dateFormatter.format(cancellationDate), groupKey, mode))
         }
       }
+  }
+
+  def onSubmitGroup(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    val form = formProvider()
+    request.userAnswers
+      .get(DateOfRegistrationPage)
+      .fold(Future.successful(Redirect(routes.SystemErrorController.onPageLoad())))(cancellationDate =>
+        Future.successful(
+          Ok(view(form, dateFormatter.format(cancellationDate), groupKey, mode))
+        )
+      )
   }
 
   private val dateFormatter =

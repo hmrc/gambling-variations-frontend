@@ -149,12 +149,6 @@ class BusinessDetailsDataRequiredActionImpl @Inject() (
                           DateOfRegistrationPage,
                           details.dateOfRegistration
                         )
-//      //TODO investigate, we have duplicate
-//      updatedAnswers <- updatedAnswers.set(
-//                          CurrentlyRegisteredPage,
-//                          details.currentlyRegistered
-//                        )
-
     } yield updatedAnswers
   }
 }

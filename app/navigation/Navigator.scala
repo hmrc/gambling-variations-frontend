@@ -28,7 +28,7 @@ import navigation.PartnerDetailsNavigator.{partnerDetailsCheckRoutes, partnerDet
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
-import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage, RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
+import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage, RegistrationCancellationDeclarationPage}
 import pages.contactdetails.*
 import pages.controllingbody.*
 import pages.correspondencedetails.*
@@ -269,8 +269,6 @@ class Navigator @Inject() () {
       _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
     case RegistrationCancellationDeclarationPage =>
       _ => controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoad()
-    case RegistrationCancellationDatePage =>
-      _ => controllers.cancellation.routes.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -288,9 +286,6 @@ class Navigator @Inject() () {
 
     case CancelRegistrationDatePage =>
       _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
-
-    case RegistrationCancellationDatePage =>
-      _ => controllers.cancellation.routes.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
 
     case ReasonForCancellationPage =>
       userAnswers => navigateCheckReasonForCancellationPage(userAnswers)
