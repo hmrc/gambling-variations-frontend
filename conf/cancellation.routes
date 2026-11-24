@@ -41,3 +41,5 @@ GET        /cancel-group-registration/submitted                         controll
 
 GET        /cancel-group-registration/declaration                controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad()
 POST       /cancel-group-registration/declaration                controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit()
+
+GET        /:regNumber/cancel-registration              controllers.cancellation.CancelRegistrationDateController.onLanding(regNumber: String)

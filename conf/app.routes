@@ -43,4 +43,3 @@ GET        /address-lookup/callback                 controllers.AddressLookupCon
 # Landing url - These are used by gambling-management-frontend
 
 GET        /:regNumber/change-registration-details      controllers.ChangeRegistrationDetailsController.onLanding(regNumber: String)
-GET        /:regNumber/cancel-registration              controllers.cancellation.CancelRegistrationDateController.onLanding(regNumber: String)
