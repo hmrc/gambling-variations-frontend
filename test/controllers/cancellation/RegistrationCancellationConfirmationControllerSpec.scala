@@ -34,9 +34,6 @@ class RegistrationCancellationConfirmationControllerSpec extends SpecBase {
       .set(BusinessTypePage, BusinessType.Partnership)
       .success
       .value
-      .set(GroupMemberPage, false)
-      .success
-      .value
 
   val userAnswersWithReferenceNumber: UserAnswers = emptyUserAnswers
     .set(RegistrationCancellationConfirmationReferencePage, cancellationConfirmationRefNumber)
@@ -47,7 +44,9 @@ class RegistrationCancellationConfirmationControllerSpec extends SpecBase {
 
     "must return OK and the non-group view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithReferenceNumber)).build()
+      val application = applicationBuilder(
+        userAnswers = Some(userAnswersWithReferenceNumber.set(GroupMemberPage, false).success.value)
+      ).build()
 
       running(application) {
         val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoad().url)
@@ -65,7 +64,9 @@ class RegistrationCancellationConfirmationControllerSpec extends SpecBase {
     }
 
     "must return OK and group view for a GET" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithReferenceNumber)).build()
+      val application = applicationBuilder(
+        userAnswers = Some(userAnswersWithReferenceNumber.set(GroupMemberPage, true).success.value)
+      ).build()
 
       running(application) {
         val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoadGroup().url)

@@ -36,7 +36,7 @@ class RegistrationCancellationLockedViewSpec extends SpecBase {
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    def messageKey: String = ""
+    def messageKey: String = "registrationCancellationLocked"
     private val html = view("", messageKey)(request, messages)
 
     val doc: Document = Jsoup.parse(html.body)

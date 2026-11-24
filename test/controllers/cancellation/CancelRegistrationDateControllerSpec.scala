@@ -74,8 +74,8 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
     registrationDate.plusDays(numberOfDays / 2)
   }
 
-  val messageKey: String = "cancelRegistrationWarning"
-  val isGroup: Boolean = false
+  val messageKey: String = "cancelGroupRegistrationDate"
+  val isGroup: Boolean = true
 
   private val validAnswer =
     LocalDate.of(2017, 1, 27)
@@ -102,7 +102,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
       .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
       .success
       .value
-      .setOriginal(GroupMemberPage, true)
+      .setOriginal(GroupMemberPage, isGroup)
       .success
       .value
       .setOriginal(DateOfRegistrationPage, registrationDate)

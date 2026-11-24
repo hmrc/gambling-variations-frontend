@@ -52,7 +52,9 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[RegistrationCancellationLockedView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view("http://localhost:10400/gambling/", "msg")(request, messages(application)).toString
+        contentAsString(result) mustEqual view("http://localhost:10400/gambling/", "groupRegistrationCancellationLocked")(request,
+                                                                                                                          messages(application)
+                                                                                                                         ).toString
       }
     }
 

@@ -56,7 +56,7 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
     def document(
       formToRender: play.api.data.Form[LocalDate] = form
     ): Document = {
-      val messageKey: String = "cancelGroupRegistrationWarning"
+      val messageKey: String = "cancelGroupRegistrationDate"
       val isGroup: Boolean = true
 
       val html = view(formToRender, registrationDate, firstInvalidDate, middleOfDateRange, messageKey, isGroup)(request, messages)

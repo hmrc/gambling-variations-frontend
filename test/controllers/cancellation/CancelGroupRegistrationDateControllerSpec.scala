@@ -21,11 +21,12 @@ import connectors.GamblingConnector
 import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl}
 import controllers.routes
 import forms.cancellation.CancelGroupRegistrationDateFormProvider
-import models.{BusinessDetails, RegistrationStatus, UserAnswers}
+import models.{BusinessDetails, BusinessType, RegistrationStatus, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage}
 import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.Messages
 import play.api.inject.bind
@@ -74,7 +75,13 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
   private lazy val cancelGroupRegistrationDateRoute =
     controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
 
-  override val emptyUserAnswers = UserAnswers(userAnswersId)
+  val messageKey: String = "cancelGroupRegistrationWarning"
+  val isGroup: Boolean = true
+
+  override val emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId)
+    .setOriginal(GroupMemberPage, isGroup)
+    .success
+    .value
 
   private def getRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, cancelGroupRegistrationDateRoute)
@@ -134,9 +141,6 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
   private def businessDetailsWithoutRegistrationDate: BusinessDetails =
     businessDetails(None)
-
-  val messageKey: String = "cancelGroupRegistrationWarning"
-  val isGroup: Boolean = true
 
   "CancelGroupRegistrationDate Controller" - {
 
