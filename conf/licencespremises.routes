@@ -1,0 +1,35 @@
+
+GET        /check              controllers.licencespremises.CheckLicencesAndPremisesController.onPageLoad()
+
+GET        /add-licence-number                         controllers.licencespremises.LicenceNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /add-licence-number                         controllers.licencespremises.LicenceNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-licence-number                        controllers.licencespremises.RemoveLicenceNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-licence-number                        controllers.licencespremises.RemoveLicenceNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-address                        controllers.licencespremises.RemovePremisesAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-address                        controllers.licencespremises.RemovePremisesAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /addresses                       controllers.licencespremises.PremisesAddressListController.onPageLoad(mode: Mode = NormalMode)
+POST       /addresses                       controllers.licencespremises.PremisesAddressListController.onSubmit(mode: Mode = NormalMode)
+
+GET        /gambling-commission-number                         controllers.licencespremises.LicenceNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /gambling-commission-number                         controllers.licencespremises.LicenceNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-premises-details                         controllers.licencespremises.RemovePremisesDetailsYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-premises-details                         controllers.licencespremises.RemovePremisesDetailsYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /provide-addresses                    controllers.licencespremises.LicencesPremisesController.onPageLoad()
+POST       /provide-addresses                    controllers.licencespremises.LicencesPremisesController.onSubmit()
+
+GET        /permits-northern-ireland                      controllers.licencespremises.OtherLicencesAndPermitsNIController.onPageLoad(mode: Mode = NormalMode)
+POST       /permits-northern-ireland                      controllers.licencespremises.OtherLicencesAndPermitsNIController.onSubmit(mode: Mode = NormalMode)
+
+GET        /permits-great-britain                        controllers.licencespremises.OtherLicencesAndPermitsGBController.onPageLoad(mode: Mode = NormalMode)
+POST       /permits-great-britain                        controllers.licencespremises.OtherLicencesAndPermitsGBController.onSubmit(mode: Mode = NormalMode)
+
+GET        /pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onSubmit(mode: Mode = NormalMode)

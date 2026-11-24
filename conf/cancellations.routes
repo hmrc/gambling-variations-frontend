@@ -1,0 +1,27 @@
+
+GET        /why-are-you-cancelling                               controllers.cancellation.ReasonForCancellationController.onPageLoad(mode: Mode = NormalMode)
+POST       /why-are-you-cancelling                               controllers.cancellation.ReasonForCancellationController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-why-are-you-cancelling                        controllers.cancellation.ReasonForCancellationController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-why-are-you-cancelling                        controllers.cancellation.ReasonForCancellationController.onSubmit(mode: Mode = CheckMode)
+
+GET        /group-registration-number                        controllers.cancellation.ChangeGroupRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /group-registration-number                        controllers.cancellation.ChangeGroupRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-group-registration-number                        controllers.cancellation.ChangeGroupRegistrationNumberController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-group-registration-number                        controllers.cancellation.ChangeGroupRegistrationNumberController.onSubmit(mode: Mode = CheckMode)
+
+GET        /no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
+POST       /no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = CheckMode)
+
+GET        /already-cancelled                       controllers.cancellation.RegistrationCancellationLockedController.onPageLoad(mode: Mode = NormalMode)
+
+GET        /submitted                       controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad()
+
+GET        /declaration                      controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad()
+POST       /declaration                      controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit()
+
+GET        /check                                   controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoad(mode: Mode = NormalMode)

@@ -1,0 +1,23 @@
+
+GET        /remove-trading-name           controllers.businessname.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-trading-name           controllers.businessname.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
+
+GET        /sole-proprietor                        controllers.businessname.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
+POST       /sole-proprietor                        controllers.businessname.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
+
+GET        /corporate-body                         controllers.businessname.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = NormalMode)
+POST       /corporate-body                         controllers.businessname.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = NormalMode)
+
+GET        /partnership                            controllers.businessname.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Partnership, mode: Mode = NormalMode)
+POST       /partnership                            controllers.businessname.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Partnership, mode: Mode = NormalMode)
+
+GET        /unincorporated-body                      controllers.businessname.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = NormalMode)
+POST       /unincorporated-body                      controllers.businessname.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = NormalMode)
+
+GET        /limited-liability-partnership            controllers.businessname.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = NormalMode)
+POST       /limited-liability-partnership            controllers.businessname.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = NormalMode)
+
+GET        /change-trading-name                      controllers.businessname.BusinessTradingNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-trading-name                      controllers.businessname.BusinessTradingNameController.onSubmit(mode: Mode = NormalMode)
+
+GET        /check              controllers.businessname.CheckBusinessNameController.onPageLoad()

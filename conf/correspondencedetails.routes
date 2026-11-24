@@ -1,0 +1,65 @@
+
+GET        /                         controllers.correspondencedetails.AddCorrespondenceDetailsYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /                         controllers.correspondencedetails.AddCorrespondenceDetailsYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /email-address                                    controllers.correspondencedetails.CorrespondenceEmailAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /email-address                                    controllers.correspondencedetails.CorrespondenceEmailAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /name                             controllers.correspondencedetails.CorrespondenceNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /name                             controllers.correspondencedetails.CorrespondenceNameController.onSubmit(mode: Mode = NormalMode)
+
+GET        /additional-name                             controllers.correspondencedetails.CorrespondenceAdditionalNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /additional-name                             controllers.correspondencedetails.CorrespondenceAdditionalNameController.onSubmit(mode: Mode = NormalMode)
+
+GET        /additional-address-information                            controllers.correspondencedetails.CorrespondenceAdditionalInfoController.onPageLoad(mode: Mode = NormalMode)
+POST       /additional-address-information                            controllers.correspondencedetails.CorrespondenceAdditionalInfoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /contact-numbers                        controllers.correspondencedetails.CorrespondenceContactNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /contact-numbers                        controllers.correspondencedetails.CorrespondenceContactNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-fax-number                        controllers.correspondencedetails.RemoveCorrespondenceFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-fax-number                        controllers.correspondencedetails.RemoveCorrespondenceFaxNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /remove-fax-number                        controllers.correspondencedetails.RemoveCorrespondenceFaxNumberController.onPageLoad(mode: Mode = CheckMode)
+POST       /remove-fax-number                        controllers.correspondencedetails.RemoveCorrespondenceFaxNumberController.onSubmit(mode: Mode = CheckMode)
+
+GET        /remove-email-address                        controllers.correspondencedetails.RemoveCorrespondenceEmailAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-email-address                        controllers.correspondencedetails.RemoveCorrespondenceEmailAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /enter-uk-address                       controllers.correspondencedetails.CorrespondenceUKAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /enter-uk-address                       controllers.correspondencedetails.CorrespondenceUKAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /enter-non-uk-address                     controllers.correspondencedetails.CorrespondenceNonUKAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /enter-non-uk-address                       controllers.correspondencedetails.CorrespondenceNonUKAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-additional-name                        controllers.correspondencedetails.RemoveAdditionalCorrespondenceNameYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-additional-name                        controllers.correspondencedetails.RemoveAdditionalCorrespondenceNameYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-additional-address-information                        controllers.correspondencedetails.RemoveCorrAddressAddInfoController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-additional-address-information                        controllers.correspondencedetails.RemoveCorrAddressAddInfoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-all                        controllers.correspondencedetails.RemoveCorrespondenceDetailsYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-all                        controllers.correspondencedetails.RemoveCorrespondenceDetailsYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-address                     controllers.correspondencedetails.CorrespondenceChangeAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-address                     controllers.correspondencedetails.CorrespondenceChangeAddrScreenerController.onSubmit(mode: Mode = NormalMode)
+
+GET        /uk-postcode-yes-no                   controllers.correspondencedetails.CorrespondenceUKAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /uk-postcode-yes-no                      controllers.correspondencedetails.CorrespondenceUKAddrScreenerController.onSubmit(mode: Mode = NormalMode)
+
+GET        /include-additional-address-information                         controllers.correspondencedetails.CorrespondenceAddrInfoScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /include-additional-address-information                         controllers.correspondencedetails.CorrespondenceAddrInfoScreenerController.onSubmit(mode: Mode = NormalMode)
+
+GET        /add-additional-name                  controllers.correspondencedetails.CorrespondenceAdditionalNameYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /add-additional-name                  controllers.correspondencedetails.CorrespondenceAdditionalNameYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /add-email-address                         controllers.correspondencedetails.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /add-email-address                         controllers.correspondencedetails.AddEmailAddressForCorrespondenceYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /fax-number-yes-no          controllers.correspondencedetails.FaxNumberForCorrespondenceYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /fax-number-yes-no          controllers.correspondencedetails.FaxNumberForCorrespondenceYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /fax-number                        controllers.correspondencedetails.CorrespondenceFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /fax-number                        controllers.correspondencedetails.CorrespondenceFaxNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /check                            controllers.correspondencedetails.CheckCorrespondenceDetailsController.onPageLoad()
+GET       /check/continue                         controllers.correspondencedetails.CheckCorrespondenceDetailsController.onContinue()

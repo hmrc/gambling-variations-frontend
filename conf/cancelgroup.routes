@@ -1,0 +1,16 @@
+
+GET        /no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
+POST       /no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = CheckMode)
+
+GET        /reviewing-cancellation-request   controllers.cancellation.RegistrationCancellationWarningController.onPageLoad(mode: Mode = NormalMode)
+POST       /reviewing-cancellation-request   controllers.cancellation.RegistrationCancellationWarningController.onSubmit(mode: Mode = NormalMode)
+
+GET        /check                             controllers.cancellation.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
+
+GET        /submitted                         controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoadGroup()
+
+GET        /declaration                controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad()
+POST       /declaration                controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit()
