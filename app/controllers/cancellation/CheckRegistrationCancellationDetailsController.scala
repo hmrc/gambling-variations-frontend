@@ -36,7 +36,7 @@ class CheckRegistrationCancellationDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val summaryList =
       CheckRegistrationCancellationDetailsViewModel.summaryList(request.userAnswers)
 

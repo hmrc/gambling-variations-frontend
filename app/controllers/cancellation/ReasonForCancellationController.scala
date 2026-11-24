@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import controllers.actions.*
 import forms.cancellation.ReasonForCancellationFormProvider
-import models.Mode
+import models.{Mode, NormalMode}
 import models.cancellation.ReasonForCancellation
 import navigation.Navigator
 import pages.cancellation.ReasonForCancellationPage
@@ -48,7 +48,7 @@ class ReasonForCancellationController @Inject() (
 
   val form: Form[ReasonForCancellation] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(ReasonForCancellationPage) match {
       case None        => form
@@ -58,7 +58,7 @@ class ReasonForCancellationController @Inject() (
     Ok(view(preparedForm))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     form
       .bindFromRequest()
       .fold(
@@ -67,7 +67,7 @@ class ReasonForCancellationController @Inject() (
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ReasonForCancellationPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ReasonForCancellationPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ReasonForCancellationPage, NormalMode, updatedAnswers))
       )
   }
 }

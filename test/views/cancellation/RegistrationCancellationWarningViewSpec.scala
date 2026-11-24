@@ -54,11 +54,8 @@ class RegistrationCancellationWarningViewSpec extends SpecBase {
 
     val form = formProvider()
 
-    def document(
-      formToRender: play.api.data.Form[Boolean] = form,
-      isGroup: Boolean = true
-    ): Document = {
-      val html = view(formToRender, currentDateFormatted, isGroup)(request, messages)
+    def document(formToRender: play.api.data.Form[Boolean] = form, key: String = ""): Document = {
+      val html = view(formToRender, currentDateFormatted, key)(request, messages)
       Jsoup.parse(html.body)
     }
   }

@@ -24,7 +24,7 @@
         paragraphWithLink: ParagraphMessageWithLink,
 )
 
-@(mode: Mode, gamblingHomeUrl: String, messageKey: String)(implicit request: Request[_], messages: Messages)
+@(gamblingHomeUrl: String, messageKey: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages(s"$messageKey.title"), Some(messages(s"$messageKey.caption")))) {
 

@@ -44,11 +44,11 @@ class RegistrationCancellationLockedController @Inject() (
   private val groupKey = "groupRegistrationCancellationLocked"
   private val nonGroupKey = "registrationCancellationLocked"
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    checkScreen(request.userAnswers, CurrentScreen.Locked, false, mode)(Ok(view(mode, appConfig.gamblingManagementHomeUrl, nonGroupKey)))
+  def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    checkScreen(request.userAnswers, CurrentScreen.Locked, false)(Ok(view(appConfig.gamblingManagementHomeUrl, nonGroupKey)))
   }
 
-  def onPageLoadGroup(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    checkScreen(request.userAnswers, CurrentScreen.Locked, true, mode)(Ok(view(mode, appConfig.gamblingManagementHomeUrl, groupKey)))
+  def onPageLoadGroup(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    checkScreen(request.userAnswers, CurrentScreen.Locked, true)(Ok(view(appConfig.gamblingManagementHomeUrl, groupKey)))
   }
 }

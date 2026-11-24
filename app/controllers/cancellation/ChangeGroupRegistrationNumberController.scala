@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import controllers.actions.*
 import forms.cancellation.ChangeGroupRegistrationNumberFormProvider
-import models.Mode
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.cancellation.ChangeGroupRegistrationNumberPage
 import play.api.data.Form
@@ -47,7 +47,7 @@ class ChangeGroupRegistrationNumberController @Inject() (
 
   val form: Form[String] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(ChangeGroupRegistrationNumberPage) match {
       case None        => form
@@ -57,7 +57,7 @@ class ChangeGroupRegistrationNumberController @Inject() (
     Ok(view(preparedForm))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
     form
       .bindFromRequest()
@@ -67,7 +67,7 @@ class ChangeGroupRegistrationNumberController @Inject() (
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeGroupRegistrationNumberPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ChangeGroupRegistrationNumberPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ChangeGroupRegistrationNumberPage, NormalMode, updatedAnswers))
       )
   }
 }

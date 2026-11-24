@@ -19,7 +19,7 @@ package controllers.cancellation
 import controllers.actions.{AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import controllers.routes
 import forms.cancellation.RegistrationCancellationWarningFormProvider
-import models.Mode
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.DateOfRegistrationPage
 import pages.cancellation.{RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDeclarationPage}
@@ -54,8 +54,8 @@ class RegistrationCancellationWarningController @Inject() (
   private val groupKey = "cancelGroupRegistrationWarning"
   private val nonGroupKey = "cancelRegistrationWarning"
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    checkScreen(request.userAnswers, CurrentScreen.Warning, false, mode) {
+  def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    checkScreen(request.userAnswers, CurrentScreen.Warning, false) {
       request.userAnswers
         .get(DateOfRegistrationPage)
         .fold(Redirect(routes.SystemErrorController.onPageLoad())) { cancellationDate =>
@@ -63,12 +63,12 @@ class RegistrationCancellationWarningController @Inject() (
             .get(RegistrationCancellationCancelAgainYesNoPage)
             .fold(formProvider())(formProvider().fill)
 
-          Ok(view(form, dateFormatter.format(cancellationDate), nonGroupKey, mode))
+          Ok(view(form, dateFormatter.format(cancellationDate), nonGroupKey))
         }
     }
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = {
+  def onSubmit(): Action[AnyContent] = {
     (authorise andThen getData andThen requireData).async { implicit request =>
       val form = formProvider()
 
@@ -81,7 +81,7 @@ class RegistrationCancellationWarningController @Inject() (
               formWithErrors =>
                 Future.successful(
                   BadRequest(
-                    view(formWithErrors, dateFormatter.format(systemDate), nonGroupKey, mode)
+                    view(formWithErrors, dateFormatter.format(systemDate), nonGroupKey)
                   )
                 ),
               value =>
@@ -95,34 +95,34 @@ class RegistrationCancellationWarningController @Inject() (
                                     )
                   _ <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(
-                  navigator.nextPage(RegistrationCancellationDeclarationPage, mode, updatedAnswers)
+                  navigator.nextPage(RegistrationCancellationDeclarationPage, NormalMode, updatedAnswers)
                 )
             )
         }
     }
   }
 
-  def onPageLoadGroup(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoadGroup(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     request.userAnswers
       .get(DateOfRegistrationPage)
       .fold(Redirect(routes.SystemErrorController.onPageLoad())) { cancellationDate =>
-        checkScreen(request.userAnswers, CurrentScreen.Warning, true, mode) {
+        checkScreen(request.userAnswers, CurrentScreen.Warning, true) {
           val form = request.userAnswers
             .get(RegistrationCancellationCancelAgainYesNoPage)
             .fold(formProvider())(formProvider().fill)
 
-          Ok(view(form, dateFormatter.format(cancellationDate), groupKey, mode))
+          Ok(view(form, dateFormatter.format(cancellationDate), groupKey))
         }
       }
   }
 
-  def onSubmitGroup(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+  def onSubmitGroup(): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val form = formProvider()
     request.userAnswers
       .get(DateOfRegistrationPage)
       .fold(Future.successful(Redirect(routes.SystemErrorController.onPageLoad())))(cancellationDate =>
         Future.successful(
-          Ok(view(form, dateFormatter.format(cancellationDate), groupKey, mode))
+          Ok(view(form, dateFormatter.format(cancellationDate), groupKey))
         )
       )
   }

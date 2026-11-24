@@ -59,13 +59,13 @@ class CancelRegistrationDateController @Inject() (
 
   def onLanding(regNumber: String): Action[AnyContent] =
     authenticate { request =>
-      Redirect(controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode))
+      Redirect(controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad())
         .addingToSession(AuthorisedAction.sessionRegNumberKey -> regNumber)(request)
     }
 
-  def onPageLoad(mode: Mode): Action[AnyContent] =
+  def onPageLoad(): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      checkScreen(request.userAnswers, CurrentScreen.Cancel, false, mode) {
+      checkScreen(request.userAnswers, CurrentScreen.Cancel, false) {
         request.userAnswers
           .get(DateOfRegistrationPage)
           .fold(
@@ -95,7 +95,6 @@ class CancelRegistrationDateController @Inject() (
             Ok(
               view(
                 preparedForm,
-                mode,
                 registrationDate,
                 firstInvalidDate,
                 middleOfDateRange,
@@ -109,7 +108,7 @@ class CancelRegistrationDateController @Inject() (
     }
 
   // TODO check screen
-  def onSubmit(mode: Mode): Action[AnyContent] =
+  def onSubmit(): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       request.userAnswers.get(DateOfRegistrationPage).fold(Future.successful(systemErrorRedirect)) { registrationDate =>
         val maximumValidDate =
@@ -132,7 +131,6 @@ class CancelRegistrationDateController @Inject() (
                 BadRequest(
                   view(
                     formWithErrors,
-                    mode,
                     registrationDate,
                     firstInvalidDate,
                     middleOfDateRange,
@@ -153,7 +151,7 @@ class CancelRegistrationDateController @Inject() (
               } yield Redirect(
                 navigator.nextPage(
                   CancelRegistrationDatePage,
-                  mode,
+                  NormalMode,
                   updatedAnswers
                 )
               )
@@ -163,9 +161,9 @@ class CancelRegistrationDateController @Inject() (
 
   ////////////////////////////////
 
-  def onPageLoadGroup(mode: Mode): Action[AnyContent] =
+  def onPageLoadGroup(): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      checkScreen(request.userAnswers, CurrentScreen.Cancel, true, mode) {
+      checkScreen(request.userAnswers, CurrentScreen.Cancel, true) {
         request.userAnswers.get(DateOfRegistrationPage).fold(systemErrorRedirect) { dateOfRegistration =>
           val maximumValidDate =
             LocalDate.now(clock).plusDays(14)
@@ -186,14 +184,14 @@ class CancelRegistrationDateController @Inject() (
               .getOrElse(form)
 
           Ok(
-            view(preparedForm, mode, dateOfRegistration, firstInvalidDate, middleOfDateRange, groupKey, true)
+            view(preparedForm, dateOfRegistration, firstInvalidDate, middleOfDateRange, groupKey, true)
           )
         }
       }
     }
 
   // TODO check screen
-  def onSubmitGroup(mode: Mode): Action[AnyContent] =
+  def onSubmitGroup(): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       request.userAnswers
         .get(DateOfRegistrationPage)
@@ -216,7 +214,7 @@ class CancelRegistrationDateController @Inject() (
               formWithErrors =>
                 Future.successful(
                   BadRequest(
-                    view(formWithErrors, mode, dateOfRegistration, firstInvalidDate, middleOfDateRange, groupKey, true)
+                    view(formWithErrors, dateOfRegistration, firstInvalidDate, middleOfDateRange, groupKey, true)
                   )
                 ),
               value =>
@@ -226,7 +224,7 @@ class CancelRegistrationDateController @Inject() (
                                     )
                   _ <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(
-                  navigator.nextPage(CancelRegistrationDatePage, mode, updatedAnswers)
+                  navigator.nextPage(CancelRegistrationDatePage, NormalMode, updatedAnswers)
                 )
             )
         }

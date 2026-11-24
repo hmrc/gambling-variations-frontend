@@ -28,7 +28,7 @@ trait CancellationEntrypointDecider {
     case Cancel, Locked, Warning
   }
 
-  def checkScreen(userAnswers: UserAnswers, currentScreen: CurrentScreen, isGroupRoute: Boolean, mode: Mode)(render: => Result): Result = userAnswers
+  def checkScreen(userAnswers: UserAnswers, currentScreen: CurrentScreen, isGroupRoute: Boolean)(render: => Result): Result = userAnswers
     .get(GroupMemberPage)
     .fold(Redirect(controllers.routes.SystemErrorController.onPageLoad().url)) { isGroup =>
 
@@ -38,8 +38,8 @@ trait CancellationEntrypointDecider {
       } else {
         Redirect(validScreen match {
           case CurrentScreen.Cancel =>
-            if isGroup then controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup(mode)
-            else controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(mode)
+            if isGroup then controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup()
+            else controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad()
           case CurrentScreen.Locked =>
             if isGroup then controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoadGroup()
             else controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad()

@@ -195,7 +195,7 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
 
       "must render non-standard page correctly - expired" in new Setup(false) {
 
-        override  def gamblingReturnPeriods = GamblingReturnPeriods(
+        override def gamblingReturnPeriods = GamblingReturnPeriods(
           mgdRegNumber          = "mgd1",
           returnPeriodsId       = Some(1),
           nstpEndDate1          = Some(date.minusMonths(24)),
@@ -210,7 +210,6 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
           finalPeriodWarning    = Some(false),
           hasExistingNstpValues = Some(true)
         )
-
 
         doc.title must include(
           messages("returnPeriods.nonStandard.title")
@@ -238,7 +237,6 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
 
         val pastTable: Option[Element] = tables
           .find(_.select("caption").text().trim == messages("returnPeriods.nonStandard.pastTable.caption"))
-
 
         assert(pastTable.isDefined, "Non-standard return periods table should exist")
 

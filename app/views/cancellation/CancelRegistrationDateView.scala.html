@@ -34,7 +34,7 @@
  )
 
 
- @(form: Form[LocalDate], mode: Mode, registrationDate: LocalDate, maximumDate: LocalDate, middleOfDateRange: LocalDate, messageKey: String, isGroup: Boolean)(implicit request: Request[_], messages: Messages)
+ @(form: Form[LocalDate], registrationDate: LocalDate, maximumDate: LocalDate, middleOfDateRange: LocalDate, messageKey: String, isGroup: Boolean)(implicit request: Request[_], messages: Messages)
 
  @fullDate(date: LocalDate) = @{
   date.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))
@@ -46,7 +46,7 @@
 
  @layout(pageTitle = title(form, messages(s"$messageKey.title"), Some(messages(s"$messageKey.caption")))) {
 
- @formHelper(action = controllers.cancellation.routes.CancelRegistrationDateController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+ @formHelper(action = controllers.cancellation.routes.CancelRegistrationDateController.onSubmit(), Symbol("autoComplete") -> "off") {
 
   @mainErrorSummary(
        form.copy(errors = form.errors.filter(_.key == "value")),

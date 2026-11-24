@@ -45,7 +45,7 @@ object CheckGroupRegistrationCancellationDetailsViewModel {
         actions = Seq(
           ActionItemViewModel(
             "site.change",
-            routes.CancelRegistrationDateController.onPageLoadGroup(CheckMode).url
+            routes.CancelRegistrationDateController.onPageLoadGroup().url
           ).withVisuallyHiddenText(
             messages("checkGroupRegistrationCancellationDetails.cancellationDate.change.hidden")
           )
