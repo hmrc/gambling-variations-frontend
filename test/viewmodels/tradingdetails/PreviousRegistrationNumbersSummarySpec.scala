@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.tradingdetails
+package viewmodels.tradingdetails
 
 import base.SpecBase
 import pages.tradingdetails.previousregnumbers.{PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.Application
 import play.api.i18n.Messages
+import viewmodels.tradingdetails.PreviousRegistrationNumbersSummary
 
 class PreviousRegistrationNumbersSummarySpec extends SpecBase {
 

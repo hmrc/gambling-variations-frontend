@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.tradingdetails
+package viewmodels.tradingdetails
 
 import models.UserAnswers
 import pages.tradingdetails.IsSeasonalBusinessPage

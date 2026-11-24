@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.tradingdetails
+package viewmodels.tradingdetails
 
 import base.SpecBase
 import models.{NormalMode, UserAnswers}
@@ -24,7 +24,7 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import viewmodels.AssociatedRegNumberViewModel
+import viewmodels.tradingdetails.AssociatedRegNumberViewModel
 
 class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.tradingdetails
+package viewmodels.tradingdetails
 
 import models.{BusinessTradeClass, UserAnswers}
 import pages.tradingdetails.{BusinessTradeClassPage, OtherTradeClassPage}

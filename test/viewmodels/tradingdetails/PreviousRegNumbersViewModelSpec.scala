@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.tradingdetails
+package viewmodels.tradingdetails
 
 import base.SpecBase
 import models.UserAnswers
 import org.scalatest.matchers.must.Matchers
-import pages.tradingdetails.previousregnumbers.UnsubmittedPreviousRegNumbersPage
+import pages.tradingdetails.previousregnumbers.PreviousRegistrationNumbersListPage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+import viewmodels.tradingdetails.PreviousRegNumbersViewModel
 
-class UnsubmittedPrevRegNumbersViewModelSpec extends SpecBase with Matchers {
+class PreviousRegNumbersViewModelSpec extends SpecBase with Matchers {
 
-  "UnsubmittedRegNumberViewModel" - {
+  "PreviousRegNumberViewModel" - {
 
     "must populate correct view" in {
       val data = Json.obj(
@@ -48,7 +49,7 @@ class UnsubmittedPrevRegNumbersViewModelSpec extends SpecBase with Matchers {
       val baseUserAnswers =
         UserAnswers(userAnswersId, data)
 
-      val unsubmittedPreviousRegNumbers = baseUserAnswers.get(UnsubmittedPreviousRegNumbersPage)
+      val previousRegNumbers = baseUserAnswers.get(PreviousRegistrationNumbersListPage)
 
       val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
@@ -56,12 +57,10 @@ class UnsubmittedPrevRegNumbersViewModelSpec extends SpecBase with Matchers {
 
       implicit val messages: Messages = messagesApi.preferred(FakeRequest())
 
-      val unsubmitted = UnsubmittedPrevRegNumbersViewModel(unsubmittedPreviousRegNumbers).summaryList
+      val submitted = PreviousRegNumbersViewModel(previousRegNumbers).summaryList
 
-      unsubmitted.head.key.content mustEqual Text("GTT28881666")
-      unsubmitted.head.actions.get.items(1).href mustEqual controllers.tradingdetails.routes.PreviousRegistrationNumbersListController
-        .onRedirect(prevRegNumber = "GTT28881666")
-        .url
+      submitted.head.key.content mustEqual Text("XHM00000199")
+      submitted(1).key.content mustEqual Text("ZIU00001218")
     }
   }
 }
