@@ -356,7 +356,7 @@ object CheckControllingBodyDetailsViewModel {
       faxNumber                = text(ControllingBodyFaxNumberPage),
       addEmailAddress          = answers.get(ControllingBodyAddEmailAddressYesNoPage),
       emailAddress             = text(ControllingBodyEmailPage),
-      hasBusinessPartnerNumber = answers.get(ControllingBodyBusinessPartnerNumberPage).isDefined
+      hasBusinessPartnerNumber = text(ControllingBodyBusinessPartnerNumberPage).isDefined
     )
   }
 }
