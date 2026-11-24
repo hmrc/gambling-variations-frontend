@@ -17,7 +17,7 @@
 package views.partnerdetails
 
 import base.SpecBase
-import forms.BusinessTradingNameFormProvider
+import forms.businessname.BusinessTradingNameFormProvider
 import models.{CheckMode, Mode}
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*

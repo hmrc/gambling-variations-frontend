@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businessaddress
 
 import forms.mappings.Mappings
-import models.BusinessChangeAddrOption
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class BusinessChangeAddrScreenerFormProvider @Inject() extends Mappings {
+class BusinessUKAddrScreenerFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[BusinessChangeAddrOption] =
+  def apply(): Form[Boolean] =
     Form(
-      "businessChangeAddrScreener" -> enumerable[BusinessChangeAddrOption](
-        "businessChangeAddrScreener.error.required"
-      )
+      "businessUKAddrScreener" -> boolean("businessUKAddrScreener.error.required")
     )
 }

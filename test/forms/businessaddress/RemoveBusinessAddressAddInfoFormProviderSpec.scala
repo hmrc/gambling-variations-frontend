@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businessaddress
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.businessaddress.RemoveBusinessAddressAddInfoFormProvider
 import play.api.data.FormError
 
-class RemoveTradeNameFormProviderSpec extends BooleanFieldBehaviours {
+class RemoveBusinessAddressAddInfoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "removeTradeName.error.required"
+  val requiredKey = "removeBusinessAddressAddInfo.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new RemoveTradeNameFormProvider()()
+  val form = new RemoveBusinessAddressAddInfoFormProvider()()
 
   ".value" - {
 

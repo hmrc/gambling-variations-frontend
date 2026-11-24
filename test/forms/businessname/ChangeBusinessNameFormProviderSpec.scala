@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businessname
 
 import forms.behaviours.StringFieldBehaviours
+import forms.businessname.ChangeBusinessNameFormProvider
 import models.BusinessType
 import play.api.data.FormError
 

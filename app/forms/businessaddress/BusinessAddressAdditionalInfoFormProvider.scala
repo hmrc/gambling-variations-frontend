@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.businessaddress
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class BusinessTradingNameFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
 
-  private val businessNameRegex = "^[a-zA-Z0-9\\- '\\s]+$"
+class BusinessAddressAdditionalInfoFormProvider @Inject() extends Mappings {
 
+  private val businessAddressAdditionalInfoRegex = "^[A-Za-z0-9 -']+$"
+  private val maxL = 100
   def apply(): Form[String] =
     Form(
-      "value" -> text("businessTradingName.error.required")
+      "businessAddressAdditionalInfo" -> text("businessAddressAdditionalInfo.error.required")
         .verifying(
-          maxLength(100, "businessTradingName.error.length")
+          maxLength(maxL, "businessAddressAdditionalInfo.error.length")
         )
         .verifying(
           regexp(
-            businessNameRegex,
-            "businessTradingName.error.invalid"
+            businessAddressAdditionalInfoRegex,
+            "businessAddressAdditionalInfo.error.invalid"
           )
         )
     )

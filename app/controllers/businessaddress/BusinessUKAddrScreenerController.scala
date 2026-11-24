@@ -17,7 +17,7 @@
 package controllers.businessaddress
 
 import controllers.actions.*
-import forms.BusinessUKAddrScreenerFormProvider
+import forms.businessaddress.BusinessUKAddrScreenerFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.businessaddress.BusinessUKAddrScreenerPage

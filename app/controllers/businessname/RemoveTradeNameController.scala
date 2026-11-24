@@ -18,7 +18,7 @@ package controllers.businessname
 
 import controllers.actions.*
 import controllers.routes
-import forms.RemoveTradeNameFormProvider
+import forms.businessname.RemoveTradeNameFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.GroupMemberPage
