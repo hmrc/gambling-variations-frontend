@@ -17,7 +17,6 @@
 package forms.tradingdetails
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.tradingdetails.AssociatedRegistrationNumbersFormProvider
 import play.api.data.FormError
 
 class AssociatedRegistrationNumbersFormProviderSpec extends BooleanFieldBehaviours {
