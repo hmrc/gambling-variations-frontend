@@ -18,16 +18,18 @@
 
 @this(
     layout: templates.Layout,
-    govukButton: GovukButton,
     h2: H2,
     p: Paragraph,
     link: Link
 )
 
-@(gamblingManagementHomeUrl: String, referenceNumber: String)(implicit request: Request[_], messages: Messages)
+@(gamblingManagementHomeUrl: String, referenceNumber: String, isGroup: Boolean)(implicit request: Request[_], messages: Messages)
+
+@titleKey = @{ if (isGroup) "registrationCancellationConfirmation.group.title" else "registrationCancellationConfirmation.title" }
+@p1Key = @{ if (isGroup) "registrationCancellationConfirmation.group.p1" else "registrationCancellationConfirmation.p1" }
 
 @layout(
-    pageTitle = titleNoForm(messages("registrationCancellationConfirmation.panel.title"), Some(messages("registrationCancellationConfirmation.title"))),
+    pageTitle = titleNoForm(messages("registrationCancellationConfirmation.panel.title"), Some(messages(titleKey))),
     showBackLink = false
 ) {
 
@@ -44,7 +46,7 @@
     
     @h2(messages("registrationCancellationConfirmation.heading"))
     
-    @p(messages("registrationCancellationConfirmation.p1"))
+    @p(messages(p1Key))
     @p(messages("registrationCancellationConfirmation.p2"))
     @link(
         "changeRegistrationDetails.change-registration.link",

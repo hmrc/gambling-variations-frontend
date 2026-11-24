@@ -28,7 +28,7 @@ import models.controllingbody.ControllingBodyChangeOption.*
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
-import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage}
+import pages.cancellation.*
 import pages.contactdetails.*
 import pages.controllingbody.*
 import pages.correspondencedetails.*
@@ -413,6 +413,18 @@ class NavigatorSpec extends SpecBase {
 
             navigator.nextPage(CancelRegistrationDatePage, CheckMode, answers) mustBe
               controllers.cancellation.routes.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
+          }
+
+          "should route RegistrationCancellationDeclarationPage to non-group confirmation when not a group member" in {
+            val userAnswers = emptyAnswers.set(GroupMemberPage, false).success.value
+            navigator.nextPage(RegistrationCancellationDeclarationPage, NormalMode, userAnswers) mustBe
+              controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoad()
+          }
+
+          "should route RegistrationCancellationDeclarationPage to group confirmation when a group member" in {
+            val userAnswers = emptyAnswers.set(GroupMemberPage, true).success.value
+            navigator.nextPage(RegistrationCancellationDeclarationPage, NormalMode, userAnswers) mustBe
+              controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoadGroup()
           }
         }
       }

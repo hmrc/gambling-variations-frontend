@@ -17,12 +17,10 @@
 package views.cancellation
 
 import base.SpecBase
-import forms.cancellation.ChangeGroupRegistrationNumberFormProvider
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import play.twirl.api.HtmlFormat
 import views.html.cancellation.RegistrationCancellationConfirmationView
 
 class RegistrationCancellationConfirmationViewSpec extends SpecBase {
@@ -31,10 +29,6 @@ class RegistrationCancellationConfirmationViewSpec extends SpecBase {
     private val app = applicationBuilder().build()
 
     val view = app.injector.instanceOf[RegistrationCancellationConfirmationView]
-
-    val formProvider = new ChangeGroupRegistrationNumberFormProvider()
-
-    val form = formProvider()
 
     val request: play.api.mvc.Request[?] = FakeRequest()
 
@@ -49,9 +43,9 @@ class RegistrationCancellationConfirmationViewSpec extends SpecBase {
 
   "RegistrationCancellationConfirmationView" - {
 
-    "must render page correctly" in new Setup {
+    "must render non-group page correctly" in new Setup {
 
-      val html: HtmlFormat.Appendable = view(redirectUrl, referenceNumber)(request, messages)
+      val html = view(redirectUrl, referenceNumber, isGroup = false)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
 
       doc.title must include(
@@ -66,6 +60,38 @@ class RegistrationCancellationConfirmationViewSpec extends SpecBase {
         .select(".govuk-body")
         .get(0)
         .text mustBe messages("registrationCancellationConfirmation.p1")
+
+      doc
+        .select(".govuk-body")
+        .get(1)
+        .text mustBe messages("registrationCancellationConfirmation.p2")
+
+      doc
+        .select(".govuk-panel__body")
+        .text mustBe messages("registrationCancellationConfirmation.panel.p1") + " " + referenceNumber
+
+      doc
+        .select(".govuk-error-summary")
+        .size() mustEqual 0
+    }
+
+    "must render group page correctly" in new Setup {
+
+      val html = view(redirectUrl, referenceNumber, isGroup = true)(request, messages)
+      val doc: Document = Jsoup.parse(html.body)
+
+      doc.title must include(
+        messages("registrationCancellationConfirmation.group.title")
+      )
+
+      doc
+        .select(".govuk-heading-m")
+        .text mustBe messages("registrationCancellationConfirmation.heading")
+
+      doc
+        .select(".govuk-body")
+        .get(0)
+        .text mustBe messages("registrationCancellationConfirmation.group.p1")
 
       doc
         .select(".govuk-body")
