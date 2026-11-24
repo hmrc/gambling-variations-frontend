@@ -16,11 +16,10 @@
 
 package controllers.cancellation
 
-import connectors.GamblingConnector
 import controllers.actions.{AuthenticatedAction, AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
-import models.Mode
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.DateOfRegistrationPage
 import pages.cancellation.CancelRegistrationDatePage
@@ -34,6 +33,9 @@ import java.time.{Clock, LocalDate}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
+//TODO slight message difference, but key should be enough to handle it
+//https://jira.tools.tax.service.gov.uk/browse/DTR-9154
+//https://jira.tools.tax.service.gov.uk/browse/DTR-9089
 class CancelRegistrationDateController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
@@ -43,7 +45,6 @@ class CancelRegistrationDateController @Inject() (
   getData: DataRetrievalAction,
   requireData: BusinessDetailsDataRequiredAction,
   formProvider: CancelRegistrationDateFormProvider,
-  gamblingConnector: GamblingConnector,
   clock: Clock,
   val controllerComponents: MessagesControllerComponents,
   view: CancelRegistrationDateView
@@ -52,18 +53,25 @@ class CancelRegistrationDateController @Inject() (
     with CancellationEntrypointDecider
     with I18nSupport {
 
+  // TODO naming
+  private val groupKey = "cancelGroupRegistrationDate"
+  private val nonGroupKey = "cancelRegistrationDate"
+
   def onLanding(regNumber: String): Action[AnyContent] =
     authenticate { request =>
-      Redirect(controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad())
+      Redirect(controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode))
         .addingToSession(AuthorisedAction.sessionRegNumberKey -> regNumber)(request)
     }
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      checkScreen(request.userAnswers, CurrentScreen.Cancel) {
+      checkScreen(request.userAnswers, CurrentScreen.Cancel, false, mode) {
+        request.userAnswers
+          .get(DateOfRegistrationPage)
+          .fold(
+            Redirect(routes.SystemErrorController.onPageLoad().url)
+          ) { registrationDate =>
 
-        request.userAnswers.get(DateOfRegistrationPage) match {
-          case Some(registrationDate) =>
             val maximumValidDate =
               LocalDate.now(clock).plusDays(14)
 
@@ -82,75 +90,145 @@ class CancelRegistrationDateController @Inject() (
                 .map(form.fill)
                 .getOrElse(form)
 
+            preparedForm.get.getDayOfMonth.toString
+
             Ok(
               view(
                 preparedForm,
+                mode,
                 registrationDate,
                 firstInvalidDate,
-                middleOfDateRange
+                middleOfDateRange,
+                nonGroupKey,
+                false
               )
             )
 
-          case None =>
-            systemErrorRedirect
+          }
+      }
+    }
+
+  // TODO check screen
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      request.userAnswers.get(DateOfRegistrationPage).fold(Future.successful(systemErrorRedirect)) { registrationDate =>
+        val maximumValidDate =
+          LocalDate.now(clock).plusDays(14)
+
+        val firstInvalidDate =
+          maximumValidDate.plusDays(1)
+
+        val form =
+          formProvider(registrationDate, maximumValidDate)
+
+        val middleOfDateRange =
+          middleDate(registrationDate, firstInvalidDate)
+
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors =>
+              Future.successful(
+                BadRequest(
+                  view(
+                    formWithErrors,
+                    mode,
+                    registrationDate,
+                    firstInvalidDate,
+                    middleOfDateRange,
+                    nonGroupKey,
+                    false
+                  )
+                )
+              ),
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(
+                                    request.userAnswers.set(
+                                      CancelRegistrationDatePage,
+                                      value
+                                    )
+                                  )
+                _ <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(
+                navigator.nextPage(
+                  CancelRegistrationDatePage,
+                  mode,
+                  updatedAnswers
+                )
+              )
+          )
+      }
+    }
+
+  ////////////////////////////////
+
+  def onPageLoadGroup(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
+      checkScreen(request.userAnswers, CurrentScreen.Cancel, true, mode) {
+        request.userAnswers.get(DateOfRegistrationPage).fold(systemErrorRedirect) { dateOfRegistration =>
+          val maximumValidDate =
+            LocalDate.now(clock).plusDays(14)
+
+          val firstInvalidDate =
+            maximumValidDate.plusDays(1)
+
+          val form =
+            formProvider(dateOfRegistration, maximumValidDate)
+
+          val middleOfDateRange =
+            middleDate(dateOfRegistration, firstInvalidDate)
+
+          val preparedForm =
+            request.userAnswers
+              .get(CancelRegistrationDatePage)
+              .map(form.fill)
+              .getOrElse(form)
+
+          Ok(
+            view(preparedForm, mode, dateOfRegistration, firstInvalidDate, middleOfDateRange, groupKey, true)
+          )
         }
       }
     }
 
-  def onSubmit(mode: Mode): Action[AnyContent] =
+  // TODO check screen
+  def onSubmitGroup(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      gamblingConnector
-        .getBusinessDetails(request.mgdRegNum)
-        .flatMap { businessDetails =>
-          businessDetails.dateOfRegistration match {
-            case Some(registrationDate) =>
-              val maximumValidDate =
-                LocalDate.now(clock).plusDays(14)
+      request.userAnswers
+        .get(DateOfRegistrationPage)
+        .fold(Future.successful(systemErrorRedirect)) { dateOfRegistration =>
+          val maximumValidDate =
+            LocalDate.now(clock).plusDays(14)
 
-              val firstInvalidDate =
-                maximumValidDate.plusDays(1)
+          val firstInvalidDate =
+            maximumValidDate.plusDays(1)
 
-              val form =
-                formProvider(registrationDate, maximumValidDate)
+          val form =
+            formProvider(dateOfRegistration, maximumValidDate)
 
-              val middleOfDateRange =
-                middleDate(registrationDate, firstInvalidDate)
+          val middleOfDateRange =
+            middleDate(dateOfRegistration, firstInvalidDate)
 
-              form
-                .bindFromRequest()
-                .fold(
-                  formWithErrors =>
-                    Future.successful(
-                      BadRequest(
-                        view(
-                          formWithErrors,
-                          registrationDate,
-                          firstInvalidDate,
-                          middleOfDateRange
-                        )
-                      )
-                    ),
-                  value =>
-                    for {
-                      updatedAnswers <- Future.fromTry(
-                                          request.userAnswers.set(
-                                            CancelRegistrationDatePage,
-                                            value
-                                          )
-                                        )
-                      _ <- sessionRepository.set(updatedAnswers)
-                    } yield Redirect(
-                      navigator.nextPage(
-                        CancelRegistrationDatePage,
-                        mode,
-                        updatedAnswers
-                      )
-                    )
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors =>
+                Future.successful(
+                  BadRequest(
+                    view(formWithErrors, mode, dateOfRegistration, firstInvalidDate, middleOfDateRange, groupKey, true)
+                  )
+                ),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(
+                                      request.userAnswers.set(CancelRegistrationDatePage, value)
+                                    )
+                  _ <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(
+                  navigator.nextPage(CancelRegistrationDatePage, mode, updatedAnswers)
                 )
-
-            case None =>
-              Future.successful(systemErrorRedirect)
-          }
+            )
         }
     }
 

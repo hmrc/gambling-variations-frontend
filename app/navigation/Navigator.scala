@@ -262,9 +262,9 @@ class Navigator @Inject() () {
 
     // Cancellation
     case CancelRegistrationDatePage =>
-      userAnswers => navigateToNextPage(userAnswers)
+      _ => controllers.cancellation.routes.ReasonForCancellationController.onPageLoad(NormalMode)
     case ReasonForCancellationPage =>
-      userAnswers => navigateReasonForCancellationPage(userAnswers)
+      userAnswers => navigateReasonForCancellationPage(userAnswers, NormalMode)
     case ChangeGroupRegistrationNumberPage =>
       _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
     case RegistrationCancellationDeclarationPage =>
@@ -273,7 +273,6 @@ class Navigator @Inject() () {
           controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoadGroup()
         else
           controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoad()
-
     case _ =>
       _ => routes.IndexController.onPageLoad()
   }
@@ -289,7 +288,7 @@ class Navigator @Inject() () {
       _ => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
 
     case CancelRegistrationDatePage =>
-      userAnswers => navigateToNextPage(userAnswers)
+      _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
 
     case ReasonForCancellationPage =>
       userAnswers => navigateCheckReasonForCancellationPage(userAnswers)
@@ -664,10 +663,13 @@ private def navigateControllingBodyTradingNamePage(userAnswers: UserAnswers): Ca
   }
 }
 
-private def navigateReasonForCancellationPage(userAnswers: UserAnswers): Call =
+private def navigateReasonForCancellationPage(
+  userAnswers: UserAnswers,
+  mode: Mode
+): Call =
   userAnswers.get(ReasonForCancellationPage) match {
     case Some(ReasonForCancellation.BusinessIsPartOfTheGroup) =>
-      controllers.cancellation.routes.ChangeGroupRegistrationNumberController.onPageLoad()
+      controllers.cancellation.routes.ChangeGroupRegistrationNumberController.onPageLoad(mode)
 
     case Some(_) =>
       controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
@@ -681,7 +683,7 @@ private def navigateCheckReasonForCancellationPage(
 ): Call =
   userAnswers.get(ReasonForCancellationPage) match {
     case Some(ReasonForCancellation.BusinessIsPartOfTheGroup) =>
-      controllers.cancellation.routes.ChangeGroupRegistrationNumberController.onPageLoad()
+      controllers.cancellation.routes.ChangeGroupRegistrationNumberController.onPageLoad(CheckMode)
 
     case Some(_) =>
       controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
@@ -689,14 +691,6 @@ private def navigateCheckReasonForCancellationPage(
     case None =>
       routes.SystemErrorController.onPageLoad()
   }
-
-private def navigateToNextPage(
-  userAnswers: UserAnswers
-): Call = userAnswers.get(GroupMemberPage) match {
-  case Some(true)  => controllers.cancellation.routes.ReasonForCancellationController.onPageLoad()
-  case Some(false) => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
-  case None        => routes.SystemErrorController.onPageLoad()
-}
 
 private def navigateControllingBodyAddTradingNameYesNoPage(answers: UserAnswers): Call =
   answers.get(ControllingBodyAddTradingNameYesNoPage) match {

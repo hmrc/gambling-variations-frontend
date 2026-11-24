@@ -26,6 +26,9 @@ import views.html.cancellation.RegistrationCancellationLockedView
 
 import javax.inject.Inject
 
+//TODO lock uses the same view, a single message maybe needs to be different.
+//https://jira.tools.tax.service.gov.uk/browse/DTR-9343
+//https://jira.tools.tax.service.gov.uk/browse/DTR-9342
 class RegistrationCancellationLockedController @Inject() (
   override val messagesApi: MessagesApi,
   appConfig: FrontendAppConfig,
@@ -38,7 +41,14 @@ class RegistrationCancellationLockedController @Inject() (
     with CancellationEntrypointDecider
     with I18nSupport {
 
+  private val groupKey = "groupRegistrationCancellationLocked"
+  private val nonGroupKey = "registrationCancellationLocked"
+
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    checkScreen(request.userAnswers, CurrentScreen.Locked)(Ok(view(appConfig.gamblingManagementHomeUrl)))
+    checkScreen(request.userAnswers, CurrentScreen.Locked, false, mode)(Ok(view(mode, appConfig.gamblingManagementHomeUrl, nonGroupKey)))
+  }
+
+  def onPageLoadGroup(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    checkScreen(request.userAnswers, CurrentScreen.Locked, true, mode)(Ok(view(mode, appConfig.gamblingManagementHomeUrl, groupKey)))
   }
 }

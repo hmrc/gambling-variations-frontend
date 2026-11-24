@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package pages.cancellation
+package pages
 
+<<<<<<<< HEAD:test/pages/cancellation/CancelRegistrationDatePageSpec.scala
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
 class CancelRegistrationDatePageSpec extends PlaySpec {
 
   "CancelRegistrationDatePage" must {
+========
+import play.api.libs.json.JsPath
+
+//TODO try to delete maybe
+case object CurrentlyRegisteredPage extends QuestionPage[Int] {
+>>>>>>>> origin/DTR-9343-2:app/pages/CurrentlyRegisteredPage.scala
 
     "have the correct path" in {
 
+<<<<<<<< HEAD:test/pages/cancellation/CancelRegistrationDatePageSpec.scala
       CancelRegistrationDatePage.path mustEqual (JsPath \ "cancelRegistrationDate")
     }
 
@@ -33,4 +41,7 @@ class CancelRegistrationDatePageSpec extends PlaySpec {
       CancelRegistrationDatePage.toString mustEqual "cancelRegistrationDate"
     }
   }
+========
+  override def toString: String = "currentlyRegistered"
+>>>>>>>> origin/DTR-9343-2:app/pages/CurrentlyRegisteredPage.scala
 }

@@ -1287,6 +1287,7 @@ chooseReturnPeriods.nonStandard.error.required = Select your non-standard return
 
 chooseStandardReturnPeriods.title = What are your standard return periods?
 chooseStandardReturnPeriods.heading = What are your standard return periods?
+chooseStandardReturnPeriods.caption = Change registration details
 
 chooseStandardReturnPeriods.jan = Last day of January, April, July and October
 chooseStandardReturnPeriods.feb = Last day of February, May, August and November
@@ -1444,10 +1445,7 @@ controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide
 returnPeriods.nonStandard.notLastPeriod.p1 = You
 returnPeriods.nonStandard.notLastPeriod.p2 = must contact HMRC (opens in new tab)
 returnPeriods.nonStandard.notLastPeriod.p3 = to change your non-standard return periods.
-returnPeriods.nonStandard.notLastPeriod.p4 = if you want to provide new dates.
 
-returnPeriods.noUpcomingPeriods.p1 = You do not have any upcoming non-standard return periods.
-returnPeriods.noUpcomingPeriods.caption = Do you want to use standard return periods?
 returnPeriods.nonStandard.switchToStandard.caption = Do you want to switch to standard return periods?
 
 returnPeriods.nonStandard.notLast.error.required = Select yes if you want to use standard return periods
@@ -1484,6 +1482,7 @@ returnPeriods.standard.p2 = Your return period end dates are the last day of Feb
 returnPeriods.standard.p3 = Your return period end dates are the last day of March, June, September and December.
 returnPeriods.standard.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
 
+returnPeriods.standard.checkYourAnswersLabel = Your standard return periods
 returnPeriods.standard.error.required = Select what you want to do with your return periods
 returnPeriods.standard.change.hidden = StandardReturnPeriods
 
@@ -1494,9 +1493,6 @@ returnPeriods.option1 = Switch to standard return periods and end dates
 returnPeriods.option2 = Keep non-standard return periods and add new end dates
 returnPeriods.option3 = Keep non-standard return periods and end dates the same
 returnPeriods.option.legend = What do you want to do when your last non‑standard return period ends?
-
-
-
 
 returnPeriods.nonStandard.switchToStandard = Switch to standard return periods and end dates
 returnPeriods.nonStandard.keepNonStandardAndChangeDates = Keep non-standard return periods and add new end dates
@@ -1715,7 +1711,6 @@ controllingBodyUTR.error.length = The Unique Taxpayer Reference (UTR) must be 10
 controllingBodyUTR.error.invalid = Enter a real Unique Taxpayer Reference (UTR)
 controllingBodyUTR.change.hidden = Tell us the controlling body’s Unique Taxpayer Reference
 
-
 controllingBodyForeignCorpRef.title = What is the controlling body’s foreign corporate reference?
 controllingBodyForeignCorpRef.heading = What is the controlling body’s foreign corporate reference?
 controllingBodyForeignCorpRef.checkYourAnswersLabel =What is the controlling body’s foreign corporate reference?
@@ -1727,24 +1722,11 @@ controllingBodyRemoveVATRegistrationNumber.title = Are you sure you want to remo
 controllingBodyRemoveVATRegistrationNumber.heading = Are you sure you want to remove {0} as this controlling body’s VAT registration number?
 controllingBodyRemoveVATRegistrationNumber.error.required = Select yes if you want to remove this controlling body’s VAT registration number
 
-
 registrationCancellationDeclaration.title = Declaration
 registrationCancellationDeclaration.heading = Declaration
 registrationCancellationDeclaration.caption = Cancel registration
 registrationCancellationDeclaration.p1 = To the best of my knowledge, I declare that the information I have provided is accurate and complete.
 registrationCancellationDeclaration.submit = Declare and submit
-
-cancelRegistrationDate.title = When are you no longer liable to pay Machine Games Duty?
-cancelRegistrationDate.heading = When are you no longer liable to pay Machine Games Duty?
-cancelRegistrationDate.caption = Cancel registration
-cancelRegistrationDate.hint = The date must be after {0} and before {1}, for example {2}
-cancelRegistrationDate.checkYourAnswersLabel = When are you no longer liable to pay Machine Games Duty?
-cancelRegistrationDate.error.required.all = Enter the date for when you are no longer liable to pay Machine Games Duty
-cancelRegistrationDate.error.required.two =  Date must include a {0} and a {1}
-cancelRegistrationDate.error.required = Date must include a {0}
-cancelRegistrationDate.error.invalid = 	Must be a real date
-cancelRegistrationDate.error.outsideBoundaries = Date must be after {0} and before {1}
-cancelRegistrationDate.change.hidden = when are you no longer liable to pay Machine Games Duty?
 
 controllingBodyAddNino.title = What is the controlling body’s National Insurance number?
 controllingBodyAddNino.paragraph = You can find this on their National Insurance card, benefit letter, payslip or P60.
@@ -1794,13 +1776,33 @@ registrationCancellationConfirmation.panel.p1 = Your reference is
 registrationCancellationConfirmation.p1 = We are reviewing your cancellation and will notify you if there are any issues.
 registrationCancellationConfirmation.p2 = It may take up to 48 hours for HMRC to approve your changes.
 
+checkGroupRegistrationCancellationDetails.title = Check your group cancellation details
+checkGroupRegistrationCancellationDetails.heading = Check your group cancellation details
+checkGroupRegistrationCancellationDetails.caption = Cancel group registration
+
+checkGroupRegistrationCancellationDetails.cancellationDate = Group registration cancellation date
+checkGroupRegistrationCancellationDetails.cancellationDate.change.hidden = group registration cancellation date
+
 registrationCancellationConfirmation.group.title = Cancel group registration
 registrationCancellationConfirmation.group.p1 = We are reviewing your group registration cancellation and will notify you if there are any issues.
+
+cancelRegistrationDate.title = When are you no longer liable to pay Machine Games Duty?
+cancelRegistrationDate.heading = When are you no longer liable to pay Machine Games Duty?
+cancelRegistrationDate.caption = Cancel registration
+cancelRegistrationDate.hint = The date must be after {0} and before {1}, for example {2}
+cancelRegistrationDate.checkYourAnswersLabel = When are you no longer liable to pay Machine Games Duty?
+cancelRegistrationDate.error.required.all = Enter the date for when you are no longer liable to pay Machine Games Duty
+cancelRegistrationDate.error.required.two =  Date must include a {0} and a {1}
+cancelRegistrationDate.error.required = Date must include a {0}
+cancelRegistrationDate.error.invalid = 	Must be a real date
+cancelRegistrationDate.error.outsideBoundaries = Date must be after {0} and before {1}
+cancelRegistrationDate.change.hidden = when are you no longer liable to pay Machine Games Duty?
 
 cancelGroupRegistrationDate.title = When is this group no longer liable to pay Machine Games Duty?
 cancelGroupRegistrationDate.heading = When is this group no longer liable to pay Machine Games Duty?
 cancelGroupRegistrationDate.caption = Cancel group registration
-cancelGroupRegistrationDate.hint = <span class="govuk-body govuk-!-display-block govuk-!-margin-bottom-3">If any member of this group is still liable to pay Machine Games Duty, they must register as an individual.</span>The date must be after {0} and before {1}. For example, {2}
+cancelGroupRegistrationDate.hint = The date must be after {0} and before {1}. For example, {2}
+cancelGroupRegistrationDate.p1 = If any member of this group is still liable to pay Machine Games Duty, they must register as an individual.
 cancelGroupRegistrationDate.checkYourAnswersLabel = When is this group no longer liable to pay Machine Games Duty?
 cancelGroupRegistrationDate.error.required.all = Enter the date for when this group is longer liable to pay Machine Games Duty
 cancelGroupRegistrationDate.error.required.two = Date must include a {0} and a {1}
@@ -1811,11 +1813,17 @@ cancelGroupRegistrationDate.change.hidden = When is this group no longer liable 
 
 cancelGroupRegistrationWarning.title = We are reviewing your cancellation request
 cancelGroupRegistrationWarning.heading = We are reviewing your cancellation request
+cancelGroupRegistrationWarning.caption = Cancel group registration
+cancelGroupRegistrationWarning.legend = You submitted a request to cancel this group''s registration on {0}. We will review this request within 48 hours.
 cancelGroupRegistrationWarning.hint = Do you want to submit a new cancellation request?
 cancelGroupRegistrationWarning.error.required = Select yes to submit a new cancellation request
 
-cancelGroupRegistrationWarning.legend = You submitted a request to cancel this group''s registration on {0}. We will review this request within 48 hours.
+cancelRegistrationWarning.title = We are reviewing your cancellation request
+cancelRegistrationWarning.heading = We are reviewing your cancellation request
+cancelRegistrationWarning.caption = Cancel registration
 cancelRegistrationWarning.legend = You submitted a request to cancel your registration on {0}. We will review this request within 48 hours.
+cancelRegistrationWarning.hint = Do you want to submit a new cancellation request?
+cancelRegistrationWarning.error.required = Select yes to submit a new cancellation request
 
 registrationCancellationLocked.title = This registration has already been cancelled
 registrationCancellationLocked.heading = This registration has already been cancelled
@@ -1823,15 +1831,8 @@ registrationCancellationLocked.caption = Cancel registration
 registrationCancellationLocked.p1 = You cannot submit a new cancellation request.
 registrationCancellationLocked.link = Return to your manage your Machine Games Duty
 
-checkGroupRegistrationCancellationDetails.title = Check your group cancellation details
-checkGroupRegistrationCancellationDetails.heading = Check your group cancellation details
-checkGroupRegistrationCancellationDetails.caption = Cancel group registration
-
-checkGroupRegistrationCancellationDetails.cancellationDate = Group registration cancellation date
-checkGroupRegistrationCancellationDetails.cancellationDate.change.hidden = group registration cancellation date
-
-registrationCancellationLocked.title = This registration has already been cancelled
-registrationCancellationLocked.heading = This registration has already been cancelled
-registrationCancellationLocked.caption = Cancel registration
-registrationCancellationLocked.p1 = You cannot submit a new cancellation request.
-registrationCancellationLocked.link = Return to your manage your Machine Games Duty
+groupRegistrationCancellationLocked.title = This registration has already been cancelled
+groupRegistrationCancellationLocked.heading = This registration has already been cancelled
+groupRegistrationCancellationLocked.caption = Cancel group registration
+groupRegistrationCancellationLocked.p1 = You cannot submit a new cancellation request for this group.
+groupRegistrationCancellationLocked.link = Return to your manage your Machine Games Duty

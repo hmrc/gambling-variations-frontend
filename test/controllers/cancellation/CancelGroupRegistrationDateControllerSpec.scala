@@ -40,6 +40,7 @@ import java.time.temporal.ChronoUnit
 import java.time.{Clock, Instant, LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
+//TODO move to another controller
 class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
 
   private implicit val messages: Messages = stubMessages()

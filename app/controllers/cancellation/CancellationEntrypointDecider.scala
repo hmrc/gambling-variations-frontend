@@ -16,9 +16,9 @@
 
 package controllers.cancellation
 
-import models.{RegistrationStatus, UserAnswers}
-import pages.RegistrationStatusPage
+import models.{Mode, RegistrationStatus, UserAnswers}
 import pages.cancellation.RegistrationCancellationDeclarationPage
+import pages.{GroupMemberPage, RegistrationStatusPage}
 import play.api.mvc.Result
 import play.api.mvc.Results.Redirect
 
@@ -28,19 +28,27 @@ trait CancellationEntrypointDecider {
     case Cancel, Locked, Warning
   }
 
-  def checkScreen(userAnswers: UserAnswers, currentScreen: CurrentScreen)(render: => Result): Result = {
-    val validScreen: CurrentScreen = determineValidScreen(userAnswers)
+  def checkScreen(userAnswers: UserAnswers, currentScreen: CurrentScreen, isGroupRoute: Boolean, mode: Mode)(render: => Result): Result = userAnswers
+    .get(GroupMemberPage)
+    .fold(Redirect(controllers.routes.SystemErrorController.onPageLoad().url)) { isGroup =>
 
-    if (currentScreen == validScreen) {
-      render
-    } else {
-      Redirect(validScreen match {
-        case CurrentScreen.Cancel  => controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad()
-        case CurrentScreen.Locked  => controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad()
-        case CurrentScreen.Warning => controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad()
-      })
+      val validScreen: CurrentScreen = determineValidScreen(userAnswers)
+      if (currentScreen == validScreen && isGroup == isGroupRoute) {
+        render
+      } else {
+        Redirect(validScreen match {
+          case CurrentScreen.Cancel =>
+            if isGroup then controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup(mode)
+            else controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(mode)
+          case CurrentScreen.Locked =>
+            if isGroup then controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoadGroup()
+            else controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad()
+          case CurrentScreen.Warning =>
+            if isGroup then controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoadGroup()
+            else controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad()
+        })
+      }
     }
-  }
 
   private def determineValidScreen(userAnswers: UserAnswers): CurrentScreen = {
     val hmrcConfirmedCancellation = userAnswers.get(RegistrationStatusPage).exists {
