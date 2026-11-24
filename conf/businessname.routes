@@ -20,4 +20,8 @@ POST       /limited-liability-partnership            controllers.businessname.Ch
 GET        /change-trading-name                      controllers.businessname.BusinessTradingNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-trading-name                      controllers.businessname.BusinessTradingNameController.onSubmit(mode: Mode = NormalMode)
 
+GET        /remove-trading-name                                    controllers.businessname.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-trading-name                                    controllers.businessname.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
+
+
 GET        /check              controllers.businessname.CheckBusinessNameController.onPageLoad()
