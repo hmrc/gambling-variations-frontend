@@ -395,9 +395,11 @@ POST       /cancel-group-registration/reviewing-cancellation-request   controlle
 GET        /cancel-registration/check                                   controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoad(mode: Mode = NormalMode)
 GET        /cancel-group-registration/check                             controllers.cancellation.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
 
+GET        /cancel-group-registration/submitted                         controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoadGroup()
+
 GET        /cancel-registration/already-cancelled                       controllers.cancellation.RegistrationCancellationLockedController.onPageLoad(mode: Mode = NormalMode)
 
-GET        /cancel-registration/submitted                       controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad(mode: Mode = NormalMode)
+GET        /cancel-registration/submitted                       controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad()
 
 GET        /cancel-registration/declaration                      controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad()
 POST       /cancel-registration/declaration                      controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit()
