@@ -24,17 +24,17 @@
         paragraphWithLink: ParagraphMessageWithLink,
 )
 
-@(mode: Mode, gamblingHomeUrl: String)(implicit request: Request[_], messages: Messages)
+@(mode: Mode, gamblingHomeUrl: String, messageKey: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("registrationCancellationLocked.title"), Some(messages("registrationCancellationLocked.caption")))) {
+@layout(pageTitle = titleNoForm(messages(s"$messageKey.title"), Some(messages(s"$messageKey.caption")))) {
 
 
-    @caption(messages("registrationCancellationLocked.caption"))
-    @h1(messages("registrationCancellationLocked.heading"))
-    @p(messages("registrationCancellationLocked.p1"))
+    @caption(messages(s"$messageKey.caption"))
+    @h1(messages(s"$messageKey.heading"))
+    @p(messages(s"$messageKey.p1"))
     @paragraphWithLink(
         None,
-        messages("registrationCancellationLocked.link"),
+        messages(s"$messageKey.link"),
         None,
         gamblingHomeUrl
     )

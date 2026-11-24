@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package pages.cancellation
+package pages
 
-import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-import java.time.LocalDate
-
-case object RegistrationCancellationDatePage extends QuestionPage[LocalDate] {
+//TODO try to delete maybe
+case object CurrentlyRegisteredPage extends QuestionPage[Int] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "registrationCancellationDate"
+  override def toString: String = "currentlyRegistered"
 }
