@@ -32,6 +32,7 @@ import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNu
 import pages.contactdetails.*
 import pages.controllingbody.*
 import pages.correspondencedetails.*
+import pages.groupmemberdetails.{RemoveTradingNameForGroupMemberPage, TradingNameForGroupMemberPage}
 import pages.licencespremises.*
 import pages.returnperiods.*
 import pages.tradingdetails.*
@@ -46,6 +47,8 @@ import javax.inject.{Inject, Singleton}
 class Navigator @Inject() () {
 
   private val normalRoutes: PartialFunction[Page, UserAnswers => Call] = {
+    case TradingNameForGroupMemberPage | RemoveTradingNameForGroupMemberPage =>
+      _ => Call("GET", "#")
     case ControllingBodyRemoveVATRegistrationNumberPage =>
       _ => Call("GET", "#") // TODO: Connect CB-CYA when the controlling body check your answers page is built.
     case ControllingBodyBusinessNamePage =>

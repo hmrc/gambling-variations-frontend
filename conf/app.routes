@@ -406,3 +406,9 @@ POST       /cancel-registration/declaration                      controllers.can
 
 GET        /cancel-group-registration/declaration                controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad()
 POST       /cancel-group-registration/declaration                controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit()
+
+GET        /change-registration-details/group-member-details/trading-name-yes-no             controllers.groupmemberdetails.TradingNameForGroupMemberController.onPageLoad(remove: Boolean = false)
+POST       /change-registration-details/group-member-details/trading-name-yes-no             controllers.groupmemberdetails.TradingNameForGroupMemberController.onSubmit(remove: Boolean = false)
+
+GET        /change-registration-details/group-member-details/remove-trading-name             controllers.groupmemberdetails.TradingNameForGroupMemberController.onPageLoad(remove: Boolean = true)
+POST       /change-registration-details/group-member-details/remove-trading-name             controllers.groupmemberdetails.TradingNameForGroupMemberController.onSubmit(remove: Boolean = true)
