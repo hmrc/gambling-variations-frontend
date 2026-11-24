@@ -46,8 +46,6 @@ class RegistrationCancellationLockedViewSpec extends SpecBase {
 
     "must render page correctly" in new Setup {
 
-      println(doc.toString)
-
       doc.title must include(
         messages("registrationCancellationLocked.title")
       )
