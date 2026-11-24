@@ -341,7 +341,6 @@ GET        /change-registration-details/controlling-body-details/vat-registratio
 POST       /change-registration-details/controlling-body-details/vat-registration-number                               controllers.controllingbody.ControllingBodyVatRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/controlling-body-details/check                            controllers.controllingbody.CheckControllingBodyDetailsController.onPageLoad()
-POST       /change-registration-details/controlling-body-details/check                            controllers.controllingbody.CheckControllingBodyDetailsController.onSubmit()
 
 GET        /cancel-registration/why-are-you-cancelling                               controllers.cancellation.ReasonForCancellationController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/why-are-you-cancelling                               controllers.cancellation.ReasonForCancellationController.onSubmit(mode: Mode = NormalMode)
