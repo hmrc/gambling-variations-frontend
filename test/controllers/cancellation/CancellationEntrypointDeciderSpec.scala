@@ -21,7 +21,7 @@ import forms.cancellation.CancelRegistrationDateFormProvider
 import models.{BusinessType, NormalMode, RegistrationStatus, UserAnswers}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage, RegistrationStatusPage}
-import pages.cancellation.{RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
+import pages.cancellation.{CancelRegistrationDatePage, RegistrationCancellationDeclarationPage}
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -86,7 +86,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
     .setOriginal(DateOfRegistrationPage, registrationDate)
     .success
     .value
-    .setOriginal(RegistrationCancellationDatePage, dateOfCancellation)
+    .setOriginal(CancelRegistrationDatePage, dateOfCancellation)
     .success
     .value
 
@@ -124,6 +124,9 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
     maximumValidDate
   )
 
+  private val groupKey = ""
+  private val nonGroupKey = ""
+
   "DateController" - {
 
     "must return OK and the correct view for a GET" in {
@@ -157,7 +160,9 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
             NormalMode,
             registrationDate,
             firstInvalidDate,
-            middleOfDateRange
+            middleOfDateRange,
+            nonGroupKey,
+            false
           )(
             request,
             messages(application)
@@ -277,6 +282,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
           view(
             form,
             dateFormatter.format(dateOfCancellation),
+            nonGroupKey,
             NormalMode
           )(
             request,
@@ -396,7 +402,8 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         contentAsString(result) mustEqual
           view(
             NormalMode,
-            gamblingUrl
+            gamblingUrl,
+            nonGroupKey
           )(
             request,
             messages(application)

@@ -26,46 +26,4 @@ import views.html.cancellation.GroupRegistrationCancellationWarningView
 //TODO move to another class
 class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
 
-  override val emptyUserAnswers: UserAnswers =
-    super.emptyUserAnswers
-      .set(BusinessTypePage, BusinessType.Partnership)
-      .success
-      .value
-      .set(GroupMemberPage, false)
-      .success
-      .value
-      .set(CurrentlyRegisteredPage, 1)
-      .success
-      .value
-
-  "GroupRegistrationCancellationWarning Controller" - {
-
-    "must return OK and the correct view for a GET" in {
-
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      running(application) {
-
-        val request =
-          FakeRequest(
-            GET,
-            routes.GroupRegistrationCancellationWarningController.onPageLoad().url
-          )
-
-        val result = route(application, request).value
-
-        val view =
-          application.injector.instanceOf[GroupRegistrationCancellationWarningView]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view("http://localhost:10400/manage-gambling-tax/manage-your-machine-games-duty/")(
-            request,
-            messages(application)
-          ).toString
-      }
-    }
-  }
 }

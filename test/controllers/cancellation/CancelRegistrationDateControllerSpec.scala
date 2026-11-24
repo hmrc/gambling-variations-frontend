@@ -175,6 +175,9 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
       businessPartnerNumber = None,
       systemDate            = currentDate
     )
+    
+  private val groupKey = ""
+  private val nonGroupKey = ""
 
   private def businessDetailsWithRegistrationDate: BusinessDetails =
     businessDetails(Some(registrationDate))
@@ -212,7 +215,9 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
               NormalMode,
               registrationDate,
               firstInvalidDate,
-              middleOfDateRange
+              middleOfDateRange,
+              nonGroupKey,
+              false
             )(
               request,
               messages(application)
@@ -254,7 +259,9 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
               NormalMode,
               registrationDate,
               firstInvalidDate,
-              middleOfDateRange
+              middleOfDateRange,
+              nonGroupKey,
+              false
             )(
               request,
               messages(application)
@@ -439,7 +446,9 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
               NormalMode,
               registrationDate,
               firstInvalidDate,
-              middleOfDateRange
+              middleOfDateRange,
+              nonGroupKey,
+              false
             )(
               request,
               messages(application)
@@ -482,7 +491,9 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
               NormalMode,
               registrationDate,
               firstInvalidDate,
-              middleOfDateRange
+              middleOfDateRange,
+              nonGroupKey,
+              false
             )(
               request,
               messages(application)
@@ -602,7 +613,6 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
         new FakeDataRetrievalAction(None),
         mock[BusinessDetailsDataRequiredAction],
         mock[CancelRegistrationDateFormProvider],
-        mock[GamblingConnector],
         fixedClock,
         cc,
         mock[CancelRegistrationDateView]

@@ -20,12 +20,12 @@ import base.SpecBase
 import forms.cancellation.RegistrationCancellationWarningFormProvider
 import models.{BusinessType, NormalMode, UserAnswers}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.cancellation.{RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
-import pages.{BusinessTypePage, GroupMemberPage}
+import pages.cancellation.{CancelRegistrationDatePage, RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDeclarationPage}
+import pages.{BusinessTypePage, CurrentlyRegisteredPage, GroupMemberPage}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import views.html.cancellation.RegistrationCancellationWarningView
+import views.html.cancellation.{GroupRegistrationCancellationWarningView, RegistrationCancellationWarningView}
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -50,7 +50,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
     .setOriginal(RegistrationCancellationDeclarationPage, true)
     .success
     .value
-    .setOriginal(RegistrationCancellationDatePage, currentDate)
+    .setOriginal(CancelRegistrationDatePage, currentDate)
     .success
     .value
     .setOriginal(GroupMemberPage, false)
@@ -62,6 +62,54 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
   private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, registrationCancellationWarningRoute)
+
+
+  private val groupKey = ""
+  private val nonGroupKey = ""
+
+
+  //TODO this test must be shit because this "warning" is for locked screen JFC
+  "GroupRegistrationCancellationWarning Controller" - {
+    val emptyUserAnswers: UserAnswers =
+      super.emptyUserAnswers
+        .set(BusinessTypePage, BusinessType.Partnership)
+        .success
+        .value
+        .set(GroupMemberPage, false)
+        .success
+        .value
+        .set(CurrentlyRegisteredPage, 1)
+        .success
+        .value
+
+    "must return OK and the correct view for a GET" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(
+            GET,
+            routes.RegistrationCancellationWarningController.onPageLoadGroup().url
+          )
+
+        val result = route(application, request).value
+
+        val view =
+          application.injector.instanceOf[RegistrationCancellationWarningView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view("http://localhost:10400/manage-gambling-tax/manage-your-machine-games-duty/")(
+            request,
+            messages(application)
+          ).toString
+      }
+    }
+  }
 
   "RegistrationCancellationWarning Controller" - {
 
@@ -80,7 +128,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form, currentDateFormatted, NormalMode)(request, messages(application)).toString
+            view(form, currentDateFormatted, nonGroupKey, NormalMode)(request, messages(application)).toString
         }
       }
 
@@ -99,7 +147,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view(form.fill(true), currentDateFormatted, NormalMode)(request, messages(application)).toString
+            view(form.fill(true), currentDateFormatted, nonGroupKey, NormalMode)(request, messages(application)).toString
         }
       }
 
@@ -166,7 +214,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, currentDateFormatted, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, currentDateFormatted, nonGroupKey, NormalMode)(request, messages(application)).toString
         }
       }
 

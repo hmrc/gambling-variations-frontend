@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import base.SpecBase
 import models.BusinessType
-import pages.cancellation.RegistrationCancellationDatePage
+import pages.cancellation.CancelRegistrationDatePage
 import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
@@ -30,7 +30,7 @@ import java.time.LocalDate
 
 class CheckGroupRegistrationCancellationDetailsControllerSpec extends SpecBase {
 
-  "CheckGroupRegistrationCancellationDetailsController" - {
+  "CheckRegistrationCancellationDetailsController" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -42,7 +42,7 @@ class CheckGroupRegistrationCancellationDetailsControllerSpec extends SpecBase {
           .set(GroupMemberPage, true)
           .success
           .value
-          .set(RegistrationCancellationDatePage, LocalDate.of(2026, 11, 20))
+          .set(CancelRegistrationDatePage, LocalDate.of(2026, 11, 20))
           .success
           .value
 
@@ -50,7 +50,7 @@ class CheckGroupRegistrationCancellationDetailsControllerSpec extends SpecBase {
 
       running(application) {
         val request =
-          FakeRequest(GET, routes.CheckGroupRegistrationCancellationDetailsController.onPageLoad().url)
+          FakeRequest(GET, routes.CheckRegistrationCancellationDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
         val view = application.injector.instanceOf[CheckGroupRegistrationCancellationDetailsView]
