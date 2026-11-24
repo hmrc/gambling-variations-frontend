@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businessname
 
 import forms.behaviours.StringFieldBehaviours
+import forms.businessname.SoleProprietorNameFormProvider
 import org.scalacheck.Gen
 import play.api.data.FormError
 

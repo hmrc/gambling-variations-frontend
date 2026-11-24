@@ -14,32 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businessname
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import forms.mappings.Mappings
+import play.api.data.Form
 
-class RemoveTradeNameFormProviderSpec extends BooleanFieldBehaviours {
+import javax.inject.Inject
 
-  val requiredKey = "removeTradeName.error.required"
-  val invalidKey = "error.boolean"
+class RemoveTradeNameFormProvider @Inject() extends Mappings {
 
-  val form = new RemoveTradeNameFormProvider()()
-
-  ".value" - {
-
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("removeTradeName.error.required")
     )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-  }
 }

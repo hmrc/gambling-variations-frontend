@@ -18,7 +18,7 @@ package controllers.businessname
 
 import controllers.actions.*
 import controllers.routes
-import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
+import forms.businessname.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Soleproprietor
 import models.{BusinessType, Mode}
 import navigation.Navigator

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package forms
+package forms.businessname
 
-import javax.inject.Inject
 import forms.mappings.Mappings
 import models.BusinessType
 import play.api.data.Form
 import utils.BusinessTypeKeyBuilder
+
+import javax.inject.Inject
 
 class ChangeBusinessNameFormProvider @Inject() extends Mappings {
 

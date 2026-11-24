@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.businessname
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class RemoveTradeNameFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
 
-  def apply(): Form[Boolean] =
+class BusinessTradingNameFormProvider @Inject() extends Mappings {
+
+  private val businessNameRegex = "^[a-zA-Z0-9\\- '\\s]+$"
+
+  def apply(): Form[String] =
     Form(
-      "value" -> boolean("removeTradeName.error.required")
+      "value" -> text("businessTradingName.error.required")
+        .verifying(
+          maxLength(100, "businessTradingName.error.length")
+        )
+        .verifying(
+          regexp(
+            businessNameRegex,
+            "businessTradingName.error.invalid"
+          )
+        )
     )
 }

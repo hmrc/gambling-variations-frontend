@@ -17,7 +17,7 @@
 package views.businessname
 
 import base.SpecBase
-import forms.ChangeBusinessNameFormProvider
+import forms.businessname.ChangeBusinessNameFormProvider
 import models.BusinessType.Soleproprietor
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*

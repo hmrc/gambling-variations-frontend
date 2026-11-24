@@ -18,7 +18,7 @@ package controllers.businessname
 
 import base.SpecBase
 import controllers.routes
-import forms.BusinessTradingNameFormProvider
+import forms.businessname.BusinessTradingNameFormProvider
 import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
