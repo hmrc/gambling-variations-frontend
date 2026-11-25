@@ -27,6 +27,7 @@ import views.html.cancellation.CancelRegistrationDateView
 
 import java.time.LocalDate
 
+//TODO move to CancelRegistrationDateViewSpec
 class CancelGroupRegistrationDateViewSpec extends SpecBase {
 
   trait Setup {
@@ -106,14 +107,16 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
 
       val doc: Document = document()
 
-      val hint = doc.select(".govuk-hint")
+      val hint = doc.select("#value-hint.govuk-hint ")
 
-      hint.text() must include(
-        "If any member of this group is still liable to pay Machine Games Duty, they must register as an individual."
-      )
+      val body = doc.select(".govuk-body")
 
       hint.text() must include(
         "The date must be after 20 March 2007 and before 5 November 2026. For example, 27 1 2017"
+      )
+
+      body.text() must include(
+        "If any member of this group is still liable to pay Machine Games Duty, they must register as an individual."
       )
     }
 
@@ -194,6 +197,8 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
           .url
     }
 
+    // TODO this test fails because we use the same form provider for
+    // group and nongroup, and this form only handles "one type" of messages currently
     "must render error summary when form has errors" in new Setup {
 
       val boundForm: Form[LocalDate] = form.bind(
@@ -207,11 +212,23 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
       val doc = document(boundForm)
 
       doc
-        .select(".govuk-error-summary")
+        .select(".govuk-list")
         .size() mustEqual 1
 
+      println(
+        doc
+          .select(".govuk-list")
+          .text()
+      )
+
+      println(
+        messages(
+          "cancelGroupRegistrationDate.error.required.all"
+        )
+      )
+
       doc
-        .select(".govuk-error-summary")
+        .select(".govuk-list")
         .text() must include(
         messages(
           "cancelGroupRegistrationDate.error.required.all"

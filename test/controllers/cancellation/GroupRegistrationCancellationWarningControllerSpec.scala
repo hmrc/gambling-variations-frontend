@@ -17,12 +17,13 @@
 package controllers.cancellation
 
 import base.SpecBase
+import forms.cancellation.{CancelRegistrationDateFormProvider, RegistrationCancellationWarningFormProvider}
 import models.{BusinessType, RegistrationStatus, UserAnswers}
 import pages.cancellation.RegistrationCancellationDeclarationPage
 import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage, RegistrationStatusPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import views.html.cancellation.GroupRegistrationCancellationWarningView
+import views.html.cancellation.{GroupRegistrationCancellationWarningView, RegistrationCancellationWarningView}
 
 import java.time.LocalDate
 
@@ -31,6 +32,8 @@ class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
 
   val messageKey: String = "cancelGroupRegistrationWarning"
   val isGroup: Boolean = true
+  val formProvider =
+    new RegistrationCancellationWarningFormProvider()
 
   val answers: UserAnswers =
     UserAnswers(userAnswersId)
@@ -68,12 +71,16 @@ class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         val view =
-          application.injector.instanceOf[GroupRegistrationCancellationWarningView]
+          application.injector.instanceOf[RegistrationCancellationWarningView]
 
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view("http://localhost:10400/manage-gambling-tax/manage-your-machine-games-duty/")(
+          view(
+            formProvider(),
+            "25 November 2026",
+            messageKey
+          )(
             request,
             messages(application)
           ).toString
