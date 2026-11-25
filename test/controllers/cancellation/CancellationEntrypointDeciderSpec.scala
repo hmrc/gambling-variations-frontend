@@ -76,8 +76,8 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val messageKey: String = "cancelGroupRegistrationWarning"
-  private val isGroupFlag: Boolean = true
+  private val messageKey: String = "cancelRegistrationWarning"
+  private val isGroupFlag: Boolean = false
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
@@ -250,7 +250,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         contentAsString(result) mustEqual
           view(
             form,
-            dateFormatter.format(dateOfCancellation),
+            dateFormatter.format(registrationDate),
             messageKey
           )(
             request,

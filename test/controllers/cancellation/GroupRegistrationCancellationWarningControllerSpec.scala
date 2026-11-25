@@ -18,20 +18,25 @@ package controllers.cancellation
 
 import base.SpecBase
 import models.{BusinessType, UserAnswers}
-import pages.{BusinessTypePage, GroupMemberPage}
+import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.cancellation.GroupRegistrationCancellationWarningView
 
+import java.time.LocalDate
+
 //TODO move to another class
 class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
 
+  val messageKey: String = "cancelGroupRegistrationWarning"
+  val isGroup: Boolean = true
+
   override val emptyUserAnswers: UserAnswers =
     super.emptyUserAnswers
-      .set(BusinessTypePage, BusinessType.Partnership)
+      .set(DateOfRegistrationPage, LocalDate.now())
       .success
       .value
-      .set(GroupMemberPage, false)
+      .set(GroupMemberPage, isGroup)
       .success
       .value
 

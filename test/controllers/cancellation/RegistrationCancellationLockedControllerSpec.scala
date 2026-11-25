@@ -25,6 +25,9 @@ import views.html.cancellation.RegistrationCancellationLockedView
 
 class RegistrationCancellationLockedControllerSpec extends SpecBase {
 
+  val messageKey: String = "registrationCancellationLocked"
+  val isGroup: Boolean = false
+
   "RegistrationCancellationLocked Controller" - {
 
     "must return OK and the correct view for a GET" in {
@@ -38,7 +41,7 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
             .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
             .success
             .value
-            .setOriginal(GroupMemberPage, true)
+            .setOriginal(GroupMemberPage, isGroup)
             .success
             .value
         )
@@ -52,9 +55,8 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[RegistrationCancellationLockedView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view("http://localhost:10400/gambling/", "groupRegistrationCancellationLocked")(request,
-                                                                                                                          messages(application)
-                                                                                                                         ).toString
+        contentAsString(result) mustEqual
+          view("http://localhost:10400/gambling/", messageKey)(request, messages(application)).toString
       }
     }
 
@@ -69,7 +71,7 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
             .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
             .success
             .value
-            .setOriginal(GroupMemberPage, true)
+            .setOriginal(GroupMemberPage, isGroup)
             .success
             .value
         )

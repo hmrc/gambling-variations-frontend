@@ -73,7 +73,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
   private val onwardRoute = Call("GET", "/foo")
 
   private lazy val cancelGroupRegistrationDateRoute =
-    controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
+    controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup().url
 
   val messageKey: String = "cancelGroupRegistrationWarning"
   val isGroup: Boolean = true
