@@ -1,0 +1,85 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package viewmodels.tradingdetails
+
+import models.UserAnswers
+import pages.tradingdetails.previousregnumbers.{PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
+import play.api.i18n.Messages
+import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
+
+object PreviousRegistrationNumbersSummary {
+
+  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
+    Some {
+
+      val prevNumbers = answers.get(PreviousRegistrationNumbersListPage).getOrElse(Seq.empty)
+      val allNumbers =
+        answers.get(UnsubmittedPreviousRegNumbersPage).getOrElse(Seq.empty) ++ prevNumbers
+
+      val prevRegAmount = prevNumbers.length
+      val maxAmount = 3
+
+      val value =
+        allNumbers match {
+          case Seq() =>
+            ValueViewModel(messages("site.notProvided"))
+
+          case Seq(singleNumber) =>
+            ValueViewModel(singleNumber)
+
+          case multipleNumbers =>
+            ValueViewModel(
+              HtmlContent(
+                HtmlFormat.raw(
+                  multipleNumbers.mkString("<br/>")
+                )
+              )
+            )
+        }
+
+      val hasNumbers = allNumbers.nonEmpty
+
+      val route =
+        if (hasNumbers) {
+          controllers.tradingdetails.routes.PreviousRegistrationNumbersListController.onPageLoad().url
+        } else {
+          controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad().url
+        }
+
+      val actions = if (prevRegAmount >= maxAmount) { Seq.empty }
+      else {
+        Seq(
+          ActionItemViewModel(
+            "site.change",
+            route
+          ).withVisuallyHiddenText(
+            messages("checkTradingDetails.previousRegistrationNumbers.change.hidden")
+          )
+        )
+      }
+
+      SummaryListRowViewModel(
+        key     = "checkTradingDetails.previousRegistrationNumbers.checkYourAnswersLabel",
+        value   = value,
+        actions = actions
+      )
+    }
+}

@@ -19,7 +19,7 @@ package controllers.partnerdetails
 import base.SpecBase
 import controllers.businesscontactdetails.LoadedPartnerDetails
 import controllers.routes
-import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
+import forms.businessname.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Partnership
 import models.{BusinessType, CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}

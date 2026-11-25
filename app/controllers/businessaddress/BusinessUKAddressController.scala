@@ -17,7 +17,7 @@
 package controllers.businessaddress
 
 import controllers.actions.*
-import forms.BusinessUKAddressFormProvider
+import forms.businessaddress.BusinessUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.businessaddress.*

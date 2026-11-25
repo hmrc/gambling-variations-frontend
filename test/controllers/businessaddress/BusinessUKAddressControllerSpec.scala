@@ -18,7 +18,7 @@ package controllers.businessaddress
 
 import base.SpecBase
 import controllers.routes
-import forms.BusinessUKAddressFormProvider
+import forms.businessaddress.BusinessUKAddressFormProvider
 import models.{Address, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any

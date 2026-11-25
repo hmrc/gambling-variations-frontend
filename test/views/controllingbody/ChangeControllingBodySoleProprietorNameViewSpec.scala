@@ -18,7 +18,7 @@ package views.controllingbody
 
 import base.SpecBase
 import controllers.controllingbody.routes
-import forms.SoleProprietorNameFormProvider
+import forms.businessname.SoleProprietorNameFormProvider
 import models.{BusinessType, SoleProprietorName}
 import org.jsoup.Jsoup
 import play.api.test.FakeRequest

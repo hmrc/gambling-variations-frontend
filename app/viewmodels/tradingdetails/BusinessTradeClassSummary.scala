@@ -1,0 +1,59 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package viewmodels.tradingdetails
+
+import models.{BusinessTradeClass, UserAnswers}
+import pages.tradingdetails.BusinessTradeClassPage
+import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
+
+object BusinessTradeClassSummary {
+
+  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
+
+    val tradeClassOpt = answers.get(BusinessTradeClassPage)
+
+    val displayValue =
+      tradeClassOpt match {
+        case None =>
+          messages("site.notProvided")
+
+        case Some(BusinessTradeClass.Other) =>
+          messages("businessTradeClass.other")
+
+        case Some(value) =>
+          messages(s"businessTradeClass.$value")
+      }
+
+    Some(
+      SummaryListRowViewModel(
+        key   = "checkTradingDetails.businessTradeClass.checkYourAnswersLabel",
+        value = ValueViewModel(displayValue),
+        actions = Seq(
+          ActionItemViewModel(
+            "site.change",
+            controllers.tradingdetails.routes.BusinessTradeClassController.onPageLoad().url
+          ).withVisuallyHiddenText(
+            messages("checkTradingDetails.businessTradeClass.change.hidden")
+          )
+        )
+      )
+    )
+  }
+}
