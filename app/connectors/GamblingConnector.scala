@@ -323,7 +323,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
 
   def getGroupMembers(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[GroupMembers] = {
     http
-      .get(url"$baseUrl/group-member/mgd/$mgdRegNumber")
+      .get(url"$baseUrl/group-members/mgd/$mgdRegNumber")
       .execute[HttpResponse]
       .map { response =>
         response.status match {

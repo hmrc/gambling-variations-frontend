@@ -800,7 +800,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
            |}""".stripMargin
 
       wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+        get(urlEqualTo(s"/gambling/group-members/mgd/$mgdRegNumber"))
           .willReturn(okJson(jsonAsString))
       )
 
@@ -810,7 +810,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     "return no members when backend returns an empty list" in {
 
       wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+        get(urlEqualTo(s"/gambling/group-members/mgd/$mgdRegNumber"))
           .willReturn(okJson("""{ "groupMembers": [] }"""))
       )
 
@@ -820,7 +820,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     "return no members when backend returns only the registration number in an item" in {
 
       wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+        get(urlEqualTo(s"/gambling/group-members/mgd/$mgdRegNumber"))
           .willReturn(okJson("""{ "groupMembers": [ { "mgdRegNumber": "XGM00000001772" } ] }"""))
       )
 
@@ -830,7 +830,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     "return no members when backend returns only the registration number and no list" in {
 
       wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+        get(urlEqualTo(s"/gambling/group-members/mgd/$mgdRegNumber"))
           .willReturn(okJson("""{ "mgdRegNumber": "XGM00000001772" }"""))
       )
 
@@ -840,7 +840,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     "throw RuntimeException when a member has no business partner number" in {
 
       wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+        get(urlEqualTo(s"/gambling/group-members/mgd/$mgdRegNumber"))
           .willReturn(okJson("""{ "groupMembers": [ { "mgdRegNumber": "XGM00000001772", "businessName": "Member Ltd" } ] }"""))
       )
 
@@ -867,7 +867,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
            |}""".stripMargin
 
       wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+        get(urlEqualTo(s"/gambling/group-members/mgd/$mgdRegNumber"))
           .willReturn(okJson(jsonAsString))
       )
 
@@ -877,7 +877,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     "throw RuntimeException when a member has an empty business partner number" in {
 
       wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+        get(urlEqualTo(s"/gambling/group-members/mgd/$mgdRegNumber"))
           .willReturn(
             okJson("""{ "groupMembers": [ { "mgdRegNumber": "XGM00000001772", "businessPartnerNumber": "", "businessName": "Member Ltd" } ] }""")
           )
@@ -891,7 +891,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     "return UpstreamErrorResponse when backend returns 404" in {
 
       wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+        get(urlEqualTo(s"/gambling/group-members/mgd/$mgdRegNumber"))
           .willReturn(aResponse().withStatus(404))
       )
 
@@ -903,7 +903,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     "return UpstreamErrorResponse when backend returns 500" in {
 
       wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+        get(urlEqualTo(s"/gambling/group-members/mgd/$mgdRegNumber"))
           .willReturn(serverError())
       )
 
