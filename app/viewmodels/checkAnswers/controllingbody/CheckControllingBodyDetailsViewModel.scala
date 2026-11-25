@@ -36,34 +36,34 @@ import java.time.LocalDate
   * mandatory details link to the screen that provides them.
   */
 case class CheckControllingBodyDetailsViewModel(
-                                                 businessType: Option[BusinessType] = None,
-                                                 businessName: Option[String] = None,
-                                                 soleProprietorName: Option[SoleProprietorName] = None,
-                                                 dateOfBirth: Option[LocalDate] = None,
-                                                 addTradingName: Option[Boolean] = None,
-                                                 tradingName: Option[String] = None,
-                                                 addNino: Option[Boolean] = None,
-                                                 nino: Option[String] = None,
-                                                 isUkIncorporated: Option[Boolean] = None,
-                                                 countryOfIncorporation: Option[String] = None,
-                                                 foreignCorporateRef: Option[String] = None,
-                                                 dateOfIncorporation: Option[LocalDate] = None,
-                                                 crn: Option[String] = None,
-                                                 utr: Option[String] = None,
-                                                 addVrn: Option[Boolean] = None,
-                                                 vrn: Option[String] = None,
-                                                 address: Option[Address] = None,
-                                                 addAdditionalInfo: Option[Boolean] = None,
-                                                 additionalInfo: Option[String] = None,
-                                                 phoneNumber: Option[String] = None,
-                                                 mobilePhoneNumber: Option[String] = None,
-                                                 addFaxNumber: Option[Boolean] = None,
-                                                 faxNumber: Option[String] = None,
-                                                 addEmailAddress: Option[Boolean] = None,
-                                                 emailAddress: Option[String] = None,
-                                                 hasBusinessPartnerNumber: Boolean = false,
-                                                 hasContinued: Boolean = false
-                                               ) {
+  businessType: Option[BusinessType] = None,
+  businessName: Option[String] = None,
+  soleProprietorName: Option[SoleProprietorName] = None,
+  dateOfBirth: Option[LocalDate] = None,
+  addTradingName: Option[Boolean] = None,
+  tradingName: Option[String] = None,
+  addNino: Option[Boolean] = None,
+  nino: Option[String] = None,
+  isUkIncorporated: Option[Boolean] = None,
+  countryOfIncorporation: Option[String] = None,
+  foreignCorporateRef: Option[String] = None,
+  dateOfIncorporation: Option[LocalDate] = None,
+  crn: Option[String] = None,
+  utr: Option[String] = None,
+  addVrn: Option[Boolean] = None,
+  vrn: Option[String] = None,
+  address: Option[Address] = None,
+  addAdditionalInfo: Option[Boolean] = None,
+  additionalInfo: Option[String] = None,
+  phoneNumber: Option[String] = None,
+  mobilePhoneNumber: Option[String] = None,
+  addFaxNumber: Option[Boolean] = None,
+  faxNumber: Option[String] = None,
+  addEmailAddress: Option[Boolean] = None,
+  emailAddress: Option[String] = None,
+  hasBusinessPartnerNumber: Boolean = false,
+  hasContinued: Boolean = false
+) {
 
   import CheckControllingBodyDetailsViewModel.*
 
@@ -205,13 +205,13 @@ case class CheckControllingBodyDetailsViewModel(
 
   // An optional detail is hidden once its screener has been answered no, otherwise it is shown with "Not provided" in place of missing data.
   private def optionalRow(
-                           key: String,
-                           screenerAnswer: Option[Boolean],
-                           value: Option[String],
-                           href: String,
-                           removeHref: Option[String] = None,
-                           locked: Boolean = false
-                         )(implicit messages: Messages): Option[SummaryListRow] =
+    key: String,
+    screenerAnswer: Option[Boolean],
+    value: Option[String],
+    href: String,
+    removeHref: Option[String] = None,
+    locked: Boolean = false
+  )(implicit messages: Messages): Option[SummaryListRow] =
     Option.unless(screenerAnswer.contains(false)) {
       value match {
         case Some(answer) if locked =>
@@ -298,7 +298,7 @@ object CheckControllingBodyDetailsViewModel {
     SummaryListRowViewModel(key = s"$prefix.$key", value = ValueViewModel(content))
 
   private def changeableRow(key: String, content: Content, href: String, removeHref: Option[String] = None)(implicit
-                                                                                                            messages: Messages
+    messages: Messages
   ): SummaryListRow =
     SummaryListRowViewModel(
       key   = s"$prefix.$key",

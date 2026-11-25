@@ -30,15 +30,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 /** CB-CYA: check your controlling body details. */
 class CheckControllingBodyDetailsController @Inject() (
-                                                        override val messagesApi: MessagesApi,
-                                                        val controllerComponents: MessagesControllerComponents,
-                                                        authorise: AuthorisedAction,
-                                                        getData: DataRetrievalAction,
-                                                        requireData: ControllingBodyDetailsDataRequiredAction,
-                                                        sessionRepository: SessionRepository,
-                                                        view: CheckControllingBodyDetailsView
-                                                        ) (implicit ec: ExecutionContext)
-  extends FrontendBaseController
+  override val messagesApi: MessagesApi,
+  val controllerComponents: MessagesControllerComponents,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: ControllingBodyDetailsDataRequiredAction,
+  sessionRepository: SessionRepository,
+  view: CheckControllingBodyDetailsView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
