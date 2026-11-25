@@ -47,7 +47,7 @@
                 field = form("value"),
                 legend = LegendViewModel(messages(s"$messageKey.legend", dateFormatted))
             )
-            .withHint(HintViewModel(messages(s"$messageKey.hint")).withCssClass("govuk-fieldset__legend--m"))
+            .withHint(HintViewModel(messages(s"$messageKey.hint")).withCssClass("govuk-fieldset__legend govuk-fieldset__legend govuk-fieldset__legend--m"))
         )
 
         @govukButton(
