@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.licencespremises
+package viewmodels.licencespremises
 
 import base.SpecBase
 import controllers.licencespremises.routes
@@ -26,6 +26,7 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
+import viewmodels.licencespremises.LicencesPremisesSummary
 
 class LicencesPremisesSummarySpec extends SpecBase {
 
