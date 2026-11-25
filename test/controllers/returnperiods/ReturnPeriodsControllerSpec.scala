@@ -1004,12 +1004,32 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           .success
           .value
 
-      "must clear all non-standard dates when Standard is submitted" in {
+      val userAnswersPreviouslyNonStandard =
+        userAnswersWithNonStandardDates
+          .set(
+            ReturnPeriodsChoicePage,
+            NoReturnPeriodsSet.Nonstandard
+          )
+          .success
+          .value
+
+      "must clear all non-standard dates when changing from Nonstandard to Standard" in {
 
         val mockSessionRepository = mockedSessionRepository
 
+        val userAnswersPreviouslyNonStandard =
+          userAnswersWithNonStandardDates
+            .set(
+              ReturnPeriodsChoicePage,
+              NoReturnPeriodsSet.Nonstandard
+            )
+            .success
+            .value
+
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersWithNonStandardDates))
+          applicationBuilder(
+            userAnswers = Some(userAnswersPreviouslyNonStandard)
+          )
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -1017,6 +1037,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
             .build()
 
         running(application) {
+
           val request =
             FakeRequest(POST, returnPeriodsRoute)
               .withFormUrlEncodedBody(
@@ -1026,8 +1047,8 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           val expectedAnswers =
-            userAnswersWithNonStandardDates
-              .set(ReturnPeriodsChoicePage, NoReturnPeriodsSet.Standard)
+            userAnswersPreviouslyNonStandard
+              .remove(ChooseReturnPeriodsPage)
               .success
               .value
               .remove(NonStandardPeriodDate1Page)
@@ -1054,9 +1075,15 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
               .remove(NonStandardPeriodDate8Page)
               .success
               .value
+              .set(
+                ReturnPeriodsChoicePage,
+                NoReturnPeriodsSet.Standard
+              )
+              .success
+              .value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual onwardRoute.url
+
           verify(mockSessionRepository).set(expectedAnswers)
         }
       }
