@@ -17,7 +17,6 @@
 package forms.businessname
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.businessname.RemoveTradeNameFormProvider
 import play.api.data.FormError
 
 class RemoveTradeNameFormProviderSpec extends BooleanFieldBehaviours {
