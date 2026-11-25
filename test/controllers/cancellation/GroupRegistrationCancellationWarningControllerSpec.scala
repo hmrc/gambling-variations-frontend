@@ -17,8 +17,8 @@
 package controllers.cancellation
 
 import base.SpecBase
-import models.{BusinessType, UserAnswers}
-import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage}
+import models.UserAnswers
+import pages.{DateOfRegistrationPage, GroupMemberPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.cancellation.GroupRegistrationCancellationWarningView

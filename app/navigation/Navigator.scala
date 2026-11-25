@@ -262,7 +262,12 @@ class Navigator @Inject() () {
 
     // Cancellation
     case CancelRegistrationDatePage =>
-      _ => controllers.cancellation.routes.ReasonForCancellationController.onPageLoad()
+      ua =>
+        ua.get(GroupMemberPage) match {
+          case Some(true)  => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+          case Some(false) => controllers.cancellation.routes.ReasonForCancellationController.onPageLoad()
+          case _           => controllers.cancellation.routes.ReasonForCancellationController.onPageLoad()
+        }
     case ReasonForCancellationPage =>
       userAnswers => navigateReasonForCancellationPage(userAnswers)
     case ChangeGroupRegistrationNumberPage =>
@@ -281,20 +286,13 @@ class Navigator @Inject() () {
 
     case ReturnPeriodsChoicePage =>
       userAnswers => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+
     case ChooseReturnPeriodsPage =>
       _ => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+
     case NonStandardPeriodDate1Page | NonStandardPeriodDate2Page | NonStandardPeriodDate3Page | NonStandardPeriodDate4Page |
         NonStandardPeriodDate5Page | NonStandardPeriodDate6Page | NonStandardPeriodDate7Page | NonStandardPeriodDate8Page =>
       _ => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
-
-    case CancelRegistrationDatePage =>
-      _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
-
-    case ReasonForCancellationPage =>
-      userAnswers => navigateCheckReasonForCancellationPage(userAnswers)
-
-    case ChangeGroupRegistrationNumberPage =>
-      _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
 
     case _ =>
       _ => routes.ChangeRegistrationDetailsController.onPageLoad()
