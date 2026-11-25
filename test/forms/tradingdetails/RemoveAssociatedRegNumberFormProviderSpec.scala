@@ -17,7 +17,6 @@
 package forms.tradingdetails
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.tradingdetails.RemoveAssociatedRegNumberFormProvider
 import play.api.data.FormError
 
 class RemoveAssociatedRegNumberFormProviderSpec extends BooleanFieldBehaviours {

@@ -17,7 +17,6 @@
 package forms.tradingdetails
 
 import forms.behaviours.OptionFieldBehaviours
-import forms.tradingdetails.BusinessTradeClassFormProvider
 import models.BusinessTradeClass
 import play.api.data.FormError
 
