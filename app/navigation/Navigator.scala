@@ -266,7 +266,7 @@ class Navigator @Inject() () {
         ua.get(GroupMemberPage) match {
           case Some(true)  => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
           case Some(false) => controllers.cancellation.routes.ReasonForCancellationController.onPageLoad()
-          case _           => controllers.cancellation.routes.ReasonForCancellationController.onPageLoad()
+          case _           => routes.SystemErrorController.onPageLoad()
         }
     case ReasonForCancellationPage =>
       userAnswers => navigateReasonForCancellationPage(userAnswers)

@@ -21,12 +21,13 @@ import connectors.GamblingConnector
 import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl}
 import controllers.routes
 import forms.cancellation.CancelGroupRegistrationDateFormProvider
+import models.BusinessType.Soleproprietor
 import models.{BusinessDetails, RegistrationStatus, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.GroupMemberPage
+import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage}
 import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.Messages
 import play.api.inject.bind
@@ -78,8 +79,14 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
   val messageKey: String = "cancelGroupRegistrationWarning"
   val isGroup: Boolean = true
 
-  override val emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId)
-    .setOriginal(GroupMemberPage, isGroup)
+  val answers: UserAnswers = UserAnswers(userAnswersId)
+    .set(DateOfRegistrationPage, registrationDate)
+    .success
+    .value
+    .setOriginal(BusinessTypePage, Soleproprietor)
+    .success
+    .value
+    .set(GroupMemberPage, isGroup)
     .success
     .value
 
@@ -149,7 +156,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
       "must return OK and the correct view for a GET" in {
 
         val application = buildApplication(
-          userAnswers     = Some(emptyUserAnswers),
+          userAnswers     = Some(answers),
           businessDetails = businessDetailsWithRegistrationDate
         )
 
@@ -168,7 +175,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
 
       "must populate the view when the question has previously been answered" in {
 
-        val userAnswers = UserAnswers(userAnswersId).set(CancelRegistrationDatePage, validAnswer).success.value
+        val userAnswers = answers.set(CancelRegistrationDatePage, validAnswer).success.value
 
         val application = buildApplication(
           userAnswers     = Some(userAnswers),
@@ -191,9 +198,8 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
       }
 
       "must redirect to SystemError when the business details do not contain a registration date" in {
-
         val application = buildApplication(
-          userAnswers     = Some(emptyUserAnswers),
+          userAnswers     = Some(UserAnswers(userAnswersId)),
           businessDetails = businessDetailsWithoutRegistrationDate
         )
 
@@ -206,19 +212,6 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
         }
       }
 
-      "must return OK when no existing user answers are found" in {
-
-        val application = buildApplication(
-          userAnswers     = None,
-          businessDetails = businessDetailsWithRegistrationDate
-        )
-
-        running(application) {
-          val result = route(application, getRequest).value
-
-          status(result) mustEqual OK
-        }
-      }
     }
 
     "onSubmit" - {
@@ -234,7 +227,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
         )
 
         val application = buildApplication(
-          userAnswers       = Some(emptyUserAnswers),
+          userAnswers       = Some(answers),
           businessDetails   = businessDetailsWithRegistrationDate,
           sessionRepository = mockSessionRepository
         )
@@ -265,7 +258,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
         )
 
         val application = buildApplication(
-          userAnswers       = Some(emptyUserAnswers),
+          userAnswers       = Some(answers),
           businessDetails   = businessDetailsWithRegistrationDate,
           sessionRepository = mockSessionRepository
         )
@@ -290,7 +283,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
         )
 
         val application = buildApplication(
-          userAnswers       = Some(emptyUserAnswers),
+          userAnswers       = Some(answers),
           businessDetails   = businessDetailsWithRegistrationDate,
           sessionRepository = mockSessionRepository
         )
@@ -307,7 +300,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
       "must return BadRequest when a date before registration is submitted" in {
 
         val application = buildApplication(
-          userAnswers     = Some(emptyUserAnswers),
+          userAnswers     = Some(answers),
           businessDetails = businessDetailsWithRegistrationDate
         )
 
@@ -337,7 +330,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
       "must return BadRequest for today plus 15 days because it is the first invalid date" in {
 
         val application = buildApplication(
-          userAnswers     = Some(emptyUserAnswers),
+          userAnswers     = Some(answers),
           businessDetails = businessDetailsWithRegistrationDate
         )
 
@@ -365,7 +358,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
       "must return BadRequest when invalid data is submitted" in {
 
         val application = buildApplication(
-          userAnswers     = Some(emptyUserAnswers),
+          userAnswers     = Some(answers),
           businessDetails = businessDetailsWithRegistrationDate
         )
 
@@ -393,7 +386,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
       "must return BadRequest when the day contains a non-numeric character" in {
 
         val application = buildApplication(
-          userAnswers     = Some(emptyUserAnswers),
+          userAnswers     = Some(answers),
           businessDetails = businessDetailsWithRegistrationDate
         )
 
@@ -415,7 +408,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
       "must return BadRequest when the month contains a non-numeric character" in {
 
         val application = buildApplication(
-          userAnswers     = Some(emptyUserAnswers),
+          userAnswers     = Some(answers),
           businessDetails = businessDetailsWithRegistrationDate
         )
 
@@ -437,7 +430,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
       "must return BadRequest when the year contains a non-numeric character" in {
 
         val application = buildApplication(
-          userAnswers     = Some(emptyUserAnswers),
+          userAnswers     = Some(answers),
           businessDetails = businessDetailsWithRegistrationDate
         )
 
@@ -459,7 +452,7 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
       "must redirect to SystemError when the business details do not contain a registration date" in {
 
         val application = buildApplication(
-          userAnswers     = Some(emptyUserAnswers),
+          userAnswers     = Some(UserAnswers(userAnswersId)),
           businessDetails = businessDetailsWithoutRegistrationDate
         )
 
