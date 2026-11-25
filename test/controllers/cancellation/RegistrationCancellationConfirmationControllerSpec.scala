@@ -56,7 +56,7 @@ class RegistrationCancellationConfirmationControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[RegistrationCancellationConfirmationView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view("http://localhost:10400/gambling/", cancellationConfirmationRefNumber, isGroup = false)(
+        contentAsString(result) mustEqual view("http://localhost:10400/manage-gambling-tax/manage-your-machine-games-duty/", cancellationConfirmationRefNumber, isGroup = false)(
           request,
           messages(application)
         ).toString
@@ -74,7 +74,7 @@ class RegistrationCancellationConfirmationControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[RegistrationCancellationConfirmationView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view("http://localhost:10400/gambling/", cancellationConfirmationRefNumber, isGroup = true)(
+        contentAsString(result) mustEqual view("http://localhost:10400/manage-gambling-tax/manage-your-machine-games-duty/", cancellationConfirmationRefNumber, isGroup = true)(
           request,
           messages(application)
         ).toString
