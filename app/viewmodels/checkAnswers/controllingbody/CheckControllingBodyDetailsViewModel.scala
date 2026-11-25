@@ -62,16 +62,20 @@ case class CheckControllingBodyDetailsViewModel(
                                                  faxNumber: Option[String] = None,
                                                  addEmailAddress: Option[Boolean] = None,
                                                  emailAddress: Option[String] = None,
-                                                 hasBusinessPartnerNumber: Boolean = false
+                                                 hasBusinessPartnerNumber: Boolean = false,
+                                                 hasContinued: Boolean = false
                                                ) {
 
   import CheckControllingBodyDetailsViewModel.*
 
   private val isSoleProprietor: Boolean = businessType.contains(Soleproprietor)
   private val isCorporateBody: Boolean = businessType.contains(Corporatebody)
+  private val isPartnership: Boolean = businessType.contains(Partnership)
 
   // Once the controlling body has a business partner number, its identifying details can no longer be changed or removed
   private val isLocked: Boolean = hasBusinessPartnerNumber
+
+  private val isVrnLocked: Boolean = isPartnership && hasBusinessPartnerNumber
 
   // A corporate body is first asked whether it is incorporated in the UK. A limited liability partnership is not asked, since it is always
   // incorporated in the UK, so its incorporation details are shown whatever the loaded flag says
@@ -123,7 +127,7 @@ case class CheckControllingBodyDetailsViewModel(
 
   // A partnership is not asked for a Unique Taxpayer Reference
   private val utrDetail: Option[MandatoryDetail] =
-    Option.when(!businessType.contains(Partnership))(MandatoryDetail.text("utr", utr, utrUrl))
+    Option.when(!isPartnership)(MandatoryDetail.text("utr", utr, utrUrl))
 
   private val addressDetail: MandatoryDetail =
     MandatoryDetail(
@@ -163,7 +167,7 @@ case class CheckControllingBodyDetailsViewModel(
   def businessDetails(implicit messages: Messages): SummaryList =
     SummaryListViewModel(
       rows = Seq(
-        Some(typeOfBusinessDetail.row),
+        Option.unless(hasContinued)(typeOfBusinessDetail.row),
         nameDetail.map(_.row),
         dateOfBirthDetail.map(_.row),
         screenerRow("addTradingName", addTradingName, addTradingNameUrl),
@@ -177,7 +181,7 @@ case class CheckControllingBodyDetailsViewModel(
         crnDetail.map(_.row),
         utrDetail.map(_.row),
         screenerRow("addVat", addVrn, addVrnUrl),
-        optionalRow("vat", addVrn, vrn, vrnUrl, Some(removeVrnUrl), locked = isLocked)
+        optionalRow("vat", addVrn, vrn, vrnUrl, Some(removeVrnUrl), locked = isVrnLocked)
       ).flatten
     )
 
@@ -356,7 +360,8 @@ object CheckControllingBodyDetailsViewModel {
       faxNumber                = text(ControllingBodyFaxNumberPage),
       addEmailAddress          = answers.get(ControllingBodyAddEmailAddressYesNoPage),
       emailAddress             = text(ControllingBodyEmailPage),
-      hasBusinessPartnerNumber = text(ControllingBodyBusinessPartnerNumberPage).isDefined
+      hasBusinessPartnerNumber = text(ControllingBodyBusinessPartnerNumberPage).isDefined,
+      hasContinued             = answers.get(ControllingBodyContinuePage).getOrElse(false)
     )
   }
 }
