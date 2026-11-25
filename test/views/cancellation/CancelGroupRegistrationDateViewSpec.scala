@@ -17,7 +17,7 @@
 package views.cancellation
 
 import base.SpecBase
-import forms.cancellation.CancelGroupRegistrationDateFormProvider
+import forms.cancellation.{CancelGroupRegistrationDateFormProvider, CancelRegistrationDateFormProvider}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
@@ -51,7 +51,7 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
         .instanceOf[play.api.i18n.MessagesApi]
         .preferred(request)
 
-    val form: Form[LocalDate] = (new CancelGroupRegistrationDateFormProvider())(registrationDate, maximumValidDate)
+    val form: Form[LocalDate] = (new CancelRegistrationDateFormProvider())(registrationDate, maximumValidDate)
 
     def document(
       formToRender: play.api.data.Form[LocalDate] = form
@@ -123,7 +123,7 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
 
       val liabilityText =
         doc.select(
-          ".govuk-hint span.govuk-body.govuk-\\!-display-block.govuk-\\!-margin-bottom-3"
+          ".govuk-body"
         )
 
       liabilityText.size() mustEqual 1
