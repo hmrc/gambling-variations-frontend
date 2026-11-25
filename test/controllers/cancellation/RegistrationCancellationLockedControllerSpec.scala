@@ -17,7 +17,7 @@
 package controllers.cancellation
 
 import base.SpecBase
-import models.{BusinessType, RegistrationStatus}
+import models.{BusinessType, RegistrationStatus, UserAnswers}
 import pages.{BusinessTypePage, GroupMemberPage, RegistrationStatusPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -28,22 +28,25 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
   val messageKey: String = "registrationCancellationLocked"
   val isGroup: Boolean = false
 
+  val answers: UserAnswers =
+    UserAnswers(userAnswersId)
+      .setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled)
+      .success
+      .value
+      .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
+      .success
+      .value
+      .setOriginal(GroupMemberPage, isGroup)
+      .success
+      .value
+
   "RegistrationCancellationLocked Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers =
         Some(
-          emptyUserAnswers
-            .setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled)
-            .success
-            .value
-            .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
-            .success
-            .value
-            .setOriginal(GroupMemberPage, isGroup)
-            .success
-            .value
+          answers
         )
       ).build()
 
@@ -56,7 +59,7 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view("http://localhost:10400/gambling/", messageKey)(request, messages(application)).toString
+          view("http://localhost:10400/manage-gambling-tax/manage-your-machine-games-duty/", messageKey)(request, messages(application)).toString
       }
     }
 
@@ -64,7 +67,7 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers =
         Some(
-          emptyUserAnswers
+          answers
             .setOriginal(RegistrationStatusPage, RegistrationStatus.Registered)
             .success
             .value

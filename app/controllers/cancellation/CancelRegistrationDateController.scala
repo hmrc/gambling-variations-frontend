@@ -90,8 +90,6 @@ class CancelRegistrationDateController @Inject() (
                 .map(form.fill)
                 .getOrElse(form)
 
-            preparedForm.get.getDayOfMonth.toString
-
             Ok(
               view(
                 preparedForm,

@@ -529,7 +529,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
       "must redirect to SystemError when the business details do not contain a registration date" in {
         val application =
           buildApplication(
-            userAnswers     = Some(emptyUserAnswers),
+            userAnswers     = Some(emptyUserAnswers.remove(DateOfRegistrationPage).success.value),
             businessDetails = businessDetailsWithoutRegistrationDate
           )
 
@@ -540,9 +540,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            routes.SystemErrorController
-              .onPageLoad()
-              .url
+            routes.SystemErrorController.onPageLoad().url
         }
       }
 

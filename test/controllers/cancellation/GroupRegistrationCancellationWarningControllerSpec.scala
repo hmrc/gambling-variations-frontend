@@ -17,8 +17,8 @@
 package controllers.cancellation
 
 import base.SpecBase
-import models.UserAnswers
-import pages.{DateOfRegistrationPage, GroupMemberPage}
+import models.{BusinessType, RegistrationStatus, UserAnswers}
+import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage, RegistrationStatusPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.cancellation.GroupRegistrationCancellationWarningView
@@ -31,12 +31,18 @@ class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
   val messageKey: String = "cancelGroupRegistrationWarning"
   val isGroup: Boolean = true
 
-  override val emptyUserAnswers: UserAnswers =
-    super.emptyUserAnswers
+  val answers: UserAnswers =
+    UserAnswers(userAnswersId)
       .set(DateOfRegistrationPage, LocalDate.now())
       .success
       .value
+      .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
+      .success
+      .value
       .set(GroupMemberPage, isGroup)
+      .success
+      .value
+      .set(RegistrationStatusPage, RegistrationStatus.Cancelled)
       .success
       .value
 
@@ -45,14 +51,14 @@ class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(answers)).build()
 
       running(application) {
 
         val request =
           FakeRequest(
             GET,
-            routes.RegistrationCancellationWarningController.onPageLoad().url
+            routes.RegistrationCancellationWarningController.onPageLoadGroup().url
           )
 
         val result = route(application, request).value
