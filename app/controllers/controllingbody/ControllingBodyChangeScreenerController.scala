@@ -22,7 +22,7 @@ import forms.controllingbody.ControllingBodyChangeScreenerFormProvider
 import models.controllingbody.ControllingBodyChangeOption
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodyChangeScreenerPage, ControllingBodyIsRepMemSameAsCbPage, ControllingBodySoleProprietorPage}
+import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodyChangeScreenerPage, ControllingBodyContinuePage, ControllingBodyIsRepMemSameAsCbPage, ControllingBodySoleProprietorPage}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -82,7 +82,8 @@ class ControllingBodyChangeScreenerController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, name))),
             value =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyChangeScreenerPage, value))
+                withOption     <- Future.fromTry(request.userAnswers.set(ControllingBodyChangeScreenerPage, value))
+                updatedAnswers <- Future.fromTry(withOption.set(ControllingBodyContinuePage, value == ControllingBodyChangeOption.EditDetails))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(ControllingBodyChangeScreenerPage, mode, updatedAnswers))
           )
