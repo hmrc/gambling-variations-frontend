@@ -35,7 +35,7 @@ import java.time.{Clock, Instant, LocalDate, ZoneOffset}
 
 class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
 
-  private val gamblingUrl = "http://localhost:10400/gambling/"
+  private val gamblingUrl = "http://localhost:10400/manage-gambling-tax/manage-your-machine-games-duty/"
 
   private val dateFormatter =
     DateTimeFormatter.ofPattern("d MMMM yyyy")
@@ -76,8 +76,14 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val messageKey: String = "cancelRegistrationWarning"
+  private val nonGroupKeyWarning: String = "cancelRegistrationWarning"
   private val isGroupFlag: Boolean = false
+
+  private val groupKeyDate = "cancelGroupRegistrationDate"
+  private val nonGroupKeyDate = "cancelRegistrationDate"
+
+  private val groupKeyLocked = ""
+  private val nonGroupKeyLocked = "registrationCancellationLocked"
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
@@ -129,7 +135,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
 
   "DateController" - {
 
-    "must return OK and the correct view for a GET" ignore {
+    "must return OK and the correct view for a GET" in {
       val application = applicationBuilder(userAnswers = Some(userAnswersNoCancel))
         .overrides(
           bind[Clock]
@@ -148,18 +154,17 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual
-          view(
-            form,
-            registrationDate,
-            firstInvalidDate,
-            middleOfDateRange,
-            messageKey,
-            isGroupFlag
-          )(
-            request,
-            messages(application)
-          ).toString
+        contentAsString(result) mustEqual view(
+          form.fill(dateOfCancellation),
+          registrationDate,
+          firstInvalidDate,
+          middleOfDateRange,
+          nonGroupKeyDate,
+          isGroupFlag
+        )(
+          request,
+          messages(application)
+        ).toString
       }
 
     }
@@ -251,7 +256,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
           view(
             form,
             dateFormatter.format(registrationDate),
-            messageKey
+            nonGroupKeyWarning
           )(
             request,
             messages(application)
@@ -344,7 +349,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(gamblingUrl, "msg")(request, messages(application)).toString
+          view(gamblingUrl, nonGroupKeyLocked)(request, messages(application)).toString
       }
 
     }
