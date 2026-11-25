@@ -364,6 +364,7 @@ POST       /change-registration-details/controlling-body-details/business-countr
 # CANCELLATION
 
 GET        /change-registration-details/controlling-body-details/check                            controllers.controllingbody.CheckControllingBodyDetailsController.onPageLoad()
+POST       /change-registration-details/controlling-body-details/check                            controllers.controllingbody.CheckControllingBodyDetailsController.onSubmit()
 
 GET        /cancel-registration/why-are-you-cancelling                               controllers.cancellation.ReasonForCancellationController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/why-are-you-cancelling                               controllers.cancellation.ReasonForCancellationController.onSubmit(mode: Mode = NormalMode)

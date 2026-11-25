@@ -17,26 +17,44 @@
 package controllers.controllingbody
 
 import controllers.actions.{AuthorisedAction, ControllingBodyDetailsDataRequiredAction, DataRetrievalAction}
+import pages.controllingbody.ControllingBodyContinuePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.controllingbody.CheckControllingBodyDetailsViewModel
 import views.html.controllingbody.CheckControllingBodyDetailsView
+import repositories.SessionRepository
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 /** CB-CYA: check your controlling body details. */
 class CheckControllingBodyDetailsController @Inject() (
-  override val messagesApi: MessagesApi,
-  val controllerComponents: MessagesControllerComponents,
-  authorise: AuthorisedAction,
-  getData: DataRetrievalAction,
-  requireData: ControllingBodyDetailsDataRequiredAction,
-  view: CheckControllingBodyDetailsView
-) extends FrontendBaseController
+                                                        override val messagesApi: MessagesApi,
+                                                        val controllerComponents: MessagesControllerComponents,
+                                                        authorise: AuthorisedAction,
+                                                        getData: DataRetrievalAction,
+                                                        requireData: ControllingBodyDetailsDataRequiredAction,
+                                                        sessionRepository: SessionRepository,
+                                                        view: CheckControllingBodyDetailsView
+                                                        ) (implicit ec: ExecutionContext)
+  extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     Ok(view(CheckControllingBodyDetailsViewModel.from(request.userAnswers)))
+  }
+
+  def onSubmit: Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    val viewModel = CheckControllingBodyDetailsViewModel.from(request.userAnswers)
+
+    if (viewModel.isMissingMandatoryDetails) {
+      Future.successful(Redirect(viewModel.continueUrl))
+    } else {
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyContinuePage, true))
+        _              <- sessionRepository.set(updatedAnswers)
+      } yield Redirect(viewModel.continueUrl)
+    }
   }
 }

@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package pages.controllingbody
 
-import models.RegistrationStatus
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object RegistrationStatusPage extends QuestionPage[RegistrationStatus] {
-
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "registrationStatus"
-
+case object ControllingBodyContinuePage extends QuestionPage[Boolean] {
+  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
+  override def toString: String = "Continue"
 }

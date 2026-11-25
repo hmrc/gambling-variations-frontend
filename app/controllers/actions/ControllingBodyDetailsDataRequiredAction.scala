@@ -109,6 +109,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyUtrPage, details.utr.map(_.toString))
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyVrnPage, details.vrn.map(_.toString))
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyCrnPage, details.crn)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyContinuePage, Some(false))
       updatedAnswers <-
         updatedAnswers.setIfDefined(ControllingBodyBusinessNamePage, answers.get(ControllingBodyBusinessNamePage).orElse(details.businessName))
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyTradingNamePage, details.tradingName)
