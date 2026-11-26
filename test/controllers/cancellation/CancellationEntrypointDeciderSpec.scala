@@ -76,20 +76,23 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
+  private val groupKeyWarning: String = "cancelGroupRegistrationWarning"
   private val nonGroupKeyWarning: String = "cancelRegistrationWarning"
-  private val isGroupFlag: Boolean = false
+
+  private val nonGroupFlag: Boolean = false
+  private val groupFlag: Boolean = true
 
   private val groupKeyDate = "cancelGroupRegistrationDate"
   private val nonGroupKeyDate = "cancelRegistrationDate"
 
-  private val groupKeyLocked = ""
+  private val groupKeyLocked = "groupRegistrationCancellationLocked"
   private val nonGroupKeyLocked = "registrationCancellationLocked"
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
     .success
     .value
-    .setOriginal(GroupMemberPage, isGroupFlag)
+    .setOriginal(GroupMemberPage, nonGroupFlag)
     .success
     .value
     .setOriginal(DateOfRegistrationPage, registrationDate)
@@ -99,318 +102,625 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
     .success
     .value
 
-  private val userAnswersHmrcCancelled = emptyUserAnswers.setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled).success.value
-  private val userAnswersUserCancelled = emptyUserAnswers.setOriginal(RegistrationCancellationDeclarationPage, true).success.value
-  private val userAnswersBothCancelled = emptyUserAnswers
-    .setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled)
-    .success
-    .value
-    .setOriginal(RegistrationCancellationDeclarationPage, true)
+  private val emptyUserAnswersGroup: UserAnswers = emptyUserAnswers
+    .setOriginal(GroupMemberPage, groupFlag)
     .success
     .value
 
-  private val userAnswersNoCancel = emptyUserAnswers
-    .setOriginal(RegistrationCancellationDeclarationPage, false)
-    .success
-    .value
-    .setOriginal(RegistrationStatusPage, RegistrationStatus.Registered)
-    .success
-    .value
+  "nonGroup" - {
 
-  lazy val cancelRegistrationDateRoute: String =
-    controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
+    val userAnswersHmrcCancelledNonGroup = emptyUserAnswers.setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled).success.value
+    val userAnswersUserCancelledNonGroup = emptyUserAnswers.setOriginal(RegistrationCancellationDeclarationPage, true).success.value
+    val userAnswersBothCancelledNonGroup = emptyUserAnswers
+      .setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled)
+      .success
+      .value
+      .setOriginal(RegistrationCancellationDeclarationPage, true)
+      .success
+      .value
 
-  lazy val registrationCancellationLockedRoute: String =
-    controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url
+    val userAnswersNoCancelNonGroup = emptyUserAnswers
+      .setOriginal(RegistrationCancellationDeclarationPage, false)
+      .success
+      .value
+      .setOriginal(RegistrationStatusPage, RegistrationStatus.Registered)
+      .success
+      .value
 
-  lazy val registrationCancellationDeclarationRoute: String =
-    controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url
+    val formProvider = new CancelRegistrationDateFormProvider()
 
-  private val formProvider = new CancelRegistrationDateFormProvider()
+    def form = formProvider(
+      registrationDate,
+      maximumValidDate
+    )
 
-  private def form = formProvider(
-    registrationDate,
-    maximumValidDate
-  )
+    "DateController" - {
 
-  "DateController" - {
+      "must return OK and the correct view for a GET" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersNoCancelNonGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
 
-    "must return OK and the correct view for a GET" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersNoCancel))
-        .overrides(
-          bind[Clock]
-            .toInstance(fixedClock)
-        )
-        .build()
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url)
 
-      running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url)
+          val result = route(application, request).value
 
-        val result = route(application, request).value
+          val view =
+            application.injector
+              .instanceOf[CancelRegistrationDateView]
 
-        val view =
-          application.injector
-            .instanceOf[CancelRegistrationDateView]
+          status(result) mustEqual OK
 
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual view(
-          form.fill(dateOfCancellation),
-          registrationDate,
-          firstInvalidDate,
-          middleOfDateRange,
-          nonGroupKeyDate,
-          isGroupFlag
-        )(
-          request,
-          messages(application)
-        ).toString
-      }
-
-    }
-
-    "must redirect and return OK and the correct view for a GET if hmrc has already cancelled" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersHmrcCancelled))
-        .overrides(
-          bind[Clock]
-            .toInstance(fixedClock)
-        )
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual
-          controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url
-      }
-    }
-
-    "must redirect and return OK and the correct view for a GET if user has already cancelled" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersUserCancelled))
-        .overrides(
-          bind[Clock]
-            .toInstance(fixedClock)
-        )
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual
-          controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url
-      }
-    }
-
-    "must redirect and return OK and the correct view for a GET if hmrc and user have already cancelled" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersBothCancelled))
-        .overrides(
-          bind[Clock]
-            .toInstance(fixedClock)
-        )
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual
-          controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url
-      }
-    }
-
-  }
-
-  "WarningController" - {
-
-    "must return OK and the correct view for a GET" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersUserCancelled))
-        .overrides(
-          bind[Clock]
-            .toInstance(fixedClock)
-        )
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        val view =
-          application.injector
-            .instanceOf[RegistrationCancellationWarningView]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(
-            form,
-            dateFormatter.format(dateOfCancellation),
-            nonGroupKeyWarning
+          contentAsString(result) mustEqual view(
+            form.fill(dateOfCancellation),
+            registrationDate,
+            firstInvalidDate,
+            middleOfDateRange,
+            nonGroupKeyDate,
+            nonGroupFlag
           )(
             request,
             messages(application)
           ).toString
+        }
+
+      }
+
+      "must redirect and return OK and the correct view for a GET if hmrc has already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersHmrcCancelledNonGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url
+        }
+      }
+
+      "must redirect and return OK and the correct view for a GET if user has already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersUserCancelledNonGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url
+        }
+      }
+
+      "must redirect and return OK and the correct view for a GET if hmrc and user have already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersBothCancelledNonGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url
+        }
       }
 
     }
 
-    "must redirect and return OK and the correct view for a GET if hmrc has already cancelled" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersHmrcCancelled))
-        .overrides(
-          bind[Clock]
-            .toInstance(fixedClock)
-        )
-        .build()
+    "WarningController" - {
 
-      running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url)
+      "must return OK and the correct view for a GET" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersUserCancelledNonGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url)
 
-        status(result) mustEqual SEE_OTHER
+          val result = route(application, request).value
 
-        redirectLocation(result).value mustEqual
-          controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url
+          val view =
+            application.injector
+              .instanceOf[RegistrationCancellationWarningView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(
+              form,
+              dateFormatter.format(dateOfCancellation),
+              nonGroupKeyWarning
+            )(
+              request,
+              messages(application)
+            ).toString
+        }
+
       }
+
+      "must redirect and return OK and the correct view for a GET if hmrc has already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersHmrcCancelledNonGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url
+        }
+      }
+
+      "must redirect and return OK and the correct view for a GET if user has did not cancel" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersNoCancelNonGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
+        }
+      }
+
+      "must redirect and return OK and the correct view for a GET if hmrc and user have already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersBothCancelledNonGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url
+        }
+      }
+
     }
 
-    "must redirect and return OK and the correct view for a GET if user has did not cancel" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersNoCancel))
-        .overrides(
-          bind[Clock]
-            .toInstance(fixedClock)
-        )
-        .build()
+    "LockedController" - {
 
-      running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url)
+      "must return OK and the correct view for a GET" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersHmrcCancelledNonGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url)
 
-        status(result) mustEqual SEE_OTHER
+          val result = route(application, request).value
 
-        redirectLocation(result).value mustEqual
-          controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
+          val view =
+            application.injector
+              .instanceOf[RegistrationCancellationLockedView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(gamblingUrl, nonGroupKeyLocked)(request, messages(application)).toString
+        }
+
       }
-    }
 
-    "must redirect and return OK and the correct view for a GET if hmrc and user have already cancelled" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersBothCancelled))
-        .overrides(
-          bind[Clock]
-            .toInstance(fixedClock)
-        )
-        .build()
+      "must redirect and return OK and the correct view for a GET if the user did not cancel" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersNoCancelNonGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
 
-      running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url)
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url)
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+          status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual
-          controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
+        }
       }
-    }
 
+      "must redirect and return OK and the correct view for a GET if user has already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersUserCancelledNonGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url
+        }
+      }
+
+      "must not redirect and return OK and the correct view for a GET if hmrc and user have already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersBothCancelledNonGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+        }
+      }
+
+    }
   }
 
-  "LockedController" - {
+  "group" - {
 
-    "must return OK and the correct view for a GET" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersHmrcCancelled))
-        .overrides(
-          bind[Clock]
-            .toInstance(fixedClock)
-        )
-        .build()
+    val userAnswersHmrcCancelledGroup = emptyUserAnswersGroup.setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled).success.value
+    val userAnswersUserCancelledGroup = emptyUserAnswersGroup.setOriginal(RegistrationCancellationDeclarationPage, true).success.value
+    val userAnswersBothCancelledGroup = emptyUserAnswersGroup
+      .setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled)
+      .success
+      .value
+      .setOriginal(RegistrationCancellationDeclarationPage, true)
+      .success
+      .value
 
-      running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url)
+    val userAnswersNoCancelGroup = emptyUserAnswersGroup
+      .setOriginal(RegistrationCancellationDeclarationPage, false)
+      .success
+      .value
+      .setOriginal(RegistrationStatusPage, RegistrationStatus.Registered)
+      .success
+      .value
 
-        val result = route(application, request).value
+    val formProvider = new CancelRegistrationDateFormProvider()
 
-        val view =
-          application.injector
-            .instanceOf[RegistrationCancellationLockedView]
+    def form = formProvider(
+      registrationDate,
+      maximumValidDate
+    )
 
-        status(result) mustEqual OK
+    "DateController" - {
 
-        contentAsString(result) mustEqual
-          view(gamblingUrl, nonGroupKeyLocked)(request, messages(application)).toString
+      "must return OK and the correct view for a GET" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersNoCancelGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup().url)
+
+          val result = route(application, request).value
+
+          val view =
+            application.injector
+              .instanceOf[CancelRegistrationDateView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual view(
+            form.fill(dateOfCancellation),
+            registrationDate,
+            firstInvalidDate,
+            middleOfDateRange,
+            groupKeyDate,
+            groupFlag
+          )(
+            request,
+            messages(application)
+          ).toString
+        }
+
+      }
+
+      "must redirect and return OK and the correct view for a GET if hmrc has already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersHmrcCancelledGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoadGroup().url
+        }
+      }
+
+      "must redirect and return OK and the correct view for a GET if user has already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersUserCancelledGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoadGroup().url
+        }
+      }
+
+      "must redirect and return OK and the correct view for a GET if hmrc and user have already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersBothCancelledGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoadGroup().url
+        }
       }
 
     }
 
-    "must redirect and return OK and the correct view for a GET if the user did not cancel" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersNoCancel))
-        .overrides(
-          bind[Clock]
-            .toInstance(fixedClock)
-        )
-        .build()
+    "WarningController" - {
 
-      running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url)
+      "must return OK and the correct view for a GET" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersUserCancelledGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoadGroup().url)
 
-        status(result) mustEqual SEE_OTHER
+          val result = route(application, request).value
 
-        redirectLocation(result).value mustEqual
-          controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
+          val view =
+            application.injector
+              .instanceOf[RegistrationCancellationWarningView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(
+              form,
+              dateFormatter.format(dateOfCancellation),
+              groupKeyWarning
+            )(
+              request,
+              messages(application)
+            ).toString
+        }
+
       }
+
+      "must redirect and return OK and the correct view for a GET if hmrc has already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersHmrcCancelledGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoadGroup().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoadGroup().url
+        }
+      }
+
+      "must redirect and return OK and the correct view for a GET if user has did not cancel" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersNoCancelGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoadGroup().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup().url
+        }
+      }
+
+      "must redirect and return OK and the correct view for a GET if hmrc and user have already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersBothCancelledGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoadGroup().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoadGroup().url
+        }
+      }
+
     }
 
-    "must redirect and return OK and the correct view for a GET if user has already cancelled" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersUserCancelled))
-        .overrides(
-          bind[Clock]
-            .toInstance(fixedClock)
-        )
-        .build()
+    "LockedController" - {
 
-      running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url)
+      "must return OK and the correct view for a GET" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersHmrcCancelledGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoadGroup().url)
 
-        status(result) mustEqual SEE_OTHER
+          val result = route(application, request).value
 
-        redirectLocation(result).value mustEqual
-          controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url
+          val view =
+            application.injector
+              .instanceOf[RegistrationCancellationLockedView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(gamblingUrl, groupKeyLocked)(request, messages(application)).toString
+        }
+
       }
-    }
 
-    "must not redirect and return OK and the correct view for a GET if hmrc and user have already cancelled" in {
-      val application = applicationBuilder(userAnswers = Some(userAnswersBothCancelled))
-        .overrides(
-          bind[Clock]
-            .toInstance(fixedClock)
-        )
-        .build()
+      "must redirect and return OK and the correct view for a GET if the user did not cancel" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersNoCancelGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
 
-      running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoad().url)
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoadGroup().url)
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        status(result) mustEqual OK
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup().url
+        }
       }
-    }
 
+      "must redirect and return OK and the correct view for a GET if user has already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersUserCancelledGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoadGroup().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoadGroup().url
+        }
+      }
+
+      "must not redirect and return OK and the correct view for a GET if hmrc and user have already cancelled" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswersBothCancelledGroup))
+          .overrides(
+            bind[Clock]
+              .toInstance(fixedClock)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, controllers.cancellation.routes.RegistrationCancellationLockedController.onPageLoadGroup().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+        }
+      }
+
+    }
   }
 
 }

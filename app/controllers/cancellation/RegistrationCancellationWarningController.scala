@@ -115,15 +115,38 @@ class RegistrationCancellationWarningController @Inject() (
       }
   }
 
-  def onSubmitGroup(): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val form = formProvider()
-    request.userAnswers
-      .get(CancelRegistrationDatePage)
-      .fold(Future.successful(Redirect(routes.SystemErrorController.onPageLoad())))(cancellationDate =>
-        Future.successful(
-          Ok(view(form, dateFormatter.format(cancellationDate), groupKey))
-        )
-      )
+  def onSubmitGroup(): Action[AnyContent] = {
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      val form = formProvider()
+
+      request.userAnswers
+        .get(CancelRegistrationDatePage)
+        .fold(Future.successful(Redirect(routes.SystemErrorController.onPageLoad().url))) { cancellationDate =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors =>
+                Future.successful(
+                  BadRequest(
+                    view(formWithErrors, dateFormatter.format(cancellationDate), groupKey)
+                  )
+                ),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(
+                                      request.userAnswers.set(RegistrationCancellationCancelAgainYesNoPage, value)
+                                    )
+
+                  updatedAnswers <- Future.fromTry(
+                                      request.userAnswers.set(RegistrationCancellationDeclarationPage, false)
+                                    )
+                  _ <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(
+                  navigator.nextPage(RegistrationCancellationDeclarationPage, NormalMode, updatedAnswers)
+                )
+            )
+        }
+    }
   }
 
   private val dateFormatter =
