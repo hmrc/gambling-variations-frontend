@@ -34,7 +34,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
 
   // The application is built before any reverse route is used, so that the routes carry the context path
   private val application: Application = applicationBuilder().build()
-  private implicit val msgs: Messages  = messages(application)
+  private implicit val msgs: Messages = messages(application)
 
   private val address = Address("18 Arundel Mews", Some("Worthing"), None, None, Some("BN11 5RG"), Some("United Kingdom"))
 
@@ -197,7 +197,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
       "must give every action the visually hidden text of its row" in {
         allRows(corporateBody).foreach { row =>
           val hidden = hiddenTexts(row)
-          hidden must not be empty
+          hidden          must not be empty
           hidden.distinct must have size 1
           // A missing message would show as the key itself
           hidden.head must not startWith "checkControllingBodyDetails."
@@ -415,8 +415,12 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
       "must not offer to remove a removable detail that has not been provided" in {
         val viewModel = corporateBody.copy(tradingName = None, vrn = None, faxNumber = None, emailAddress = None)
 
-        Seq(viewModel.businessDetails -> "tradingName", viewModel.businessDetails -> "vat",
-          viewModel.contactDetails -> "faxNumber", viewModel.contactDetails -> "emailAddress").foreach { case (list, name) =>
+        Seq(
+          viewModel.businessDetails -> "tradingName",
+          viewModel.businessDetails -> "vat",
+          viewModel.contactDetails  -> "faxNumber",
+          viewModel.contactDetails  -> "emailAddress"
+        ).foreach { case (list, name) =>
           actionTexts(rowFor(list, name)) mustEqual Seq(change)
         }
       }
@@ -498,7 +502,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         )
 
         valueText(rowFor(viewModel.businessDetails, "corporateBodyName")) mustEqual "<b>Bold</b> & Co"
-        valueHtml(rowFor(viewModel.addressDetails, "address")) must startWith("&lt;i&gt;1&lt;/i&gt; Street<br>")
+        valueHtml(rowFor(viewModel.addressDetails, "address"))        must startWith("&lt;i&gt;1&lt;/i&gt; Street<br>")
         valueHtml(rowFor(viewModel.contactDetails, "contactNumbers")) must include("&lt;1&gt;")
       }
     }
@@ -667,19 +671,19 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
           answers <- answers.set(ControllingBodyUtrPage, " ")
           answers <- answers.set(ControllingBodyTradingNamePage, "")
           answers <- answers.set(
-            ControllingBodyCorrespondenceSectionPage,
-            CorrespondenceDetails(
-              mgdRegNum,
-              None,
-              None,
-              Some(address.copy(address1 = " ")),
-              None,
-              None,
-              Some(ContactNumber(Some(" "), None)),
-              None,
-              None
-            )
-          )
+                       ControllingBodyCorrespondenceSectionPage,
+                       CorrespondenceDetails(
+                         mgdRegNum,
+                         None,
+                         None,
+                         Some(address.copy(address1 = " ")),
+                         None,
+                         None,
+                         Some(ContactNumber(Some(" "), None)),
+                         None,
+                         None
+                       )
+                     )
         } yield answers).success.value
 
         val viewModel = CheckControllingBodyDetailsViewModel.from(answers)
@@ -706,7 +710,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
 
       "must read whether the user has continued" in {
         val continued = emptyUserAnswers.set(ControllingBodyContinuePage, true).success.value
-        val notYet    = emptyUserAnswers.set(ControllingBodyContinuePage, false).success.value
+        val notYet = emptyUserAnswers.set(ControllingBodyContinuePage, false).success.value
 
         CheckControllingBodyDetailsViewModel.from(continued).hasContinued mustBe true
         CheckControllingBodyDetailsViewModel.from(notYet).hasContinued mustBe false
