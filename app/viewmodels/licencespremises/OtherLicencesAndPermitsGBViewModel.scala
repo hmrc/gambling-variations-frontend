@@ -14,40 +14,41 @@
  * limitations under the License.
  */
 
-package viewmodels
+package viewmodels.licencespremises
 
-import models.licencespremises.OtherLicencesAndPermitsNI
-import models.licencespremises.OtherLicencesAndPermitsNI.*
+import models.licencespremises.OtherLicencesAndPermitsGB
+import models.licencespremises.OtherLicencesAndPermitsGB.*
 import play.api.data.Form
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Checkboxes, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxItem, ExclusiveCheckbox}
 import viewmodels.govuk.all.CheckboxesViewModel.FluentLegend
 import viewmodels.govuk.all.{FieldsetViewModel, HintViewModel, LegendViewModel}
+import viewmodels.{ErrorMessageAwareness, LegendSize}
 
-object OtherLicencesAndPermitsNIViewModel extends ErrorMessageAwareness {
-  def apply(form: Form[Set[OtherLicencesAndPermitsNI]])(implicit messages: Messages): Checkboxes = {
+object OtherLicencesAndPermitsGBViewModel extends ErrorMessageAwareness {
+  def apply(form: Form[Set[OtherLicencesAndPermitsGB]])(implicit messages: Messages): Checkboxes = {
     Checkboxes(
       fieldset = Some(
         FieldsetViewModel(
-          LegendViewModel(Text(messages("otherLicencesAndPermitsNI.heading"))).asPageHeading(LegendSize.Large)
+          LegendViewModel(Text(messages("otherLicencesAndPermitsGB.heading"))).asPageHeading(LegendSize.Large)
         )
       ),
-      name         = "permitsNI[]",
-      errorMessage = errorMessage(form("permitsNI")),
-      hint         = Some(HintViewModel(Text(messages("otherLicencesAndPermitsNI.hint")))),
+      name         = "permitsGB[]",
+      hint         = Some(HintViewModel(Text(messages("otherLicencesAndPermitsGB.hint")))),
+      errorMessage = errorMessage(form("permitsGB")),
       items = positiveValues.zipWithIndex.map { case (checkedBox, index) =>
         CheckboxItem(
-          id      = Some(s"permitsNI-${checkedBox.toString}"),
-          content = Text(messages(s"otherLicencesAndPermitsNI.option.${checkedBox.toString}")),
+          id      = Some(s"permitsGB-${checkedBox.toString}"),
+          content = Text(messages(s"otherLicencesAndPermitsGB.option.${checkedBox.toString}")),
           value   = checkedBox.toString,
           checked = form.value.exists(_.contains(checkedBox))
         )
       } ++ Seq(CheckboxItem(divider = Some(messages("site.or"))))
         ++ Seq(
           CheckboxItem(
-            id        = Some(s"permitsNI-${noOtherLicencesAndPermits.toString}"),
-            content   = Text(messages(s"otherLicencesAndPermitsNI.option.none")),
+            id        = Some(s"permitsGB-${noOtherLicencesAndPermits.toString}"),
+            content   = Text(messages(s"otherLicencesAndPermitsGB.option.none")),
             value     = noOtherLicencesAndPermits.toString,
             checked   = form.value.exists(_.contains(noOtherLicencesAndPermits)),
             behaviour = Some(ExclusiveCheckbox)
