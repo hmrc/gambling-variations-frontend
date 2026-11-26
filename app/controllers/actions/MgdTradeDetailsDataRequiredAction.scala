@@ -98,12 +98,12 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
         .filter(_.nonEmpty)
 
     for {
-      updatedAnswers <- answers.set(MgdTradeDetailsSectionPage, mgdTradeDetails.mgdRegNumber)
-      updatedAnswers <- updatedAnswers.setIfDefined(IsSeasonalBusinessPage, mgdTradeDetails.isBusinessSeasonal)
-      updatedAnswers <- updatedAnswers.setIfDefined(BusinessTradeClassPage, mgdTradeDetails.businessTradeClass)
-      updatedAnswers <- updatedAnswers.setIfDefined(OtherTradeClassPage, mgdTradeDetails.businessActivityDesc)
-      updatedAnswers <- updatedAnswers.setIfDefined(PreviousRegistrationNumbersListPage, previousRegs)
-      updatedAnswers <- updatedAnswers.setIfDefined(AssociatedRegistrationNumbersPage, associatedRegs)
+      updatedAnswers <- answers.setOriginal(MgdTradeDetailsSectionPage, mgdTradeDetails.mgdRegNumber)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(IsSeasonalBusinessPage, mgdTradeDetails.isBusinessSeasonal)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(BusinessTradeClassPage, mgdTradeDetails.businessTradeClass)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(OtherTradeClassPage, mgdTradeDetails.businessActivityDesc)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(PreviousRegistrationNumbersListPage, previousRegs)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(AssociatedRegistrationNumbersPage, associatedRegs)
     } yield updatedAnswers
   }
 }
