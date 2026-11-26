@@ -617,7 +617,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
     "from user answers" - {
 
       "must read the controlling body details as stored by the data required action and the screens" in {
-        val correspondence = CorrespondenceDetails(
+        val correspondence = ContactDetails(
           mgdRegNumber          = mgdRegNum,
           nameLine1             = None,
           nameLine2             = None,
@@ -672,7 +672,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
           answers <- answers.set(ControllingBodyTradingNamePage, "")
           answers <- answers.set(
                        ControllingBodyCorrespondenceSectionPage,
-                       CorrespondenceDetails(
+            ContactDetails(
                          mgdRegNum,
                          None,
                          None,
