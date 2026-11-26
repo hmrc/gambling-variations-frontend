@@ -124,6 +124,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
             "typeOfControllingBody"  -> 2,
             "isRepMemSameAsCb"       -> "0",
             "isUkIncorporated"       -> "0",
+            "Continue"               -> false,
             "soleProprietor" -> Json.obj(
               "title"      -> "Mx",
               "firstName"  -> "solePropFirstName",
