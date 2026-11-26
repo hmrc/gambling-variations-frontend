@@ -130,22 +130,22 @@ class BusinessDetailsDataRequiredActionImpl @Inject() (
     logger.info("Mapping BusinessDetails into UserAnswers")
 
     for {
-      updatedAnswers <- answers.setOriginalIfDefined(
+      updatedAnswers <- answers.setIfDefined(
                           BusinessTypePage,
                           details.businessType
                         )
 
-      updatedAnswers <- updatedAnswers.setOriginal(
+      updatedAnswers <- updatedAnswers.set(
                           GroupMemberPage,
                           details.groupReg
                         )
 
-      updatedAnswers <- updatedAnswers.setOriginal(
+      updatedAnswers <- updatedAnswers.set(
                           RegistrationStatusPage,
                           details.currentlyRegistered
                         )
 
-      updatedAnswers <- updatedAnswers.setOriginalIfDefined(
+      updatedAnswers <- updatedAnswers.setIfDefined(
                           DateOfRegistrationPage,
                           details.dateOfRegistration
                         )
