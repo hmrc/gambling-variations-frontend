@@ -51,7 +51,6 @@ class ReasonForCancellationViewSpec extends SpecBase {
 
       val html = view(form)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
-      print(doc.toString)
 
       doc.title must include(
         messages("reasonForCancellation.title")

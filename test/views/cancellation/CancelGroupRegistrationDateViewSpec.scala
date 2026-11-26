@@ -214,18 +214,6 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
         .select(".govuk-list")
         .size() mustEqual 1
 
-      println(
-        doc
-          .select(".govuk-list")
-          .text()
-      )
-
-      println(
-        messages(
-          "cancelGroupRegistrationDate.error.required.all"
-        )
-      )
-
       doc
         .select(".govuk-list")
         .text() must include(
