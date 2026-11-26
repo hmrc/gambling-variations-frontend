@@ -25,7 +25,7 @@ import pages.ControllingBodyVATScreenerPage
 import pages.controllingbody.*
 import play.api.Application
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryList, SummaryListRow}
 
 import java.time.LocalDate
@@ -34,7 +34,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
 
   // The application is built before any reverse route is used, so that the routes carry the context path
   private val application: Application = applicationBuilder().build()
-  private implicit val msgs: Messages = messages(application)
+  private implicit val msgs: Messages  = messages(application)
 
   private val address = Address("18 Arundel Mews", Some("Worthing"), None, None, Some("BN11 5RG"), Some("United Kingdom"))
 
@@ -80,6 +80,11 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
     additionalInfo      = None
   )
 
+  private val change: Content = Text(msgs("site.change"))
+  private val remove: Content = Text(msgs("site.remove"))
+
+  private val removableRows: Seq[String] = Seq("tradingName", "vat", "faxNumber", "emailAddress")
+
   private def key(name: String): String = msgs(s"checkControllingBodyDetails.$name")
 
   private def keys(list: SummaryList): Seq[String] = list.rows.map(_.key.content.asInstanceOf[Text].value)
@@ -93,6 +98,8 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
   private def valueLink(row: SummaryListRow): Option[String] = Option(Jsoup.parse(valueHtml(row)).selectFirst("a")).map(_.attr("href"))
 
   private def hrefs(row: SummaryListRow): Seq[String] = row.actions.toSeq.flatMap(_.items.map(_.href))
+
+  private def actionTexts(row: SummaryListRow): Seq[Content] = row.actions.toSeq.flatMap(_.items.map(_.content))
 
   private def hiddenTexts(row: SummaryListRow): Seq[String] = row.actions.toSeq.flatMap(_.items.flatMap(_.visuallyHiddenText))
 
@@ -165,19 +172,20 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         hrefs(rowFor(business, "typeOfBusiness")) mustEqual Seq(routes.ControllingBodyBusinessTypeController.onPageLoad().url)
         hrefs(rowFor(business, "corporateBodyName")) mustEqual Seq(routes.ChangeControllingBodyNameController.onPageLoad(Corporatebody).url)
         hrefs(rowFor(business, "addTradingName")) mustEqual Seq(routes.ControllingBodyAddTradingNameYesNoController.onPageLoad().url)
-        hrefs(rowFor(business, "tradingName")) mustEqual Seq(routes.ControllingBodyTradingNameController.onPageLoad().url)
+        hrefs(rowFor(business, "tradingName")) mustEqual Seq(routes.ControllingBodyTradingNameController.onPageLoad().url, "#")
         hrefs(rowFor(business, "isIncorporated")) mustEqual Seq(routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad().url)
         hrefs(rowFor(business, "dateOfInc")) mustEqual Seq(routes.DateOfIncorporationController.onPageLoad().url)
         hrefs(rowFor(business, "companyRegNumber")) mustEqual Seq(routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad().url)
         hrefs(rowFor(business, "addVat")) mustEqual Seq(routes.ControllingBodyVATScreenerController.onPageLoad().url)
-        hrefs(rowFor(business, "vat")) mustEqual Seq(routes.ControllingBodyVatRegistrationNumberController.onPageLoad().url)
+        hrefs(rowFor(business, "vat")) mustEqual Seq(routes.ControllingBodyVatRegistrationNumberController.onPageLoad().url, "#")
         hrefs(rowFor(corporateBody.addressDetails, "addAddrInfo")) mustEqual
           Seq(routes.ControllingBodyAdditionalAddressInformationYesNoController.onPageLoad().url)
         hrefs(rowFor(corporateBody.contactDetails, "addFaxNumber")) mustEqual Seq(routes.ControllingBodyAddFaxNumberYesNoController.onPageLoad().url)
-        hrefs(rowFor(corporateBody.contactDetails, "faxNumber")) mustEqual Seq(routes.ControllingBodyFaxNumberController.onPageLoad().url)
+        hrefs(rowFor(corporateBody.contactDetails, "faxNumber")) mustEqual Seq(routes.ControllingBodyFaxNumberController.onPageLoad().url, "#")
         hrefs(rowFor(corporateBody.contactDetails, "addEmailAddress")) mustEqual
           Seq(routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad().url)
-        hrefs(rowFor(corporateBody.contactDetails, "emailAddress")) mustEqual Seq(routes.ControllingBodyEmailAddressController.onPageLoad().url)
+        hrefs(rowFor(corporateBody.contactDetails, "emailAddress")) mustEqual
+          Seq(routes.ControllingBodyEmailAddressController.onPageLoad().url, "#")
 
         hrefs(rowFor(business, "utr")) mustEqual Seq("#")
         Seq("address", "addAdditionalInfo").foreach { name =>
@@ -186,21 +194,35 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         hrefs(rowFor(corporateBody.contactDetails, "contactNumbers")) mustEqual Seq("#")
       }
 
-      "must give every change link the visually hidden text of its row" in {
+      "must give every action the visually hidden text of its row" in {
         allRows(corporateBody).foreach { row =>
           val hidden = hiddenTexts(row)
-          hidden must have size 1
+          hidden must not be empty
+          hidden.distinct must have size 1
           // A missing message would show as the key itself
           hidden.head must not startWith "checkControllingBodyDetails."
         }
         hiddenTexts(rowFor(corporateBody.businessDetails, "typeOfBusiness")) mustEqual Seq(key("typeOfBusiness.hidden"))
         hiddenTexts(rowFor(corporateBody.businessDetails, "isIncorporated")) mustEqual Seq(key("isIncorporated.hidden"))
-        hiddenTexts(rowFor(corporateBody.contactDetails, "emailAddress")) mustEqual Seq(key("emailAddress.hidden"))
+        hiddenTexts(rowFor(corporateBody.contactDetails, "emailAddress")) mustEqual
+          Seq(key("emailAddress.hidden"), key("emailAddress.hidden"))
       }
 
-      "must not offer to remove any detail in the add flow" in {
+      "must only offer to remove the trading name, VAT number, fax number and email address" in {
+        val removable = removableRows.map(key)
+
         allRows(corporateBody).foreach { row =>
-          row.actions.toSeq.flatMap(_.items.map(_.content)) must not contain Text(msgs("site.remove"))
+          if (removable.contains(row.key.content.asInstanceOf[Text].value)) {
+            actionTexts(row) mustEqual Seq(change, remove)
+          } else {
+            actionTexts(row) must not contain remove
+          }
+        }
+      }
+
+      "must let every detail be changed" in {
+        allRows(corporateBody).foreach { row =>
+          actionTexts(row) must contain(change)
         }
       }
 
@@ -389,6 +411,15 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         valueText(rowFor(viewModel.contactDetails, "emailAddress")) mustEqual msgs("site.notProvided")
         viewModel.isMissingMandatoryDetails mustBe false
       }
+
+      "must not offer to remove a removable detail that has not been provided" in {
+        val viewModel = corporateBody.copy(tradingName = None, vrn = None, faxNumber = None, emailAddress = None)
+
+        Seq(viewModel.businessDetails -> "tradingName", viewModel.businessDetails -> "vat",
+          viewModel.contactDetails -> "faxNumber", viewModel.contactDetails -> "emailAddress").foreach { case (list, name) =>
+          actionTexts(rowFor(list, name)) mustEqual Seq(change)
+        }
+      }
     }
 
     "missing mandatory details" - {
@@ -460,21 +491,129 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
       }
 
       "must escape the details" in {
-        val viewModel = corporateBody.copy(businessName = Some("<b>Bold</b> & Co"),
-                                           address      = Some(address.copy(address1 = "1 <High> Street")),
-                                           phoneNumber  = Some("<1>")
-                                          )
+        val viewModel = corporateBody.copy(
+          businessName = Some("<b>Bold</b> & Co"),
+          address      = Some(address.copy(address1 = "<i>1</i> Street")),
+          phoneNumber  = Some("<1>")
+        )
 
         valueText(rowFor(viewModel.businessDetails, "corporateBodyName")) mustEqual "<b>Bold</b> & Co"
-        valueHtml(rowFor(viewModel.addressDetails, "address"))        must startWith("1 &lt;High&gt; Street<br>")
+        valueHtml(rowFor(viewModel.addressDetails, "address")) must startWith("&lt;i&gt;1&lt;/i&gt; Street<br>")
         valueHtml(rowFor(viewModel.contactDetails, "contactNumbers")) must include("&lt;1&gt;")
+      }
+    }
+
+    "when there is a business partner number" - {
+
+      val withBpn = corporateBody.copy(hasBusinessPartnerNumber = true)
+
+      "must show the incorporation details of a corporate body without any actions" in {
+        Seq("isIncorporated", "dateOfInc", "companyRegNumber").foreach { name =>
+          rowFor(withBpn.businessDetails, name).actions mustBe None
+        }
+      }
+
+      "must still show the values of the locked details" in {
+        valueText(rowFor(withBpn.businessDetails, "isIncorporated")) mustEqual msgs("site.yes")
+        valueText(rowFor(withBpn.businessDetails, "dateOfInc")) mustEqual "1 Jan 2000"
+        valueText(rowFor(withBpn.businessDetails, "companyRegNumber")) mustEqual "CR345678"
+      }
+
+      "must show the date of birth and National Insurance number of a sole proprietor without any actions" in {
+        val locked = soleProprietor.copy(hasBusinessPartnerNumber = true)
+
+        Seq("soleProprietorDOB", "nino").foreach { name =>
+          rowFor(locked.businessDetails, name).actions mustBe None
+        }
+      }
+
+      "must show the VAT number of a partnership without any actions" in {
+        rowFor(corporateBody.copy(businessType = Some(Partnership), hasBusinessPartnerNumber = true).businessDetails, "vat").actions mustBe None
+      }
+
+      "must still let a business that is not a partnership change and remove its VAT number" in {
+        actionTexts(rowFor(withBpn.businessDetails, "vat")) mustEqual Seq(change, remove)
+      }
+
+      "must still let the other details be changed, and the removable ones be removed" in {
+        Seq("typeOfBusiness", "corporateBodyName", "addTradingName", "utr", "addVat").foreach { name =>
+          actionTexts(rowFor(withBpn.businessDetails, name)) mustEqual Seq(change)
+        }
+        actionTexts(rowFor(withBpn.businessDetails, "tradingName")) mustEqual Seq(change, remove)
+        actionTexts(rowFor(withBpn.contactDetails, "faxNumber")) mustEqual Seq(change, remove)
+        actionTexts(rowFor(withBpn.contactDetails, "emailAddress")) mustEqual Seq(change, remove)
+      }
+
+      "must still let the overseas incorporation details be changed" in {
+        val overseas = withBpn.copy(
+          isUkIncorporated       = Some(false),
+          countryOfIncorporation = Some("Spain"),
+          foreignCorporateRef    = Some("ES123")
+        )
+
+        rowFor(overseas.businessDetails, "isIncorporated").actions mustBe None
+        actionTexts(rowFor(overseas.businessDetails, "countryOfIncorporation")) mustEqual Seq(change)
+        actionTexts(rowFor(overseas.businessDetails, "foreignCorporateRef")) mustEqual Seq(change)
+      }
+
+      "must still link a locked detail that has not been provided to the screen that provides it" in {
+        val row = rowFor(withBpn.copy(crn = None).businessDetails, "companyRegNumber")
+
+        valueText(row) mustEqual key("companyRegNumber.add")
+        valueLink(row) mustEqual Some(routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad().url)
+        row.actions mustBe None
+      }
+    }
+
+    "when there is no business partner number" - {
+
+      "must let the six identifying details be changed" in {
+        Seq("isIncorporated", "dateOfInc", "companyRegNumber").foreach { name =>
+          actionTexts(rowFor(corporateBody.businessDetails, name)) mustEqual Seq(change)
+        }
+        Seq("soleProprietorDOB", "nino").foreach { name =>
+          actionTexts(rowFor(soleProprietor.businessDetails, name)) mustEqual Seq(change)
+        }
+      }
+
+      "must let a partnership change and remove its VAT number" in {
+        actionTexts(rowFor(corporateBody.copy(businessType = Some(Partnership)).businessDetails, "vat")) mustEqual Seq(change, remove)
+      }
+    }
+
+    "the type of business" - {
+
+      "must be shown before the user has continued" in {
+        keys(corporateBody.businessDetails) must contain(key("typeOfBusiness"))
+      }
+
+      "must not be shown once the user has continued" in {
+        keys(corporateBody.copy(hasContinued = true).businessDetails) mustEqual Seq(
+          key("corporateBodyName"),
+          key("addTradingName"),
+          key("tradingName"),
+          key("isIncorporated"),
+          key("dateOfInc"),
+          key("companyRegNumber"),
+          key("utr"),
+          key("addVat"),
+          key("vat")
+        )
+      }
+
+      "must still count towards the missing mandatory details once hidden" in {
+        val viewModel = corporateBody.copy(businessType = None, hasContinued = true)
+
+        keys(viewModel.businessDetails) must not contain key("typeOfBusiness")
+        viewModel.isMissingMandatoryDetails mustBe true
+        viewModel.continueUrl mustEqual routes.ControllingBodyBusinessTypeController.onPageLoad().url
       }
     }
 
     "from user answers" - {
 
       "must read the controlling body details as stored by the data required action and the screens" in {
-        val correspondence = ContactDetails(
+        val correspondence = CorrespondenceDetails(
           mgdRegNumber          = mgdRegNum,
           nameLine1             = None,
           nameLine2             = None,
@@ -528,18 +667,19 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
           answers <- answers.set(ControllingBodyUtrPage, " ")
           answers <- answers.set(ControllingBodyTradingNamePage, "")
           answers <- answers.set(
-                       ControllingBodyCorrespondenceSectionPage,
-                       ContactDetails(mgdRegNum,
-                                      None,
-                                      None,
-                                      Some(address.copy(address1 = " ")),
-                                      None,
-                                      None,
-                                      Some(ContactNumber(Some(" "), None)),
-                                      None,
-                                      None
-                                     )
-                     )
+            ControllingBodyCorrespondenceSectionPage,
+            CorrespondenceDetails(
+              mgdRegNum,
+              None,
+              None,
+              Some(address.copy(address1 = " ")),
+              None,
+              None,
+              Some(ContactNumber(Some(" "), None)),
+              None,
+              None
+            )
+          )
         } yield answers).success.value
 
         val viewModel = CheckControllingBodyDetailsViewModel.from(answers)
@@ -549,6 +689,28 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         viewModel.tradingName mustBe None
         viewModel.address mustBe None
         viewModel.phoneNumber mustBe None
+      }
+
+      "must treat a business partner number as present when it holds a value" in {
+        val answers = emptyUserAnswers.set(ControllingBodyBusinessPartnerNumberPage, "0123456789").success.value
+
+        CheckControllingBodyDetailsViewModel.from(answers).hasBusinessPartnerNumber mustBe true
+      }
+
+      "must treat a blank or missing business partner number as absent" in {
+        val blank = emptyUserAnswers.set(ControllingBodyBusinessPartnerNumberPage, "   ").success.value
+
+        CheckControllingBodyDetailsViewModel.from(blank).hasBusinessPartnerNumber mustBe false
+        CheckControllingBodyDetailsViewModel.from(emptyUserAnswers).hasBusinessPartnerNumber mustBe false
+      }
+
+      "must read whether the user has continued" in {
+        val continued = emptyUserAnswers.set(ControllingBodyContinuePage, true).success.value
+        val notYet    = emptyUserAnswers.set(ControllingBodyContinuePage, false).success.value
+
+        CheckControllingBodyDetailsViewModel.from(continued).hasContinued mustBe true
+        CheckControllingBodyDetailsViewModel.from(notYet).hasContinued mustBe false
+        CheckControllingBodyDetailsViewModel.from(emptyUserAnswers).hasContinued mustBe false
       }
 
       "must have no details when there are no answers" in {
