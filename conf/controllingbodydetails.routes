@@ -1,0 +1,102 @@
+
+GET        /business-type                        controllers.controllingbody.ControllingBodyBusinessTypeController.onPageLoad(mode: Mode = NormalMode)
+POST       /business-type                        controllers.controllingbody.ControllingBodyBusinessTypeController.onSubmit(mode: Mode = NormalMode)
+
+GET        /what-do-you-want-to-do               controllers.controllingbody.ControllingBodyChangeScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /what-do-you-want-to-do               controllers.controllingbody.ControllingBodyChangeScreenerController.onSubmit(mode: Mode = NormalMode)
+
+GET        /sole-proprietor                 controllers.controllingbody.ChangeControllingBodyNameController.onPageLoad(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
+POST       /sole-proprietor                 controllers.controllingbody.ChangeControllingBodyNameController.onSubmit(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
+
+GET        /partnership                     controllers.controllingbody.ChangeControllingBodyNameController.onPageLoad(businessType: BusinessType = BusinessType.Partnership, mode: Mode = NormalMode)
+POST       /partnership                     controllers.controllingbody.ChangeControllingBodyNameController.onSubmit(businessType: BusinessType = BusinessType.Partnership, mode: Mode = NormalMode)
+
+GET        /corporate-body                  controllers.controllingbody.ChangeControllingBodyNameController.onPageLoad(businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = NormalMode)
+POST       /corporate-body                  controllers.controllingbody.ChangeControllingBodyNameController.onSubmit(businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = NormalMode)
+
+GET        /unincorporated-body             controllers.controllingbody.ChangeControllingBodyNameController.onPageLoad(businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = NormalMode)
+POST       /unincorporated-body             controllers.controllingbody.ChangeControllingBodyNameController.onSubmit(businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = NormalMode)
+
+GET        /limited-liability-partnership   controllers.controllingbody.ChangeControllingBodyNameController.onPageLoad(businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = NormalMode)
+POST       /limited-liability-partnership   controllers.controllingbody.ChangeControllingBodyNameController.onSubmit(businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = NormalMode)
+
+GET        /trading-name-yes-no              controllers.controllingbody.ControllingBodyAddTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /trading-name-yes-no              controllers.controllingbody.ControllingBodyAddTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-trading-name           controllers.controllingbody.RemoveControllingBodyTradeNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-trading-name           controllers.controllingbody.RemoveControllingBodyTradeNameController.onSubmit(mode: Mode = NormalMode)
+
+GET        /additional-address-information-yes-no           controllers.controllingbody.ControllingBodyAdditionalAddressInformationYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /additional-address-information-yes-no           controllers.controllingbody.ControllingBodyAdditionalAddressInformationYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-fax-number             controllers.controllingbody.RemoveControllingBodyFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-fax-number             controllers.controllingbody.RemoveControllingBodyFaxNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-email-address           controllers.controllingbody.RemoveControllingBodyEmailController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-email-address           controllers.controllingbody.RemoveControllingBodyEmailController.onSubmit(mode: Mode = NormalMode)
+
+GET        /trading-name                     controllers.controllingbody.ControllingBodyTradingNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /trading-name                     controllers.controllingbody.ControllingBodyTradingNameController.onSubmit(mode: Mode = NormalMode)
+
+GET        /email-address                    controllers.controllingbody.ControllingBodyEmailAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /email-address                    controllers.controllingbody.ControllingBodyEmailAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details             controllers.controllingbody.ControllingBodySameAsRepYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details             controllers.controllingbody.ControllingBodySameAsRepYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /groups-representative-member             controllers.controllingbody.ControllingBodyNotProvidedYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /groups-representative-member             controllers.controllingbody.ControllingBodyNotProvidedYesNoController.onSubmit(mode: Mode = NormalMode)
+
+
+GET        /fax-number                        controllers.controllingbody.ControllingBodyFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /fax-number                        controllers.controllingbody.ControllingBodyFaxNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /email-address-yes-no        controllers.controllingbody.ControllingBodyAddEmailAddressYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /email-address-yes-no        controllers.controllingbody.ControllingBodyAddEmailAddressYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /business-incorporated-uk           controllers.controllingbody.ControllingBodyBusinessUKIncorporatedController.onPageLoad(mode: Mode = NormalMode)
+POST       /business-incorporated-uk           controllers.controllingbody.ControllingBodyBusinessUKIncorporatedController.onSubmit(mode: Mode = NormalMode)
+
+GET        /fax-number-yes-no       controllers.controllingbody.ControllingBodyAddFaxNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /fax-number-yes-no       controllers.controllingbody.ControllingBodyAddFaxNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /national-insurance-number-yes-no        controllers.controllingbody.ControllingBodyAddNINumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /national-insurance-number-yes-no        controllers.controllingbody.ControllingBodyAddNINumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /date-of-incorporation                   controllers.controllingbody.DateOfIncorporationController.onPageLoad()
+POST       /date-of-incorporation                   controllers.controllingbody.DateOfIncorporationController.onSubmit()
+
+GET        /date-of-birth       controllers.controllingbody.ControllingBodySoleProprietorDobController.onPageLoad(mode: Mode = NormalMode)
+POST       /date-of-birth       controllers.controllingbody.ControllingBodySoleProprietorDobController.onSubmit(mode: Mode = NormalMode)
+
+GET        /company-registration-number     controllers.controllingbody.ControllingBodyCompanyRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /company-registration-number     controllers.controllingbody.ControllingBodyCompanyRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /vat-registration-number-yes-no                        controllers.controllingbody.ControllingBodyVATScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /vat-registration-number-yes-no                        controllers.controllingbody.ControllingBodyVATScreenerController.onSubmit(mode: Mode = NormalMode)
+
+GET        /vat-registration-number                               controllers.controllingbody.ControllingBodyVatRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /vat-registration-number                               controllers.controllingbody.ControllingBodyVatRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-national-insurance-number                      controllers.controllingbody.RemoveControllingBodyNINumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-national-insurance-number                      controllers.controllingbody.RemoveControllingBodyNINumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /contact-numbers                        controllers.controllingbody.ControllingBodyContactDetailsController.onPageLoad(mode: Mode = NormalMode)
+POST       /contact-numbers                        controllers.controllingbody.ControllingBodyContactDetailsController.onSubmit(mode: Mode = NormalMode)
+
+GET        /unique-taxpayer-reference                        controllers.controllingbody.ControllingBodyUTRController.onPageLoad(mode: Mode = NormalMode)
+POST       /unique-taxpayer-reference                        controllers.controllingbody.ControllingBodyUTRController.onSubmit(mode: Mode = NormalMode)
+
+GET        /check                            controllers.controllingbody.CheckControllingBodyDetailsController.onPageLoad()
+
+GET        /foreign-corporate-reference     controllers.controllingbody.ControllingBodyForeignCorpRefController.onPageLoad(mode: Mode = NormalMode)
+POST       /foreign-corporate-reference     controllers.controllingbody.ControllingBodyForeignCorpRefController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-vat-registration-number                        controllers.controllingbody.ControllingBodyRemoveVATRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-vat-registration-number                        controllers.controllingbody.ControllingBodyRemoveVATRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /national-insurance-number                      controllers.controllingbody.ControllingBodyNINumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /national-insurance-number                      controllers.controllingbody.ControllingBodyNINumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /business-country-incorporated        controllers.controllingbody.ControllingBodyCountryOfIncorporationController.onPageLoad(mode: Mode = NormalMode)
+POST       /business-country-incorporated        controllers.controllingbody.ControllingBodyCountryOfIncorporationController.onSubmit(mode: Mode = NormalMode)
