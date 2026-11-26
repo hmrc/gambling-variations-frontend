@@ -154,10 +154,7 @@ class GamblingReturnPeriodsDataRequiredActionImpl @Inject() (
 
     logger.info("Setting User Answers for Gambling Return Periods")
 
-    answers.set(
-      GamblingReturnPeriodsPage,
-      gamblingReturnPeriods
-    )
+    answers.setOriginal(GamblingReturnPeriodsPage, gamblingReturnPeriods)
   }
 }
 
