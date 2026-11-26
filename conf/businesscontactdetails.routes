@@ -1,0 +1,17 @@
+
+GET        /fax-number                    controllers.businesscontactdetails.FaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /fax-number                    controllers.businesscontactdetails.FaxNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /email-address                     controllers.businesscontactdetails.BusinessEmailAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /email-address                     controllers.businesscontactdetails.BusinessEmailAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /contact-numbers                   controllers.businesscontactdetails.BusinessContactNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /contact-numbers                   controllers.businesscontactdetails.BusinessContactNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-fax-number             controllers.businesscontactdetails.RemoveFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-fax-number             controllers.businesscontactdetails.RemoveFaxNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-email-address          controllers.businesscontactdetails.RemoveEmailAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-email-address          controllers.businesscontactdetails.RemoveEmailAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /check                          controllers.businesscontactdetails.CheckBusinessContactDetailsController.onPageLoad()

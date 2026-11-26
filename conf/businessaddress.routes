@@ -1,0 +1,24 @@
+
+GET        /change                          controllers.businessaddress.BusinessChangeAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /change                          controllers.businessaddress.BusinessChangeAddrScreenerController.onSubmit(mode: Mode = NormalMode)
+
+GET        /additional-information                       controllers.businessaddress.BusinessAddressAdditionalInfoController.onPageLoad(mode: Mode = NormalMode)
+POST       /additional-information                       controllers.businessaddress.BusinessAddressAdditionalInfoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /uk-postcode-yes-no                   controllers.businessaddress.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /uk-postcode-yes-no                      controllers.businessaddress.BusinessUKAddrScreenerController.onSubmit(mode: Mode = NormalMode)
+
+GET        /enter-uk-address                     controllers.businessaddress.BusinessUKAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /enter-uk-address                     controllers.businessaddress.BusinessUKAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /enter-non-uk-address                     controllers.businessaddress.BusinessNonUKAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /enter-non-uk-address                     controllers.businessaddress.BusinessNonUKAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /additional-information-yes-no                      controllers.businessaddress.BusinessAddrInfoScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /additional-information-yes-no                      controllers.businessaddress.BusinessAddrInfoScreenerController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-additional-information                      controllers.businessaddress.RemoveBusinessAddressAddInfoController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-additional-information                      controllers.businessaddress.RemoveBusinessAddressAddInfoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /check                               controllers.businessaddress.CheckBusinessAddressController.onPageLoad(mode: Mode = NormalMode)
+GET        /check-redirect                               controllers.businessaddress.CheckBusinessAddressController.onContinue(mode: Mode = NormalMode)

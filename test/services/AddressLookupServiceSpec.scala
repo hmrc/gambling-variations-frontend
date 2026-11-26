@@ -58,7 +58,7 @@ class AddressLookupServiceSpec extends SpecBase with MockitoSugar {
 
       config.version mustBe 2
       config.options.continueUrl mustBe
-        "http://localhost:9000/gambling-variations/change-registration-details/correspondence-details/address-lookup/callback"
+        "http://localhost:9000/manage-gambling-tax/address-lookup/callback"
       config.options.homeNavHref mustBe "http://gambling-variations/home"
       config.options.accessibilityFooterUrl mustBe
         "http://localhost:12346/accessibility-statement/gambling-variations-frontend"

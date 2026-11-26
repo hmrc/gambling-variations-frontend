@@ -17,7 +17,6 @@
 package forms.tradingdetails
 
 import forms.behaviours.StringFieldBehaviours
-import forms.tradingdetails.AssociatedRegNumberFormProvider
 import play.api.data.FormError
 import utils.ChecksumValidator
 
