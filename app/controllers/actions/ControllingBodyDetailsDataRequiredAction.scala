@@ -53,10 +53,12 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
           details        <- gamblingConnector.getControllingBodyDetails(request.mgdRegNum)
           updatedAnswers <- Future.fromTry(setControllingBodyDetails(details, answers))
           saved          <- sessionRepository.set(updatedAnswers)
-        } yield saved match {
-          case true  => Right(DataRequest(request.request, request.mgdRegNum, updatedAnswers))
-          case false => Left(Redirect(routes.SystemErrorController.onPageLoad()))
-        }).recover { case NonFatal(e) =>
+        } yield
+          if (saved) {
+            Right(DataRequest(request.request, request.mgdRegNum, updatedAnswers))
+          } else {
+            Left(Redirect(routes.SystemErrorController.onPageLoad()))
+          }).recover { case NonFatal(e) =>
           logger.warn("Unable to load controlling body details", e)
           Left(Redirect(routes.SystemErrorController.onPageLoad()))
         }
