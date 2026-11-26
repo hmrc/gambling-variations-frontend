@@ -17,7 +17,6 @@
 package views.cancellation
 
 import base.SpecBase
-import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
@@ -37,7 +36,8 @@ class RegistrationCancellationLockedViewSpec extends SpecBase {
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val html = view(NormalMode, "")(request, messages)
+    def messageKey: String = "registrationCancellationLocked"
+    private val html = view("", messageKey)(request, messages)
 
     val doc: Document = Jsoup.parse(html.body)
 
@@ -46,8 +46,6 @@ class RegistrationCancellationLockedViewSpec extends SpecBase {
   "RegistrationCancellationLockedView" - {
 
     "must render page correctly" in new Setup {
-
-      println(doc.toString)
 
       doc.title must include(
         messages("registrationCancellationLocked.title")

@@ -23,7 +23,6 @@ import play.api.Application
 import play.api.i18n.Messages
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
-import viewmodels.tradingdetails.OtherTradeClassSummary
 
 class OtherTradeClassSummarySpec extends SpecBase {
 

@@ -18,9 +18,10 @@ package controllers.cancellation
 
 import controllers.actions.*
 import forms.cancellation.ChangeGroupRegistrationNumberFormProvider
-import models.Mode
+import models.NormalMode
 import navigation.Navigator
 import pages.cancellation.ChangeGroupRegistrationNumberPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -44,29 +45,26 @@ class ChangeGroupRegistrationNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[String] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-
+  def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers.get(ChangeGroupRegistrationNumberPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
-
-    Ok(view(preparedForm, mode))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
+  def onSubmit(): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeGroupRegistrationNumberPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ChangeGroupRegistrationNumberPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ChangeGroupRegistrationNumberPage, NormalMode, updatedAnswers))
       )
   }
 }

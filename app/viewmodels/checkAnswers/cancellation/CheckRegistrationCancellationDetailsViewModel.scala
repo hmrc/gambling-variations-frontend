@@ -17,8 +17,8 @@
 package viewmodels.checkAnswers.cancellation
 
 import controllers.cancellation.routes
+import models.UserAnswers
 import models.cancellation.ReasonForCancellation
-import models.{CheckMode, UserAnswers}
 import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
@@ -48,7 +48,7 @@ object CheckRegistrationCancellationDetailsViewModel {
         actions = Seq(
           ActionItemViewModel(
             "site.change",
-            routes.CancelRegistrationDateController.onPageLoad(CheckMode).url
+            routes.CancelRegistrationDateController.onPageLoad().url
           ).withVisuallyHiddenText(
             messages("checkRegistrationCancellationDetails.cancellationDate.change.hidden")
           )
@@ -68,7 +68,7 @@ object CheckRegistrationCancellationDetailsViewModel {
         actions = Seq(
           ActionItemViewModel(
             "site.change",
-            routes.ReasonForCancellationController.onPageLoad(CheckMode).url
+            routes.ReasonForCancellationController.onPageLoad().url
           ).withVisuallyHiddenText(
             messages("checkRegistrationCancellationDetails.cancellationReason.change.hidden")
           )
@@ -90,7 +90,7 @@ object CheckRegistrationCancellationDetailsViewModel {
             actions = Seq(
               ActionItemViewModel(
                 "site.change",
-                routes.ChangeGroupRegistrationNumberController.onPageLoad(CheckMode).url
+                routes.ChangeGroupRegistrationNumberController.onPageLoad().url
               ).withVisuallyHiddenText(
                 messages("checkRegistrationCancellationDetails.groupRegistrationNumber.change.hidden")
               )

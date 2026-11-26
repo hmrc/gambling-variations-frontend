@@ -18,8 +18,8 @@ package viewmodels.checkAnswers.cancellation
 
 import base.SpecBase
 import controllers.cancellation.routes
+import models.UserAnswers
 import models.cancellation.ReasonForCancellation
-import models.{CheckMode, UserAnswers}
 import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage}
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.FakeRequest
@@ -137,9 +137,7 @@ class CheckRegistrationCancellationDetailsViewModelSpec extends SpecBase {
         val action = actionOf(row)
 
         action.href mustBe
-          routes.CancelRegistrationDateController
-            .onPageLoad(CheckMode)
-            .url
+          routes.CancelRegistrationDateController.onPageLoad().url
 
         action.content mustBe Text(messages("site.change"))
 
@@ -184,9 +182,7 @@ class CheckRegistrationCancellationDetailsViewModelSpec extends SpecBase {
         val action = actionOf(row)
 
         action.href mustBe
-          routes.ReasonForCancellationController
-            .onPageLoad(CheckMode)
-            .url
+          routes.ReasonForCancellationController.onPageLoad().url
 
         action.content mustBe Text(messages("site.change"))
 
@@ -227,9 +223,7 @@ class CheckRegistrationCancellationDetailsViewModelSpec extends SpecBase {
         val action = actionOf(row)
 
         action.href mustBe
-          routes.ChangeGroupRegistrationNumberController
-            .onPageLoad(CheckMode)
-            .url
+          routes.ChangeGroupRegistrationNumberController.onPageLoad().url
 
         action.content mustBe Text(messages("site.change"))
 

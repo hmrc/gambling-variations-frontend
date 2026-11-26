@@ -28,9 +28,9 @@
     p: Paragraph
 )
 
-@(form: Form[_], dateFormatted: String, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], dateFormatted: String, messageKey: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("cancelGroupRegistrationWarning.title"), Some(messages("cancelGroupRegistrationWarning.caption")))) {
+@layout(pageTitle = title(form, messages(s"$messageKey.title"), Some(messages(s"$messageKey.caption")))) {
 
     @formHelper(action = controllers.cancellation.routes.RegistrationCancellationWarningController.onSubmit(), Symbol("autoComplete") -> "off") {
 
@@ -38,16 +38,16 @@
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
         }
 
-        @caption(messages("cancelGroupRegistrationWarning.caption"))
+        @caption(messages(s"$messageKey.caption"))
 
-        @h1("cancelGroupRegistrationWarning.heading")
+        @h1(s"$messageKey.heading")
 
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("cancelGroupRegistrationWarning.legend", dateFormatted))
+                legend = LegendViewModel(messages(s"$messageKey.legend", dateFormatted))
             )
-            .withHint(HintViewModel(messages("cancelGroupRegistrationWarning.hint")).withCssClass("govuk-fieldset__legend--m"))
+            .withHint(HintViewModel(messages(s"$messageKey.hint")).withCssClass("govuk-fieldset__legend govuk-fieldset__legend govuk-fieldset__legend--m"))
         )
 
         @govukButton(

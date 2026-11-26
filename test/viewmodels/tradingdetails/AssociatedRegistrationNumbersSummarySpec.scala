@@ -18,9 +18,8 @@ package viewmodels.tradingdetails
 
 import base.SpecBase
 import pages.tradingdetails.associatedregnumbers.AssociatedRegistrationNumbersPage
-import play.api.i18n.Messages
 import play.api.Application
-import viewmodels.tradingdetails.AssociatedRegistrationNumbersSummary
+import play.api.i18n.Messages
 
 class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
 

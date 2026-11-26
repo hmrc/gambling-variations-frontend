@@ -48,14 +48,14 @@
 
 
     @if(!viewModel.hasFuturePeriods) {
-        @paragraph("You do not have any upcoming non-standard return periods.")
+        @paragraph(messages("returnPeriods.noUpcomingPeriods.p1"))
     }
 
     @if(!viewModel.isInLastNonStandardReturnPeriod){
         @paragraphWithLink(
             Some(messages("returnPeriods.nonStandard.notLastPeriod.p1")),
             messages("returnPeriods.nonStandard.notLastPeriod.p2"),
-            Some(messages("returnPeriods.nonStandard.notLastPeriod.p3")),
+            if(viewModel.hasFuturePeriods){Some(messages("returnPeriods.nonStandard.notLastPeriod.p3"))}else{Some(messages("returnPeriods.nonStandard.notLastPeriod.p4"))},
             "return-periods/see-confluence"
         )
     }
@@ -167,7 +167,10 @@
         } else {
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("returnPeriods.nonStandard.switchToStandard.caption")).withCssClass("govuk-fieldset__legend--m")
+                legend = LegendViewModel(
+                    if (!viewModel.hasFuturePeriods) messages("returnPeriods.noUpcomingPeriods.caption")
+                    else messages("returnPeriods.nonStandard.switchToStandard.caption")
+                ).withCssClass("govuk-fieldset__legend--m")
             )
             .withHint(
                 HintViewModel(messages("returnPeriods.nonStandard.switchToStandard.hint", viewModel.selectedMonths.map(messages.apply(_))*))

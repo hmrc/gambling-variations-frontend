@@ -17,7 +17,6 @@
 package forms.businesscontactdetails
 
 import forms.behaviours.StringFieldBehaviours
-import forms.businesscontactdetails.EmailAddressFormProvider
 import org.scalacheck.Gen
 import play.api.data.FormError
 

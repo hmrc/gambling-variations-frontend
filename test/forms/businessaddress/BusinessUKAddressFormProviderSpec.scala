@@ -17,7 +17,6 @@
 package forms.businessaddress
 
 import forms.behaviours.StringFieldBehaviours
-import forms.businessaddress.BusinessUKAddressFormProvider
 import models.Address
 import play.api.data.FormError
 

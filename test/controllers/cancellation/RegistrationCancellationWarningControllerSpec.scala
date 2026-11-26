@@ -18,10 +18,10 @@ package controllers.cancellation
 
 import base.SpecBase
 import forms.cancellation.RegistrationCancellationWarningFormProvider
-import models.{BusinessType, NormalMode, UserAnswers}
+import models.{BusinessType, UserAnswers}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.cancellation.{RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
-import pages.{BusinessTypePage, GroupMemberPage}
+import pages.cancellation.{CancelRegistrationDatePage, RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDeclarationPage}
+import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -38,168 +38,386 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
   private val currentDate = LocalDate.of(2026, 11, 3)
 
   private val currentDateFormatted = dateFormatter.format(currentDate)
+  private val nonGroupMessageKey: String = "cancelRegistrationWarning"
+  private val groupMessageKey: String = "cancelGroupRegistrationWarning"
+  private val nonGroupFlag: Boolean = false
+  private val groupFlag: Boolean = true
 
   private val formProvider = new RegistrationCancellationWarningFormProvider()
 
   private def form = formProvider()
 
-  private lazy val registrationCancellationWarningRoute =
+  private lazy val registrationCancellationWarningRouteNonGroup =
     controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoad().url
+
+  private lazy val registrationCancellationWarningRouteGroup =
+    controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoadGroup().url
 
   override val emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId)
     .setOriginal(RegistrationCancellationDeclarationPage, true)
     .success
     .value
-    .setOriginal(RegistrationCancellationDatePage, currentDate)
+    .setOriginal(DateOfRegistrationPage, currentDate)
     .success
     .value
-    .setOriginal(GroupMemberPage, false)
+    .setOriginal(CancelRegistrationDatePage, currentDate)
+    .success
+    .value
+    .setOriginal(GroupMemberPage, nonGroupFlag)
     .success
     .value
     .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
     .success
     .value
 
-  private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest(GET, registrationCancellationWarningRoute)
+  val emptyUserAnswersGroup: UserAnswers = emptyUserAnswers
+    .setOriginal(GroupMemberPage, groupFlag)
+    .success
+    .value
+
+  private def getRequestNonGroup(): FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest(GET, registrationCancellationWarningRouteNonGroup)
+
+  private def getRequestGroup(): FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest(GET, registrationCancellationWarningRouteGroup)
 
   "RegistrationCancellationWarning Controller" - {
 
-    "onPageLoad" - {
+    "nonGroup" - {
 
-      "must return OK and the correct view for a GET" in {
+      "onPageLoad" - {
 
-        val application = applicationBuilder(Some(emptyUserAnswers)).build()
+        "must return OK and the correct view for a GET" in {
 
-        running(application) {
-          val request = getRequest()
+          val application = applicationBuilder(Some(emptyUserAnswers)).build()
 
-          val result = route(application, request).value
+          running(application) {
+            val request = getRequestNonGroup()
 
-          val view = application.injector.instanceOf[RegistrationCancellationWarningView]
+            val result = route(application, request).value
 
-          status(result) mustEqual OK
-          contentAsString(result) mustEqual
-            view(form, currentDateFormatted, NormalMode)(request, messages(application)).toString
+            val view = application.injector.instanceOf[RegistrationCancellationWarningView]
+
+            status(result) mustEqual OK
+            contentAsString(result) mustEqual
+              view(form, currentDateFormatted, nonGroupMessageKey)(request, messages(application)).toString
+          }
+        }
+
+        "must redirect to systemError when CancelRegistrationDate is not present" in {
+          val userAnswers = emptyUserAnswers.remove(CancelRegistrationDatePage).success.value
+
+          val application = applicationBuilder(Some(userAnswers)).build()
+
+          running(application) {
+            val result = route(application, getRequestNonGroup()).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual
+              controllers.routes.SystemErrorController.onPageLoad().url
+          }
+        }
+
+        "must populate the view when the question has previously been answered" in {
+
+          val userAnswers = emptyUserAnswers.set(RegistrationCancellationCancelAgainYesNoPage, true).success.value
+
+          val application = applicationBuilder(Some(userAnswers)).build()
+
+          running(application) {
+            val request = getRequestNonGroup()
+
+            val view = application.injector.instanceOf[RegistrationCancellationWarningView]
+
+            val result = route(application, getRequestNonGroup()).value
+
+            status(result) mustEqual OK
+            contentAsString(result) mustEqual
+              view(form.fill(true), currentDateFormatted, nonGroupMessageKey)(request, messages(application)).toString
+          }
+        }
+
+        "must redirect when the registration cancellation value does not exist" in {
+
+          val userAnswers = emptyUserAnswers.remove(RegistrationCancellationDeclarationPage).success.value
+
+          val application = applicationBuilder(Some(userAnswers)).build()
+
+          running(application) {
+            val result = route(application, getRequestNonGroup()).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual
+              controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
+          }
+        }
+
+        "must redirect when the registration cancellation value is false" in {
+
+          val userAnswers = emptyUserAnswers.set(RegistrationCancellationDeclarationPage, false).success.value
+
+          val application = applicationBuilder(Some(userAnswers)).build()
+
+          running(application) {
+            val result = route(application, getRequestNonGroup()).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual
+              controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
+          }
         }
       }
 
-      "must populate the view when the question has previously been answered" in {
+      "onSubmit" - {
 
-        val userAnswers = emptyUserAnswers.set(RegistrationCancellationCancelAgainYesNoPage, true).success.value
+        "must return a Ok when valid data is submitted" in {
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-        val application = applicationBuilder(Some(userAnswers)).build()
+          running(application) {
+            val request =
+              FakeRequest(POST, registrationCancellationWarningRouteNonGroup)
+                .withFormUrlEncodedBody(("value", "true"))
 
-        running(application) {
-          val request = getRequest()
+            val result = route(application, request).value
 
-          val view = application.injector.instanceOf[RegistrationCancellationWarningView]
-
-          val result = route(application, getRequest()).value
-
-          status(result) mustEqual OK
-          contentAsString(result) mustEqual
-            view(form.fill(true), currentDateFormatted, NormalMode)(request, messages(application)).toString
+            status(result) mustEqual SEE_OTHER
+          }
         }
-      }
 
-      "must redirect when the registration cancellation value does not exist" in {
+        "must redirect to SystemError for a GET if CancelRegistrationDate is not found" in {
 
-        val userAnswers = emptyUserAnswers.remove(RegistrationCancellationDeclarationPage).success.value
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers.remove(GroupMemberPage).success.value)).build()
 
-        val application = applicationBuilder(Some(userAnswers)).build()
+          running(application) {
+            val request = FakeRequest(GET, registrationCancellationWarningRouteNonGroup)
 
-        running(application) {
-          val result = route(application, getRequest()).value
+            val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual
-            controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+          }
         }
-      }
 
-      "must redirect when the registration cancellation value is false" in {
+        "must return a Bad Request and errors when invalid data is submitted" in {
 
-        val userAnswers = emptyUserAnswers.set(RegistrationCancellationDeclarationPage, false).success.value
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-        val application = applicationBuilder(Some(userAnswers)).build()
+          running(application) {
+            val request =
+              FakeRequest(POST, registrationCancellationWarningRouteNonGroup)
+                .withFormUrlEncodedBody(("invalid value", "invalid value"))
 
-        running(application) {
-          val result = route(application, getRequest()).value
+            val boundForm = form.bind(Map("invalid value" -> "invalid value"))
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual
-            controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
+            val view = application.injector.instanceOf[RegistrationCancellationWarningView]
+
+            val result = route(application, request).value
+
+            status(result) mustEqual BAD_REQUEST
+            contentAsString(result) mustEqual view(boundForm, currentDateFormatted, nonGroupMessageKey)(request, messages(application)).toString
+          }
         }
+
+        "must redirect to SystemError for a GET if no existing data is found" in {
+
+          val application = applicationBuilder(userAnswers = None).build()
+
+          running(application) {
+            val request = FakeRequest(GET, registrationCancellationWarningRouteNonGroup)
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+          }
+        }
+
+        "must redirect to SystemError for a POST if no existing data is found" in {
+
+          val application = applicationBuilder(userAnswers = None).build()
+
+          running(application) {
+            val request =
+              FakeRequest(POST, registrationCancellationWarningRouteNonGroup)
+                .withFormUrlEncodedBody(("value", "answer"))
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+          }
+        }
+
       }
     }
 
-    "onSubmit" - {
+    "group" - {
 
-      "must return a Ok when valid data is submitted" in {
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      "onPageLoad" - {
 
-        running(application) {
-          val request =
-            FakeRequest(POST, registrationCancellationWarningRoute)
-              .withFormUrlEncodedBody(("value", "true"))
+        "must return OK and the correct view for a GET" in {
 
-          val result = route(application, request).value
+          val application = applicationBuilder(Some(emptyUserAnswersGroup)).build()
 
-          status(result) mustEqual SEE_OTHER
+          running(application) {
+            val request = getRequestGroup()
+
+            val result = route(application, request).value
+
+            val view = application.injector.instanceOf[RegistrationCancellationWarningView]
+
+            status(result) mustEqual OK
+            contentAsString(result) mustEqual
+              view(form, currentDateFormatted, groupMessageKey)(request, messages(application)).toString
+          }
+        }
+
+        "must redirect to systemError when CancelRegistrationDate is not present" in {
+          val userAnswers = emptyUserAnswersGroup.remove(CancelRegistrationDatePage).success.value
+
+          val application = applicationBuilder(Some(userAnswers)).build()
+
+          running(application) {
+            val result = route(application, getRequestGroup()).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual
+              controllers.routes.SystemErrorController.onPageLoad().url
+          }
+        }
+
+        "must populate the view when the question has previously been answered" in {
+
+          val userAnswers = emptyUserAnswersGroup.set(RegistrationCancellationCancelAgainYesNoPage, true).success.value
+
+          val application = applicationBuilder(Some(userAnswers)).build()
+
+          running(application) {
+            val request = getRequestGroup()
+
+            val view = application.injector.instanceOf[RegistrationCancellationWarningView]
+
+            val result = route(application, getRequestGroup()).value
+
+            status(result) mustEqual OK
+            contentAsString(result) mustEqual
+              view(form.fill(true), currentDateFormatted, groupMessageKey)(request, messages(application)).toString
+          }
+        }
+
+        "must redirect when the registration cancellation value does not exist" in {
+
+          val userAnswers = emptyUserAnswersGroup.remove(RegistrationCancellationDeclarationPage).success.value
+
+          val application = applicationBuilder(Some(userAnswers)).build()
+
+          running(application) {
+            val result = route(application, getRequestGroup()).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual
+              controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup().url
+          }
+        }
+
+        "must redirect when the registration cancellation value is false" in {
+
+          val userAnswers = emptyUserAnswersGroup.set(RegistrationCancellationDeclarationPage, false).success.value
+
+          val application = applicationBuilder(Some(userAnswers)).build()
+
+          running(application) {
+            val result = route(application, getRequestGroup()).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual
+              controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup().url
+          }
         }
       }
 
-      "must return a Bad Request and errors when invalid data is submitted" in {
+      "onSubmit" - {
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        "must return a Ok when valid data is submitted" in {
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswersGroup)).build()
 
-        running(application) {
-          val request =
-            FakeRequest(POST, registrationCancellationWarningRoute)
-              .withFormUrlEncodedBody(("invalid value", "invalid value"))
+          running(application) {
+            val request =
+              FakeRequest(POST, registrationCancellationWarningRouteGroup)
+                .withFormUrlEncodedBody(("value", "true"))
 
-          val boundForm = form.bind(Map("invalid value" -> "invalid value"))
+            val result = route(application, request).value
 
-          val view = application.injector.instanceOf[RegistrationCancellationWarningView]
-
-          val result = route(application, request).value
-
-          status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, currentDateFormatted, NormalMode)(request, messages(application)).toString
+            status(result) mustEqual SEE_OTHER
+          }
         }
-      }
 
-      "must redirect to SystemError for a GET if no existing data is found" in {
+        "must redirect to SystemError for a GET if CancelRegistrationDate is not found" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswersGroup.remove(GroupMemberPage).success.value)).build()
 
-        running(application) {
-          val request = FakeRequest(GET, registrationCancellationWarningRoute)
+          running(application) {
+            val request = FakeRequest(GET, registrationCancellationWarningRouteGroup)
 
-          val result = route(application, request).value
+            val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+          }
         }
-      }
 
-      "must redirect to SystemError for a POST if no existing data is found" in {
+        "must return a Bad Request and errors when invalid data is submitted" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswersGroup)).build()
 
-        running(application) {
-          val request =
-            FakeRequest(POST, registrationCancellationWarningRoute)
-              .withFormUrlEncodedBody(("value", "answer"))
+          running(application) {
+            val request =
+              FakeRequest(POST, registrationCancellationWarningRouteGroup)
+                .withFormUrlEncodedBody(("invalid value", "invalid value"))
 
-          val result = route(application, request).value
+            val boundForm = form.bind(Map("invalid value" -> "invalid value"))
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+            val view = application.injector.instanceOf[RegistrationCancellationWarningView]
+
+            val result = route(application, request).value
+
+            status(result) mustEqual BAD_REQUEST
+            contentAsString(result) mustEqual view(boundForm, currentDateFormatted, groupMessageKey)(request, messages(application)).toString
+          }
         }
-      }
 
+        "must redirect to SystemError for a GET if no existing data is found" in {
+
+          val application = applicationBuilder(userAnswers = None).build()
+
+          running(application) {
+            val request = FakeRequest(GET, registrationCancellationWarningRouteGroup)
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+          }
+        }
+
+        "must redirect to SystemError for a POST if no existing data is found" in {
+
+          val application = applicationBuilder(userAnswers = None).build()
+
+          running(application) {
+            val request =
+              FakeRequest(POST, registrationCancellationWarningRouteGroup)
+                .withFormUrlEncodedBody(("value", "answer"))
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+          }
+        }
+
+      }
     }
+
   }
 }

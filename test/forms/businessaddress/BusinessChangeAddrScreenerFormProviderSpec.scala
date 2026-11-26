@@ -17,7 +17,6 @@
 package forms.businessaddress
 
 import forms.behaviours.OptionFieldBehaviours
-import forms.businessaddress.BusinessChangeAddrScreenerFormProvider
 import models.BusinessChangeAddrOption
 import play.api.data.FormError
 

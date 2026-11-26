@@ -17,7 +17,6 @@
 package forms.businessaddress
 
 import forms.behaviours.StringFieldBehaviours
-import forms.businessaddress.BusinessAddressAdditionalInfoFormProvider
 import org.scalacheck.Gen
 
 class BusinessAddressAdditionalInfoFormProviderSpec extends StringFieldBehaviours {
