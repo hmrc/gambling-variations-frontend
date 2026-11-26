@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package viewmodels
+package viewmodels.licencespremises
 
 import base.SpecBase
 import forms.licencespremises.OtherLicencesAndPermitsNIFormProvider
-import models.licencespremises.OtherLicencesAndPermitsNI.getSelectedLicencesAndPermits
 import models.UserAnswers
+import models.licencespremises.OtherLicencesAndPermitsNI.getSelectedLicencesAndPermits
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Checkboxes, Text}
+import viewmodels.licencespremises.OtherLicencesAndPermitsNIViewModel
 
 class OtherLicencesAndPermitsNIViewModelSpec extends SpecBase {
 

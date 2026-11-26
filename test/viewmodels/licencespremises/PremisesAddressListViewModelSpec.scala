@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels
+package viewmodels.licencespremises
 
 import base.SpecBase
 import forms.licencespremises.PremisesAddressListFormProvider
@@ -27,6 +27,7 @@ import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
+import viewmodels.licencespremises.PremisesAddressListViewModel
 import views.html.licencespremises.PremisesAddressListView
 
 import java.time.LocalDate
