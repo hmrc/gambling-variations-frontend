@@ -1791,6 +1791,9 @@ registrationCancellationConfirmation.panel.p1 = Your reference is
 registrationCancellationConfirmation.p1 = We are reviewing your cancellation and will notify you if there are any issues.
 registrationCancellationConfirmation.p2 = It may take up to 48 hours for HMRC to approve your changes.
 
+registrationCancellationConfirmation.group.title = Cancel group registration
+registrationCancellationConfirmation.group.p1 = We are reviewing your group registration cancellation and will notify you if there are any issues.
+
 cancelGroupRegistrationDate.title = When is this group no longer liable to pay Machine Games Duty?
 cancelGroupRegistrationDate.heading = When is this group no longer liable to pay Machine Games Duty?
 cancelGroupRegistrationDate.caption = Cancel group registration

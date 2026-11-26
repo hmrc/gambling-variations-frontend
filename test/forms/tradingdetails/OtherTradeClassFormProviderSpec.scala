@@ -17,7 +17,6 @@
 package forms.tradingdetails
 
 import forms.behaviours.StringFieldBehaviours
-import forms.tradingdetails.OtherTradeClassFormProvider
 import org.scalacheck.Gen
 import play.api.data.FormError
 

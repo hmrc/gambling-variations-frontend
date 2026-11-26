@@ -221,7 +221,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual "/gambling-variations/there-is-a-problem-with-the-service"
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
           }
         }
       }
@@ -383,7 +383,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual "/gambling-variations/there-is-a-problem-with-the-service"
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
           }
         }
       }

@@ -17,7 +17,6 @@
 package forms.tradingdetails
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.tradingdetails.SeasonalBusinessFormProvider
 import play.api.data.FormError
 
 class SeasonalBusinessFormProviderSpec extends BooleanFieldBehaviours {

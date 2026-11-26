@@ -17,7 +17,6 @@
 package forms.businesscontactdetails
 
 import forms.behaviours.StringFieldBehaviours
-import forms.businesscontactdetails.BusinessContactNumberFormProvider
 import org.scalacheck.Gen
 
 class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {

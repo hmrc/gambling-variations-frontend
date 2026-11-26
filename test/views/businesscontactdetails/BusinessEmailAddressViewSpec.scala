@@ -17,7 +17,7 @@
 package views.businesscontactdetails
 
 import base.SpecBase
-import forms.BusinessTradingNameFormProvider
+import forms.businessname.BusinessTradingNameFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*

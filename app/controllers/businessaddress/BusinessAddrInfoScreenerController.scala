@@ -17,7 +17,7 @@
 package controllers.businessaddress
 
 import controllers.actions.*
-import forms.BusinessAddrInfoScreenerFormProvider
+import forms.businessaddress.BusinessAddrInfoScreenerFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.businessaddress.{AddBusinessAddressAdditionalInformationPage, BusinessAddressSubmittedPage}

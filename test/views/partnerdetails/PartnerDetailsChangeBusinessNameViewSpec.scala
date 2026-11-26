@@ -17,7 +17,7 @@
 package views.partnerdetails
 
 import base.SpecBase
-import forms.ChangeBusinessNameFormProvider
+import forms.businessname.ChangeBusinessNameFormProvider
 import models.{BusinessType, NormalMode}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
