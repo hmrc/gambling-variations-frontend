@@ -5,7 +5,7 @@ GET        /cancel-registration/group-registration-number                control
 POST       /cancel-registration/group-registration-number                controllers.cancellation.ChangeGroupRegistrationNumberController.onSubmit()
 
 GET        /cancel-registration/check                                    controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoad()
-GET        /cancel-group-registration/check                              controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoad()
+GET        /cancel-group-registration/check                              controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoadGroup()
 
 GET        /cancel-registration/no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onPageLoad()
 POST       /cancel-registration/no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onSubmit()

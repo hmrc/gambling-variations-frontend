@@ -130,7 +130,7 @@ class CheckRegistrationCancellationDetailsControllerSpec extends SpecBase {
             FakeRequest(
               GET,
               controllers.cancellation.routes.CheckRegistrationCancellationDetailsController
-                .onPageLoad()
+                .onPageLoadGroup()
                 .url
             )
 
