@@ -33,7 +33,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import viewmodels.OtherLicencesAndPermitsNIViewModel
+import viewmodels.licencespremises.OtherLicencesAndPermitsNIViewModel
 import views.html.licencespremises.OtherLicencesAndPermitsNIView
 
 import scala.concurrent.Future

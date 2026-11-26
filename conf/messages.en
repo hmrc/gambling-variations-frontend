@@ -979,7 +979,7 @@ partnerDateOfIncorporation.hint = For example, 27 3 2007
 partnerDateOfIncorporation.checkYourAnswersLabel = When was the partner’s date of incorporation?
 partnerDateOfIncorporation.error.required.all = Enter a date of incorporation for the partner
 partnerDateOfIncorporation.error.required.two = Date of incorporation must include a {0} and {1}
-partnerDateOfIncorporation.error.required = Date of incorporation must include {0}
+partnerDateOfIncorporation.error.required = Date of incorporation must include a {0}
 partnerDateOfIncorporation.error.invalid = 	Date of incorporation must be a real date
 partnerDateOfIncorporation.change.hidden = When was the partner’s date of incorporation?
 
@@ -1225,7 +1225,6 @@ premisesAddressList.message.submit = You must submit any changes you make to you
 premisesAddressList.question.add = Do you want to add another address?
 premisesAddressList.hint = You can only provide up to 100 premises addresses online
 premisesAddressList.max = You can only have up to 100 premises addresses. If you need to add a new address, you must change or remove a current one.
-premisesAddressList.records = Showing {0} to {1} of {2} records
 premisesAddressList.yesLabel = Yes, add another address
 premisesAddressList.records = Showing {0} to {1} of {2} records
 premisesAddressList.noLabel = No, return to check your licence and premises details
@@ -1447,6 +1446,7 @@ returnPeriods.nonStandard.notLastPeriod.p2 = must contact HMRC (opens in new tab
 returnPeriods.nonStandard.notLastPeriod.p3 = to change your non-standard return periods.
 
 returnPeriods.nonStandard.switchToStandard.caption = Do you want to switch to standard return periods?
+returnPeriods.noUpcomingPeriods.p1 = You do not have any upcoming non-standard return periods
 
 returnPeriods.nonStandard.notLast.error.required = Select yes if you want to use standard return periods
 returnPeriods.nonStandard.last.error.required = Select what you want to do when your last non-standard return period ends

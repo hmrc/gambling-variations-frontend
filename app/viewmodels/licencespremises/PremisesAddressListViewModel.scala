@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels
+package viewmodels.licencespremises
 
 import controllers.routes
 import models.licencespremises.PremisesDetails

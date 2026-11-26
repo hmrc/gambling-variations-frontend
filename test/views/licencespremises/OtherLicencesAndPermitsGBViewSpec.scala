@@ -26,7 +26,7 @@ import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import viewmodels.OtherLicencesAndPermitsGBViewModel
+import viewmodels.licencespremises.OtherLicencesAndPermitsGBViewModel
 import views.html.licencespremises.OtherLicencesAndPermitsGBView
 
 class OtherLicencesAndPermitsGBViewSpec extends SpecBase {

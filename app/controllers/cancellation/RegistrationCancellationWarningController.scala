@@ -21,8 +21,7 @@ import controllers.routes
 import forms.cancellation.RegistrationCancellationWarningFormProvider
 import models.NormalMode
 import navigation.Navigator
-import pages.DateOfRegistrationPage
-import pages.cancellation.{RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDeclarationPage}
+import pages.cancellation.{CancelRegistrationDatePage, RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDeclarationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -57,7 +56,7 @@ class RegistrationCancellationWarningController @Inject() (
   def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     checkScreen(request.userAnswers, CurrentScreen.Warning, false) {
       request.userAnswers
-        .get(DateOfRegistrationPage)
+        .get(CancelRegistrationDatePage)
         .fold(Redirect(routes.SystemErrorController.onPageLoad())) { cancellationDate =>
           val form = request.userAnswers
             .get(RegistrationCancellationCancelAgainYesNoPage)
@@ -73,15 +72,15 @@ class RegistrationCancellationWarningController @Inject() (
       val form = formProvider()
 
       request.userAnswers
-        .get(DateOfRegistrationPage)
-        .fold(Future.successful(Redirect(routes.SystemErrorController.onPageLoad().url))) { systemDate =>
+        .get(CancelRegistrationDatePage)
+        .fold(Future.successful(Redirect(routes.SystemErrorController.onPageLoad().url))) { cancellationDate =>
           form
             .bindFromRequest()
             .fold(
               formWithErrors =>
                 Future.successful(
                   BadRequest(
-                    view(formWithErrors, dateFormatter.format(systemDate), nonGroupKey)
+                    view(formWithErrors, dateFormatter.format(cancellationDate), nonGroupKey)
                   )
                 ),
               value =>
@@ -104,7 +103,7 @@ class RegistrationCancellationWarningController @Inject() (
 
   def onPageLoadGroup(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     request.userAnswers
-      .get(DateOfRegistrationPage)
+      .get(CancelRegistrationDatePage)
       .fold(Redirect(routes.SystemErrorController.onPageLoad())) { cancellationDate =>
         checkScreen(request.userAnswers, CurrentScreen.Warning, true) {
           val form = request.userAnswers
@@ -119,7 +118,7 @@ class RegistrationCancellationWarningController @Inject() (
   def onSubmitGroup(): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val form = formProvider()
     request.userAnswers
-      .get(DateOfRegistrationPage)
+      .get(CancelRegistrationDatePage)
       .fold(Future.successful(Redirect(routes.SystemErrorController.onPageLoad())))(cancellationDate =>
         Future.successful(
           Ok(view(form, dateFormatter.format(cancellationDate), groupKey))

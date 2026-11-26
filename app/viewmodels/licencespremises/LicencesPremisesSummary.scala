@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.licencespremises
+package viewmodels.licencespremises
 
 import controllers.licencespremises.routes
 import models.UserAnswers
