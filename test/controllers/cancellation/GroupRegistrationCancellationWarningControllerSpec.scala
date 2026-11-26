@@ -19,7 +19,7 @@ package controllers.cancellation
 import base.SpecBase
 import forms.cancellation.{CancelRegistrationDateFormProvider, RegistrationCancellationWarningFormProvider}
 import models.{BusinessType, RegistrationStatus, UserAnswers}
-import pages.cancellation.RegistrationCancellationDeclarationPage
+import pages.cancellation.{CancelRegistrationDatePage, RegistrationCancellationDeclarationPage}
 import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage, RegistrationStatusPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -37,7 +37,7 @@ class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
 
   val answers: UserAnswers =
     UserAnswers(userAnswersId)
-      .set(DateOfRegistrationPage, LocalDate.of(2026, 11, 25))
+      .set(CancelRegistrationDatePage, LocalDate.of(2026, 11, 25))
       .success
       .value
       .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)

@@ -255,7 +255,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
         contentAsString(result) mustEqual
           view(
             form,
-            dateFormatter.format(registrationDate),
+            dateFormatter.format(dateOfCancellation),
             nonGroupKeyWarning
           )(
             request,

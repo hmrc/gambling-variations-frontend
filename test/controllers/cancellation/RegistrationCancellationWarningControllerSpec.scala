@@ -20,7 +20,7 @@ import base.SpecBase
 import forms.cancellation.RegistrationCancellationWarningFormProvider
 import models.{BusinessType, UserAnswers}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.cancellation.{RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDeclarationPage}
+import pages.cancellation.{CancelRegistrationDatePage, RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDeclarationPage}
 import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
@@ -53,6 +53,9 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
     .success
     .value
     .setOriginal(DateOfRegistrationPage, currentDate)
+    .success
+    .value
+    .setOriginal(CancelRegistrationDatePage, currentDate)
     .success
     .value
     .setOriginal(GroupMemberPage, isGroupFlag)
