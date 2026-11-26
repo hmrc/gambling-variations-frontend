@@ -22,12 +22,13 @@ import controllers.routes
 import forms.returnperiods.EnterNonStandardPeriodDateFormProvider
 import models.{BusinessDetails, GamblingReturnPeriods, Mode, NormalMode}
 import navigation.Navigator
-import pages.returnperiods.{ChooseReturnPeriodsPage, NonStandardPeriodDatePages}
+import pages.returnperiods.{ChooseReturnPeriodsPage, NonStandardPeriodDatePages, ReturnPeriodsChangesPage, ReturnPeriodsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import services.returnperiods.NstpPeriodCalculator
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkIfChanged
 import views.html.returnperiods.EnterNonStandardPeriodDateView
 
 import java.time.{Clock, LocalDate}
@@ -210,11 +211,40 @@ class EnterNonStandardPeriodDateController @Inject() (
     page: pages.QuestionPage[LocalDate],
     value: LocalDate,
     mode: Mode
-  )(implicit request: models.requests.DataRequest[AnyContent]): Future[Result] =
+  )(implicit request: models.requests.DataRequest[AnyContent]): Future[Result] = {
+
+    val isChanged: Boolean =
+      checkIfChanged(
+        value,
+        request.userAnswers,
+        page,
+        ReturnPeriodsChangesPage
+      )
+
     for {
-      updatedAnswers <- Future.fromTry(request.userAnswers.set(page, value))
-      _              <- sessionRepository.set(updatedAnswers)
-    } yield Redirect(navigator.nextPage(page, mode, updatedAnswers))
+      updatedAnswers <- Future.fromTry(
+                          request.userAnswers
+                            .set(page, value)
+                            .flatMap(
+                              _.set(
+                                ReturnPeriodsSubmittedPage,
+                                true
+                              )
+                            )
+                            .flatMap(
+                              _.set(
+                                ReturnPeriodsChangesPage,
+                                isChanged
+                              )
+                            )
+                        )
+
+      _ <- sessionRepository.set(updatedAnswers)
+
+    } yield Redirect(
+      navigator.nextPage(page, mode, updatedAnswers)
+    )
+  }
 
   private def getPeriodEndDate(
     businessDetails: BusinessDetails,

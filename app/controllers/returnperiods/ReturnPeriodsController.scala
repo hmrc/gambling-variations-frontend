@@ -111,6 +111,12 @@ class ReturnPeriodsController @Inject() (
               val hasChangedType =
                 previousChoice.exists(_ != value)
 
+              val returnPeriodsChanged =
+                hasChangedType ||
+                  request.userAnswers
+                    .get(ReturnPeriodsChangesPage)
+                    .contains(true)
+
               val answersToUpdate =
                 if (hasChangedType) {
                   clearReturnPeriodAnswers(request.userAnswers)
@@ -122,10 +128,23 @@ class ReturnPeriodsController @Inject() (
                 answersAfterClear <- Future.fromTry(answersToUpdate)
 
                 updatedAnswers <- Future.fromTry(
-                                    answersAfterClear.set(
-                                      ReturnPeriodsChoicePage,
-                                      value
-                                    )
+                                    answersAfterClear
+                                      .set(
+                                        ReturnPeriodsChoicePage,
+                                        value
+                                      )
+                                      .flatMap(
+                                        _.set(
+                                          ReturnPeriodsSubmittedPage,
+                                          true
+                                        )
+                                      )
+                                      .flatMap(
+                                        _.set(
+                                          ReturnPeriodsChangesPage,
+                                          returnPeriodsChanged
+                                        )
+                                      )
                                   )
 
                 _ <- sessionRepository.set(updatedAnswers)

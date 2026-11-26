@@ -48,7 +48,7 @@
 
 
     @if(!viewModel.hasFuturePeriods) {
-        @paragraph("You do not have any upcoming non-standard return periods.")
+        @paragraph(messages("returnPeriods.nonStandard.switchToStandard.youDoNot.p1"))
     }
 
     @if(!viewModel.isInLastNonStandardReturnPeriod){

@@ -300,7 +300,6 @@ POST       /change-registration-details/return-periods/change-select  controller
 
 GET        /change-registration-details/return-periods                       controllers.returnperiods.ReturnPeriodsController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/return-periods                       controllers.returnperiods.ReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
-
 GET        /change-registration-details/change-return-periods                 controllers.returnperiods.ReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/change-return-periods                 controllers.returnperiods.ReturnPeriodsController.onSubmit(mode: Mode = CheckMode)
 

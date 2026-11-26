@@ -25,7 +25,7 @@ import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, NonStandardPeriodDatePages}
+import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, NonStandardPeriodDatePages, ReturnPeriodsChangesPage, ReturnPeriodsSubmittedPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -272,6 +272,18 @@ class EnterNonStandardPeriodDateControllerSpec extends SpecBase with MockitoSuga
             .set(
               NonStandardPeriodDatePages(periodNumber),
               validAnswer
+            )
+            .success
+            .value
+            .set(
+              ReturnPeriodsSubmittedPage,
+              true
+            )
+            .success
+            .value
+            .set(
+              ReturnPeriodsChangesPage,
+              true
             )
             .success
             .value

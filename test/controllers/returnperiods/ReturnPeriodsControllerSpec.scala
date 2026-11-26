@@ -1025,6 +1025,18 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
             )
             .success
             .value
+            .set(
+              ReturnPeriodsSubmittedPage,
+              true
+            )
+            .success
+            .value
+            .set(
+              ReturnPeriodsChangesPage,
+              true
+            )
+            .success
+            .value
 
         val application =
           applicationBuilder(
@@ -1111,7 +1123,22 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
           val expectedAnswers =
             userAnswersWithNonStandardDates
-              .set(ReturnPeriodsChoicePage, NoReturnPeriodsSet.Nonstandard)
+              .set(
+                ReturnPeriodsChoicePage,
+                NoReturnPeriodsSet.Nonstandard
+              )
+              .success
+              .value
+              .set(
+                ReturnPeriodsSubmittedPage,
+                true
+              )
+              .success
+              .value
+              .set(
+                ReturnPeriodsChangesPage,
+                false
+              )
               .success
               .value
 
@@ -1195,7 +1222,26 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
           val result = route(application, request).value
 
-          val expectedAnswers = userAnswersNoPeriodsSet.set(ReturnPeriodsChoicePage, validAnswer).success.value
+          val expectedAnswers =
+            userAnswersNoPeriodsSet
+              .set(
+                ReturnPeriodsChoicePage,
+                validAnswer
+              )
+              .success
+              .value
+              .set(
+                ReturnPeriodsSubmittedPage,
+                true
+              )
+              .success
+              .value
+              .set(
+                ReturnPeriodsChangesPage,
+                false
+              )
+              .success
+              .value
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url

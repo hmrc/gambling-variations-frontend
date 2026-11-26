@@ -109,6 +109,12 @@ class ChooseReturnPeriodsController @Inject() (
                 val hasChanged =
                   currentReturnPeriodsId.forall(_ != value.returnPeriodsId)
 
+                val returnPeriodsChanged =
+                  hasChanged ||
+                    request.userAnswers
+                      .get(ReturnPeriodsChangesPage)
+                      .contains(true)
+
                 val answers =
                   if (hasChanged) {
                     clearNstpDates(request.userAnswers)
@@ -132,6 +138,18 @@ class ChooseReturnPeriodsController @Inject() (
                             variant == ReturnPeriodsVariant.NonStandard
                           )
                         )
+                        .flatMap(
+                          _.set(
+                            ReturnPeriodsChangesPage,
+                            returnPeriodsChanged
+                          )
+                        )
+                        .flatMap(
+                          _.set(
+                            ReturnPeriodsSubmittedPage,
+                            true
+                          )
+                        )
                     )
 
                   _ <- sessionRepository.set(updatedAnswers)
@@ -152,6 +170,7 @@ class ChooseReturnPeriodsController @Inject() (
                     )
                   }
                 }
+
               }
             )
 
@@ -194,7 +213,14 @@ class ChooseReturnPeriodsController @Inject() (
           .map {
 
             case true =>
-              ReturnPeriodsVariant.NonStandard
+              userAnswers.get(NonStandardNotLastReturnPeriodsYesNoPage) match {
+
+                case Some(true) =>
+                  ReturnPeriodsVariant.Standard
+
+                case _ =>
+                  ReturnPeriodsVariant.NonStandard
+              }
 
             case false =>
               userAnswers.get(StandardReturnPeriodsPage) match {
