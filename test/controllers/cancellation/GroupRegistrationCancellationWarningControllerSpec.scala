@@ -37,7 +37,7 @@ class GroupRegistrationCancellationWarningControllerSpec extends SpecBase {
 
   val answers: UserAnswers =
     UserAnswers(userAnswersId)
-      .set(DateOfRegistrationPage, LocalDate.now())
+      .set(DateOfRegistrationPage, LocalDate.of(2026, 11, 25))
       .success
       .value
       .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
