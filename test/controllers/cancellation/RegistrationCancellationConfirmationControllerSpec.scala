@@ -24,7 +24,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.cancellation.RegistrationCancellationConfirmationView
 
-//TODO move to another class
 class RegistrationCancellationConfirmationControllerSpec extends SpecBase {
 
   private val cancellationConfirmationRefNumber = "ABCDEFGH"

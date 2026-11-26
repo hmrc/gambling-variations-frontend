@@ -49,12 +49,10 @@ class ReasonForCancellationController @Inject() (
   val form: Form[ReasonForCancellation] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-
     val preparedForm = request.userAnswers.get(ReasonForCancellationPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
-
     Ok(view(preparedForm))
   }
 

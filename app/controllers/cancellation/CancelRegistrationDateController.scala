@@ -53,7 +53,6 @@ class CancelRegistrationDateController @Inject() (
     with CancellationEntrypointDecider
     with I18nSupport {
 
-  // TODO naming
   private val groupKey = "cancelGroupRegistrationDate"
   private val nonGroupKey = "cancelRegistrationDate"
 
@@ -105,7 +104,6 @@ class CancelRegistrationDateController @Inject() (
       }
     }
 
-  // TODO check screen
   def onSubmit(): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       request.userAnswers.get(DateOfRegistrationPage).fold(Future.successful(systemErrorRedirect)) { registrationDate =>
@@ -157,8 +155,6 @@ class CancelRegistrationDateController @Inject() (
       }
     }
 
-  ////////////////////////////////
-
   def onPageLoadGroup(): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
       checkScreen(request.userAnswers, CurrentScreen.Cancel, true) {
@@ -188,7 +184,6 @@ class CancelRegistrationDateController @Inject() (
       }
     }
 
-  // TODO check screen
   def onSubmitGroup(): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       request.userAnswers

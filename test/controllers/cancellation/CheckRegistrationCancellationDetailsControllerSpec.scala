@@ -90,4 +90,6 @@ class CheckRegistrationCancellationDetailsControllerSpec extends SpecBase {
       }
     }
   }
+
+  // TODO add group version
 }

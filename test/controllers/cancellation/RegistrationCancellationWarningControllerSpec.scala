@@ -222,7 +222,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
       val answers: UserAnswers =
         UserAnswers(userAnswersId)
-          .set(DateOfRegistrationPage, LocalDate.of(2026, 11, 25))
+          .set(CancelRegistrationDatePage, LocalDate.of(2026, 11, 25))
           .success
           .value
           .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)

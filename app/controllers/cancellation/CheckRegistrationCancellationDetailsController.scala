@@ -20,7 +20,7 @@ import controllers.actions.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.checkAnswers.cancellation.CheckRegistrationCancellationDetailsViewModel
+import viewmodels.checkAnswers.cancellation.{CheckGroupRegistrationCancellationDetailsViewModel, CheckRegistrationCancellationDetailsViewModel}
 import views.html.cancellation.CheckRegistrationCancellationDetailsView
 
 import javax.inject.Inject
@@ -36,9 +36,12 @@ class CheckRegistrationCancellationDetailsController @Inject() (
     with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val summaryList =
-      CheckRegistrationCancellationDetailsViewModel.summaryList(request.userAnswers)
+    val summaryList = CheckRegistrationCancellationDetailsViewModel.summaryList(request.userAnswers)
+    Ok(view(summaryList))
+  }
 
+  def onPageLoadGroup(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    val summaryList = CheckGroupRegistrationCancellationDetailsViewModel.summaryList(request.userAnswers)
     Ok(view(summaryList))
   }
 }
