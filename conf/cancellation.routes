@@ -1,0 +1,34 @@
+GET        /cancel-registration/why-are-you-cancelling                   controllers.cancellation.ReasonForCancellationController.onPageLoad()
+POST       /cancel-registration/why-are-you-cancelling                   controllers.cancellation.ReasonForCancellationController.onSubmit()
+
+GET        /cancel-registration/group-registration-number                controllers.cancellation.ChangeGroupRegistrationNumberController.onPageLoad()
+POST       /cancel-registration/group-registration-number                controllers.cancellation.ChangeGroupRegistrationNumberController.onSubmit()
+
+GET        /cancel-registration/check                                    controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoad()
+GET        /cancel-group-registration/check                              controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoadGroup()
+
+GET        /cancel-registration/no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onPageLoad()
+POST       /cancel-registration/no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onSubmit()
+
+GET        /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onPageLoadGroup()
+POST       /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onSubmitGroup()
+
+GET        /cancel-registration/reviewing-cancellation-request          controllers.cancellation.RegistrationCancellationWarningController.onPageLoad()
+POST       /cancel-registration/reviewing-cancellation-request          controllers.cancellation.RegistrationCancellationWarningController.onSubmit()
+
+GET        /cancel-group-registration/reviewing-cancellation-request    controllers.cancellation.RegistrationCancellationWarningController.onPageLoadGroup()
+POST       /cancel-group-registration/reviewing-cancellation-request    controllers.cancellation.RegistrationCancellationWarningController.onSubmitGroup()
+
+GET        /cancel-registration/already-cancelled                       controllers.cancellation.RegistrationCancellationLockedController.onPageLoad()
+GET        /cancel-group-registration/already-cancelled                 controllers.cancellation.RegistrationCancellationLockedController.onPageLoadGroup()
+
+GET        /cancel-registration/submitted                               controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad()
+GET        /cancel-group-registration/submitted                         controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoadGroup()
+
+GET        /cancel-registration/declaration                             controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad()
+POST       /cancel-registration/declaration                             controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit()
+
+GET        /cancel-group-registration/declaration                       controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad()
+POST       /cancel-group-registration/declaration                       controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit()
+
+GET        /:regNumber/cancel-registration                              controllers.cancellation.CancelRegistrationDateController.onLanding(regNumber: String)

@@ -19,17 +19,16 @@ package viewmodels.licencespremises
 import base.SpecBase
 import controllers.licencespremises.routes
 import models.UserAnswers
+import models.licencespremises.*
 import models.licencespremises.LicencesAndPremisesRadioOptions.{ByPost, Online}
 import models.licencespremises.OtherLicencesAndPermitsGB.{clubMachine, clubPremises, familyEntertainment, prizeGaming}
 import models.licencespremises.OtherLicencesAndPermitsNI.{amusement, bingo, regCert, serveAlcohol}
-import models.licencespremises.*
 import org.jsoup.Jsoup
 import pages.licencespremises.*
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.licencespremises.CheckLicencesAndPremisesViewModel
 
 import scala.jdk.CollectionConverters.*
 
