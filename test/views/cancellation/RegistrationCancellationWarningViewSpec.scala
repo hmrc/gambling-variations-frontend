@@ -29,6 +29,9 @@ import java.time.format.DateTimeFormatter
 
 class RegistrationCancellationWarningViewSpec extends SpecBase {
 
+  private val nonGroupKey = "cancelRegistrationWarning"
+  private val groupKey = "cancelGroupRegistrationWarning"
+
   trait Setup {
 
     private val app = applicationBuilder().build()
@@ -54,7 +57,7 @@ class RegistrationCancellationWarningViewSpec extends SpecBase {
 
     val form = formProvider()
 
-    def document(formToRender: play.api.data.Form[Boolean] = form, key: String = "cancelGroupRegistrationWarning"): Document = {
+    def document(formToRender: play.api.data.Form[Boolean] = form, key: String): Document = {
       val html = view(formToRender, currentDateFormatted, key)(request, messages)
       Jsoup.parse(html.body)
     }
@@ -62,59 +65,118 @@ class RegistrationCancellationWarningViewSpec extends SpecBase {
 
   "RegistrationCancellationWarningView" - {
 
-    "must render page correctly" in new Setup {
+    "group" - {
 
-      val doc = document()
+      "must render page correctly" in new Setup {
 
-      doc.title must include(
-        messages("cancelGroupRegistrationWarning.title")
-      )
+        val doc = document(key = groupKey)
 
-      doc
-        .select(".govuk-caption-l")
-        .text() must include(
-        messages("cancelGroupRegistrationDate.caption")
-      )
+        doc.title must include(
+          messages("cancelGroupRegistrationWarning.title")
+        )
 
-      doc
-        .select("h1")
-        .text() mustBe
-        messages("cancelGroupRegistrationWarning.heading")
+        doc
+          .select(".govuk-caption-l")
+          .text() must include(
+          messages("cancelGroupRegistrationWarning.caption")
+        )
 
-      doc
-        .body()
-        .text() must include
-      messages("cancelGroupRegistrationWarning.paragraph")
+        doc
+          .select("h1")
+          .text() mustBe
+          messages("cancelGroupRegistrationWarning.heading")
 
-      doc
-        .select("button.govuk-button")
-        .text() must include(
-        messages("site.continue")
-      )
+        doc
+          .body()
+          .text() must include
+        messages("cancelGroupRegistrationWarning.paragraph")
 
-      doc
-        .select(".govuk-error-summary")
-        .size() mustEqual 0
+        doc
+          .select("button.govuk-button")
+          .text() must include(
+          messages("site.continue")
+        )
+
+        doc
+          .select(".govuk-error-summary")
+          .size() mustEqual 0
+      }
+
+      "must render error summary when form has errors" in new Setup {
+
+        val boundForm =
+          form.bind(Map("reasonForCancellation" -> ""))
+
+        val html = view(boundForm, currentDateFormatted, groupKey)(request, messages)
+        val doc: Document = Jsoup.parse(html.body)
+
+        doc
+          .select(".govuk-error-summary")
+          .size() mustEqual 1
+
+        doc
+          .select(".govuk-error-summary")
+          .text must include(
+          messages("cancelGroupRegistrationWarning.error.required")
+        )
+      }
     }
 
-    "must render error summary when form has errors" in new Setup {
+    "noNgroup" - {
 
-      val boundForm =
-        form.bind(Map("reasonForCancellation" -> ""))
+      "must render page correctly" in new Setup {
 
-      val key: String = ""
-      val html = view(boundForm, currentDateFormatted, key)(request, messages)
-      val doc: Document = Jsoup.parse(html.body)
+        val doc = document(key = nonGroupKey)
 
-      doc
-        .select(".govuk-error-summary")
-        .size() mustEqual 1
+        doc.title must include(
+          messages("cancelRegistrationWarning.title")
+        )
 
-      doc
-        .select(".govuk-error-summary")
-        .text must include(
-        messages("cancelGroupRegistrationWarning.error.required")
-      )
+        doc
+          .select(".govuk-caption-l")
+          .text() must include(
+          messages("cancelRegistrationWarning.caption")
+        )
+
+        doc
+          .select("h1")
+          .text() mustBe
+          messages("cancelRegistrationWarning.heading")
+
+        doc
+          .body()
+          .text() must include
+        messages("cancelRegistrationWarning.paragraph")
+
+        doc
+          .select("button.govuk-button")
+          .text() must include(
+          messages("site.continue")
+        )
+
+        doc
+          .select(".govuk-error-summary")
+          .size() mustEqual 0
+      }
+
+      "must render error summary when form has errors" in new Setup {
+
+        val boundForm =
+          form.bind(Map("reasonForCancellation" -> ""))
+
+        val html = view(boundForm, currentDateFormatted, nonGroupKey)(request, messages)
+        val doc: Document = Jsoup.parse(html.body)
+
+        doc
+          .select(".govuk-error-summary")
+          .size() mustEqual 1
+
+        doc
+          .select(".govuk-error-summary")
+          .text must include(
+          messages("cancelRegistrationWarning.error.required")
+        )
+      }
     }
 
   }

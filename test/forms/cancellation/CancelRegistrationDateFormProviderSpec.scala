@@ -38,7 +38,8 @@ class CancelRegistrationDateFormProviderSpec extends DateBehaviours {
   private val form =
     new CancelRegistrationDateFormProvider()(
       registrationDate,
-      maximumValidDate
+      maximumValidDate,
+      "cancelRegistrationDate"
     )
 
   private def dateData(date: LocalDate): Map[String, String] =

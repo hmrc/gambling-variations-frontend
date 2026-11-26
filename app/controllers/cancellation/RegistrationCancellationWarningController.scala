@@ -32,9 +32,6 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-//TODO lock uses the same view, a few messsages maybe needs to be different. key is enough
-//https://jira.tools.tax.service.gov.uk/browse/DTR-9460
-//https://jira.tools.tax.service.gov.uk/browse/DTR-9459
 class RegistrationCancellationWarningController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,

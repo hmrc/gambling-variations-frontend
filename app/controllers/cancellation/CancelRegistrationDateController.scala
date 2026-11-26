@@ -33,9 +33,6 @@ import java.time.{Clock, LocalDate}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-//TODO slight message difference, but key should be enough to handle it
-//https://jira.tools.tax.service.gov.uk/browse/DTR-9154
-//https://jira.tools.tax.service.gov.uk/browse/DTR-9089
 class CancelRegistrationDateController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
@@ -78,7 +75,7 @@ class CancelRegistrationDateController @Inject() (
               maximumValidDate.plusDays(1)
 
             val form =
-              formProvider(registrationDate, maximumValidDate)
+              formProvider(registrationDate, maximumValidDate, nonGroupKey)
 
             val middleOfDateRange =
               middleDate(registrationDate, firstInvalidDate)
@@ -114,7 +111,7 @@ class CancelRegistrationDateController @Inject() (
           maximumValidDate.plusDays(1)
 
         val form =
-          formProvider(registrationDate, maximumValidDate)
+          formProvider(registrationDate, maximumValidDate, nonGroupKey)
 
         val middleOfDateRange =
           middleDate(registrationDate, firstInvalidDate)
@@ -166,7 +163,7 @@ class CancelRegistrationDateController @Inject() (
             maximumValidDate.plusDays(1)
 
           val form =
-            formProvider(dateOfRegistration, maximumValidDate)
+            formProvider(dateOfRegistration, maximumValidDate, groupKey)
 
           val middleOfDateRange =
             middleDate(dateOfRegistration, firstInvalidDate)
@@ -196,7 +193,7 @@ class CancelRegistrationDateController @Inject() (
             maximumValidDate.plusDays(1)
 
           val form =
-            formProvider(dateOfRegistration, maximumValidDate)
+            formProvider(dateOfRegistration, maximumValidDate, groupKey)
 
           val middleOfDateRange =
             middleDate(dateOfRegistration, firstInvalidDate)

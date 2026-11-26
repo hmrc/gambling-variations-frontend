@@ -87,7 +87,8 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
     def form =
       formProvider(
         registrationDate,
-        maximumValidDate
+        maximumValidDate,
+        messageKey
       )
 
     val onwardRoute =
@@ -604,14 +605,15 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
 
     val formProvider = new CancelRegistrationDateFormProvider()
 
-    def form = formProvider(registrationDate, maximumValidDate)
+    val messageKey: String = "cancelGroupRegistrationDate"
+
+    def form = formProvider(registrationDate, maximumValidDate, messageKey)
 
     val onwardRoute = Call("GET", "/foo")
 
     lazy val cancelGroupRegistrationDateRoute =
       controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup().url
 
-    val messageKey: String = "cancelGroupRegistrationDate"
     val isGroup: Boolean = true
 
     val answers: UserAnswers = UserAnswers(userAnswersId)

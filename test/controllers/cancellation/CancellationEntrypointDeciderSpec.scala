@@ -107,6 +107,26 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
     .success
     .value
 
+  "redirects to system error when group value is missing" in {
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers.remove(GroupMemberPage).success.value))
+      .overrides(
+        bind[Clock]
+          .toInstance(fixedClock)
+      )
+      .build()
+
+    running(application) {
+      val request = FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual
+        controllers.routes.SystemErrorController.onPageLoad().url
+    }
+  }
+
   "nonGroup" - {
 
     val userAnswersHmrcCancelledNonGroup = emptyUserAnswers.setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled).success.value
@@ -131,7 +151,8 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
 
     def form = formProvider(
       registrationDate,
-      maximumValidDate
+      maximumValidDate,
+      nonGroupKeyDate
     )
 
     "DateController" - {
@@ -439,7 +460,8 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
 
     def form = formProvider(
       registrationDate,
-      maximumValidDate
+      maximumValidDate,
+      groupKeyWarning
     )
 
     "DateController" - {

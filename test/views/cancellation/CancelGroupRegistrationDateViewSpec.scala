@@ -17,7 +17,7 @@
 package views.cancellation
 
 import base.SpecBase
-import forms.cancellation.{CancelGroupRegistrationDateFormProvider, CancelRegistrationDateFormProvider}
+import forms.cancellation.CancelRegistrationDateFormProvider
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
@@ -52,14 +52,13 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
         .instanceOf[play.api.i18n.MessagesApi]
         .preferred(request)
 
-    val form: Form[LocalDate] = (new CancelRegistrationDateFormProvider())(registrationDate, maximumValidDate)
+    val messageKey: String = "cancelGroupRegistrationDate"
+    val form: Form[LocalDate] = (new CancelRegistrationDateFormProvider())(registrationDate, maximumValidDate, messageKey)
 
     def document(
       formToRender: play.api.data.Form[LocalDate] = form
     ): Document = {
-      val messageKey: String = "cancelGroupRegistrationDate"
       val isGroup: Boolean = true
-
       val html = view(formToRender, registrationDate, firstInvalidDate, middleOfDateRange, messageKey, isGroup)(request, messages)
 
       Jsoup.parse(html.body)
@@ -199,42 +198,42 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
 
     // TODO this test fails because we use the same form provider for
     // group and nongroup, and this form only handles "one type" of messages currently
-//    "must render error summary when form has errors" in new Setup {
-//
-//      val boundForm: Form[LocalDate] = form.bind(
-//        Map(
-//          "value.day"   -> "",
-//          "value.month" -> "",
-//          "value.year"  -> ""
-//        )
-//      )
-//
-//      val doc = document(boundForm)
-//
-//      doc
-//        .select(".govuk-list")
-//        .size() mustEqual 1
-//
-//      println(
-//        doc
-//          .select(".govuk-list")
-//          .text()
-//      )
-//
-//      println(
-//        messages(
-//          "cancelGroupRegistrationDate.error.required.all"
-//        )
-//      )
-//
-//      doc
-//        .select(".govuk-list")
-//        .text() must include(
-//        messages(
-//          "cancelGroupRegistrationDate.error.required.all"
-//        )
-//      )
-//    }
+    "must render error summary when form has errors" in new Setup {
+
+      val boundForm: Form[LocalDate] = form.bind(
+        Map(
+          "value.day"   -> "",
+          "value.month" -> "",
+          "value.year"  -> ""
+        )
+      )
+
+      val doc = document(boundForm)
+
+      doc
+        .select(".govuk-list")
+        .size() mustEqual 1
+
+      println(
+        doc
+          .select(".govuk-list")
+          .text()
+      )
+
+      println(
+        messages(
+          "cancelGroupRegistrationDate.error.required.all"
+        )
+      )
+
+      doc
+        .select(".govuk-list")
+        .text() must include(
+        messages(
+          "cancelGroupRegistrationDate.error.required.all"
+        )
+      )
+    }
 
     "must render outside boundaries error" in new Setup {
 

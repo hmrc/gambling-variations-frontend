@@ -25,9 +25,6 @@ import views.html.cancellation.RegistrationCancellationLockedView
 
 import javax.inject.Inject
 
-//TODO lock uses the same view, a single message maybe needs to be different.
-//https://jira.tools.tax.service.gov.uk/browse/DTR-9343
-//https://jira.tools.tax.service.gov.uk/browse/DTR-9342
 class RegistrationCancellationLockedController @Inject() (
   override val messagesApi: MessagesApi,
   appConfig: FrontendAppConfig,

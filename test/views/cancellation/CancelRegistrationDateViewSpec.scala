@@ -60,12 +60,12 @@ class CancelRegistrationDateViewSpec extends SpecBase {
     val formProvider =
       new CancelRegistrationDateFormProvider()
 
-    val form: Form[LocalDate] = formProvider(registrationDate, maximumValidDate)
+    val messageKey: String = "cancelRegistrationDate"
+
+    val form: Form[LocalDate] = formProvider(registrationDate, maximumValidDate, messageKey)
 
     def document(formToRender: Form[LocalDate] = form): Document = {
-      val messageKey: String = "cancelRegistrationDate"
       val isGroup: Boolean = false
-
       val html =
         view(formToRender, registrationDate, firstInvalidDate, middleOfDateRange, messageKey, isGroup)(request, messages)
 

@@ -104,6 +104,20 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
           }
         }
 
+        "must redirect to systemError when CancelRegistrationDate is not present" in {
+          val userAnswers = emptyUserAnswers.remove(CancelRegistrationDatePage).success.value
+
+          val application = applicationBuilder(Some(userAnswers)).build()
+
+          running(application) {
+            val result = route(application, getRequestNonGroup()).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual
+              controllers.routes.SystemErrorController.onPageLoad().url
+          }
+        }
+
         "must populate the view when the question has previously been answered" in {
 
           val userAnswers = emptyUserAnswers.set(RegistrationCancellationCancelAgainYesNoPage, true).success.value
@@ -167,6 +181,20 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
+          }
+        }
+
+        "must redirect to SystemError for a GET if CancelRegistrationDate is not found" in {
+
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers.remove(GroupMemberPage).success.value)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, registrationCancellationWarningRouteNonGroup)
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
           }
         }
 
@@ -244,6 +272,20 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
           }
         }
 
+        "must redirect to systemError when CancelRegistrationDate is not present" in {
+          val userAnswers = emptyUserAnswersGroup.remove(CancelRegistrationDatePage).success.value
+
+          val application = applicationBuilder(Some(userAnswers)).build()
+
+          running(application) {
+            val result = route(application, getRequestGroup()).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual
+              controllers.routes.SystemErrorController.onPageLoad().url
+          }
+        }
+
         "must populate the view when the question has previously been answered" in {
 
           val userAnswers = emptyUserAnswersGroup.set(RegistrationCancellationCancelAgainYesNoPage, true).success.value
@@ -298,7 +340,6 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
         "must return a Ok when valid data is submitted" in {
           val application = applicationBuilder(userAnswers = Some(emptyUserAnswersGroup)).build()
-          println(emptyUserAnswersGroup.toString)
 
           running(application) {
             val request =
@@ -308,6 +349,20 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
+          }
+        }
+
+        "must redirect to SystemError for a GET if CancelRegistrationDate is not found" in {
+
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswersGroup.remove(GroupMemberPage).success.value)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, registrationCancellationWarningRouteGroup)
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
           }
         }
 
