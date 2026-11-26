@@ -17,7 +17,7 @@
 package views.cancellation
 
 import base.SpecBase
-import forms.cancellation.{CancelGroupRegistrationDateFormProvider, CancelRegistrationDateFormProvider}
+import forms.cancellation.CancelRegistrationDateFormProvider
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form

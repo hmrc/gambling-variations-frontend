@@ -25,7 +25,6 @@ import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Checkboxes, Text}
-import viewmodels.licencespremises.OtherLicencesAndPermitsNIViewModel
 
 class OtherLicencesAndPermitsNIViewModelSpec extends SpecBase {
 
