@@ -214,7 +214,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual "/gambling-variations/there-is-a-problem-with-the-service"
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
           }
         }
       }
@@ -377,7 +377,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual "/gambling-variations/there-is-a-problem-with-the-service"
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
           }
         }
       }

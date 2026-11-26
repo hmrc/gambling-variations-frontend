@@ -1,0 +1,34 @@
+
+GET        /remove-previous-registration-number                      controllers.tradingdetails.RemovePreviousRegNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-previous-registration-number                      controllers.tradingdetails.RemovePreviousRegNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-associated-registration-number                      controllers.tradingdetails.RemoveAssociatedRegNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-associated-registration-number                      controllers.tradingdetails.RemoveAssociatedRegNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /check                       controllers.tradingdetails.CheckTradingDetailsController.onPageLoad()
+POST       /check                       controllers.tradingdetails.CheckTradingDetailsController.onContinue()
+
+GET        /other-business-trade-class                         controllers.tradingdetails.OtherTradeClassController.onPageLoad(mode: Mode = NormalMode)
+POST       /other-business-trade-class                         controllers.tradingdetails.OtherTradeClassController.onSubmit(mode: Mode = NormalMode)
+
+GET        /associated-registration-number                  controllers.tradingdetails.AssociatedRegNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /associated-registration-number                  controllers.tradingdetails.AssociatedRegNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-previous-registration-numbers-redirect         controllers.tradingdetails.PreviousRegistrationNumbersListController.onChangeRedirect(mode: Mode = NormalMode, prevRegNumber: String)
+GET        /previous-registration-numbers-redirect                controllers.tradingdetails.PreviousRegistrationNumbersListController.onRedirect(mode: Mode = NormalMode, prevRegNumber: String)
+GET        /previous-registration-numbers                         controllers.tradingdetails.PreviousRegistrationNumbersListController.onPageLoad(mode: Mode = NormalMode)
+POST       /previous-registration-numbers                         controllers.tradingdetails.PreviousRegistrationNumbersListController.onSubmit(mode: Mode = NormalMode)
+
+GET        /previous-registration-number                 controllers.tradingdetails.PreviousRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /previous-registration-number                 controllers.tradingdetails.PreviousRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-associated-registration-numbers-redirect        controllers.tradingdetails.AssociatedRegistrationNumbersListController.onChangeRedirect(mode: Mode = NormalMode, assocRegNumber: String)
+GET        /associated-registration-numbers-redirect               controllers.tradingdetails.AssociatedRegistrationNumbersListController.onRedirect(mode: Mode = NormalMode, assocRegNumber: String)
+GET        /associated-registration-numbers                        controllers.tradingdetails.AssociatedRegistrationNumbersListController.onPageLoad(mode: Mode = NormalMode)
+POST       /associated-registration-numbers                        controllers.tradingdetails.AssociatedRegistrationNumbersListController.onSubmit(mode: Mode = NormalMode)
+
+GET        /business-trade-class                        controllers.tradingdetails.BusinessTradeClassController.onPageLoad(mode: Mode = NormalMode)
+POST       /business-trade-class                        controllers.tradingdetails.BusinessTradeClassController.onSubmit(mode: Mode = NormalMode)
+
+GET        /seasonal-business                        controllers.tradingdetails.SeasonalBusinessController.onPageLoad(mode: Mode = NormalMode)
+POST       /seasonal-business                        controllers.tradingdetails.SeasonalBusinessController.onSubmit(mode: Mode = NormalMode)
