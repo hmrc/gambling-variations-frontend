@@ -24,7 +24,7 @@ import org.jsoup.nodes.Document
 import play.api.Application
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import viewmodels.checkAnswers.licencespremises.CheckLicencesAndPremisesViewModel
+import viewmodels.licencespremises.CheckLicencesAndPremisesViewModel
 import views.html.licencespremises.CheckLicenceAndPremisesView
 
 class CheckLicenceAndPremisesViewSpec extends SpecBase {

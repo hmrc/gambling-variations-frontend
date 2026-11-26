@@ -30,7 +30,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.OtherLicencesAndPermitsGBViewModel
+import viewmodels.licencespremises.OtherLicencesAndPermitsGBViewModel
 import views.html.licencespremises.OtherLicencesAndPermitsGBView
 
 import javax.inject.Inject

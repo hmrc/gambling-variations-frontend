@@ -23,7 +23,7 @@ import pages.licencespremises.*
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import viewmodels.checkAnswers.licencespremises.CheckLicencesAndPremisesViewModel
+import viewmodels.licencespremises.CheckLicencesAndPremisesViewModel
 import views.html.licencespremises.CheckLicenceAndPremisesView
 
 class CheckLicencesAndPremisesControllerSpec extends SpecBase {

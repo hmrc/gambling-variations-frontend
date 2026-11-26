@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.licencespremises
+package viewmodels.licencespremises
 
 import base.SpecBase
 import controllers.licencespremises.routes
@@ -29,6 +29,7 @@ import play.api.i18n.Messages
 import play.api.libs.json.Json
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
+import viewmodels.licencespremises.CheckLicencesAndPremisesViewModel
 
 import scala.jdk.CollectionConverters.*
 
