@@ -18,10 +18,10 @@ package controllers.cancellation
 
 import base.SpecBase
 import forms.cancellation.RegistrationCancellationWarningFormProvider
-import models.{BusinessType, UserAnswers}
+import models.{BusinessType, RegistrationStatus, UserAnswers}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.cancellation.{RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDeclarationPage}
-import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage}
+import pages.{BusinessTypePage, DateOfRegistrationPage, GroupMemberPage, RegistrationStatusPage}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -199,6 +199,69 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+        }
+      }
+
+    }
+  }
+
+  // TODO copied from group
+  // todo some hardcoded values
+  "group" - {
+
+    "GroupRegistrationCancellationWarning Controller" - {
+      val messageKey: String = "cancelGroupRegistrationWarning"
+      val isGroup: Boolean = true
+      val formProvider =
+        new RegistrationCancellationWarningFormProvider()
+
+      val answers: UserAnswers =
+        UserAnswers(userAnswersId)
+          .set(DateOfRegistrationPage, LocalDate.of(2026, 11, 25))
+          .success
+          .value
+          .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
+          .success
+          .value
+          .set(GroupMemberPage, isGroup)
+          .success
+          .value
+          .set(RegistrationStatusPage, RegistrationStatus.Registered)
+          .success
+          .value
+          .set(RegistrationCancellationDeclarationPage, true)
+          .success
+          .value
+
+      "must return OK and the correct view for a GET" in {
+
+        val application =
+          applicationBuilder(userAnswers = Some(answers)).build()
+
+        running(application) {
+
+          val request =
+            FakeRequest(
+              GET,
+              routes.RegistrationCancellationWarningController.onPageLoadGroup().url
+            )
+
+          val result = route(application, request).value
+
+          val view =
+            application.injector.instanceOf[RegistrationCancellationWarningView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(
+              formProvider(),
+              "25 November 2026",
+              messageKey
+            )(
+              request,
+              messages(application)
+            ).toString
         }
       }
 
