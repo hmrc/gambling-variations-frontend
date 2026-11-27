@@ -17,12 +17,12 @@
 package pages.businessaddress
 
 import models.BusinessChangeAddrOption
-import pages.QuestionPage
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
-case object BusinessChangeAddrScreenerPage extends QuestionPage[BusinessChangeAddrOption] {
+case object BusinessChangeAddrScreenerPage extends FlagPage[BusinessChangeAddrOption] {
 
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
+  override def path: JsPath = BusinessAddressSection.path \ toString
 
   override def toString: String = "businessChangeAddrScreener"
 }

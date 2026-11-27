@@ -71,10 +71,10 @@ class BusinessChangeAddrScreenerControllerSpec extends SpecBase with MockitoSuga
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "businessAddressSection" -> Json.obj("mgdRegNum" -> userAnswersId, BusinessChangeAddrScreenerPage.toString -> EditCurrentAddress.toString)
+        "businessAddressSection" -> Json.obj("mgdRegNum" -> userAnswersId)
       )
 
-      val userAnswers = UserAnswers(userAnswersId, data)
+      val userAnswers = UserAnswers(userAnswersId, data).set(BusinessChangeAddrScreenerPage, EditCurrentAddress).success.value
 
       val filledForm = form.fill(EditCurrentAddress)
 

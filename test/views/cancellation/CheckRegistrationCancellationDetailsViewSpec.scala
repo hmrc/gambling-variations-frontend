@@ -73,7 +73,7 @@ class CheckRegistrationCancellationDetailsViewSpec extends SpecBase {
 
   private val document =
     org.jsoup.Jsoup.parse(
-      view(summaryList).toString
+      view(summaryList, "checkRegistrationCancellationDetails").toString
     )
 
   "CheckRegistrationCancellationDetailsView" - {

@@ -27,14 +27,14 @@
   h1:H1
  )
 
-@(summaryList: SummaryList)(implicit request: Request[_], messages: Messages)
+@(summaryList: SummaryList, messageKey: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("checkRegistrationCancellationDetails.title"), Some(messages("checkRegistrationCancellationDetails.caption")))) {
+@layout(pageTitle = titleNoForm(messages(s"$messageKey.title"), Some(messages(s"$messageKey.caption")))) {
 
   @formHelper(action = controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()) {
 
-  @caption(messages("checkRegistrationCancellationDetails.caption"))
-  @h1("checkRegistrationCancellationDetails.heading", classes = "govuk-heading-l")
+  @caption(messages(s"$messageKey.caption"))
+  @h1(s"$messageKey.heading", classes = "govuk-heading-l")
 
 
   @govukSummaryList(summaryList)

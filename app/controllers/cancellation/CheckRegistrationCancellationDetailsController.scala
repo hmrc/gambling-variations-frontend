@@ -35,13 +35,16 @@ class CheckRegistrationCancellationDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
+  private val nonGroupKey = "checkRegistrationCancellationDetails"
+  private val groupKey = "checkGroupRegistrationCancellationDetails"
+
   def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val summaryList = CheckRegistrationCancellationDetailsViewModel.summaryList(request.userAnswers)
-    Ok(view(summaryList))
+    Ok(view(summaryList, nonGroupKey))
   }
 
   def onPageLoadGroup(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val summaryList = CheckGroupRegistrationCancellationDetailsViewModel.summaryList(request.userAnswers)
-    Ok(view(summaryList))
+    Ok(view(summaryList, groupKey))
   }
 }

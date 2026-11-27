@@ -32,22 +32,22 @@
 
 @layout(pageTitle = title(form, messages(s"$messageKey.title"), Some(messages(s"$messageKey.caption")))) {
 
+    @caption(messages(s"$messageKey.caption"))
+    @h1(s"$messageKey.heading")
+
     @formHelper(action = controllers.cancellation.routes.RegistrationCancellationWarningController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
         }
 
-        @caption(messages(s"$messageKey.caption"))
-
-        @h1(s"$messageKey.heading")
+        @p(messages(s"$messageKey.legend", dateFormatted))
 
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages(s"$messageKey.legend", dateFormatted))
+                legend = LegendViewModel(messages(s"$messageKey.hint", dateFormatted)).withCssClass("govuk-fieldset__legend govuk-fieldset__legend govuk-fieldset__legend--m")
             )
-            .withHint(HintViewModel(messages(s"$messageKey.hint")).withCssClass("govuk-fieldset__legend govuk-fieldset__legend govuk-fieldset__legend--m"))
         )
 
         @govukButton(

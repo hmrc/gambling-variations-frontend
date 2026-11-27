@@ -88,7 +88,7 @@ class CheckRegistrationCancellationDetailsControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(expectedSummaryList)(request, msgs).toString
+            view(expectedSummaryList, "checkRegistrationCancellationDetails")(request, msgs).toString
         }
       }
     }
@@ -148,7 +148,7 @@ class CheckRegistrationCancellationDetailsControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(expectedSummaryList)(request, msgs).toString
+            view(expectedSummaryList, "checkGroupRegistrationCancellationDetails")(request, msgs).toString
         }
       }
     }
