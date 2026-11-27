@@ -2,18 +2,21 @@
 
 ->         /hmrc-frontend                               hmrcfrontend.Routes
 
-->         /change-registration-details/business-name               businessname.Routes
-->         /change-registration-details/business-address            businessaddress.Routes
-->         /change-registration-details/partner-details             partnerdetails.Routes
-->         /change-registration-details/licences-and-premises       licencespremises.Routes
-->         /change-registration-details/business-contact-details    businesscontactdetails.Routes
-->         /change-registration-details/correspondence-details      correspondencedetails.Routes
-->         /change-registration-details/trading-details             tradingdetails.Routes
-->         /change-registration-details/controlling-body-details    controllingbodydetails.Routes
-->         /change-registration-details/return-periods              returnperiods.Routes
-->         /                                                        cancellation.Routes
+->         /business-name                               businessname.Routes
+->         /business-address                            businessaddress.Routes
+->         /partner-details                             partnerdetails.Routes
+->         /licences-and-premises                       licencespremises.Routes
+->         /business-contact-details                    businesscontactdetails.Routes
+->         /correspondence-details                      correspondencedetails.Routes
+->         /trading-details                             tradingdetails.Routes
+->         /controlling-body-details                    controllingbodydetails.Routes
+->         /return-periods                              returnperiods.Routes
+->         /                                            cancellation.Routes
 
-GET        /                                            controllers.IndexController.onPageLoad()
+GET        /                                            controllers.ChangeRegistrationDetailsController.onPageLoad()
+
+# Landing url - These are used by gambling-management-frontend
+GET        /:regNumber/                                 controllers.ChangeRegistrationDetailsController.onLanding(regNumber: String)
 
 GET        /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)
 
@@ -32,14 +35,8 @@ GET        /there-is-a-problem-with-the-service         controllers.SystemErrorC
 GET        /there-is-a-problem-access-denied            controllers.AccessDeniedController.onPageLoad()
 GET        /page-not-found                              controllers.PageNotFoundController.onPageLoad()
 
-GET        /change-registration-details                 controllers.ChangeRegistrationDetailsController.onPageLoad()
+GET        /declaration                                 controllers.DeclarationController.onPageLoad()
+POST       /declaration                                 controllers.DeclarationController.onSubmit()
 
-GET        /change-registration-details/declaration             controllers.DeclarationController.onPageLoad()
-POST       /change-registration-details/declaration             controllers.DeclarationController.onSubmit()
-
-GET        /address-lookup                          controllers.AddressLookupController.initialise()
-GET        /address-lookup/callback                 controllers.AddressLookupController.callback(id: String)
-
-# Landing url - These are used by gambling-management-frontend
-
-GET        /:regNumber/change-registration-details      controllers.ChangeRegistrationDetailsController.onLanding(regNumber: String)
+GET        /address-lookup                              controllers.AddressLookupController.initialise()
+GET        /address-lookup/callback                     controllers.AddressLookupController.callback(id: String)
