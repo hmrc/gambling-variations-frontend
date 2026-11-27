@@ -33,7 +33,7 @@ import pages.contactdetails.*
 import pages.controllingbody.*
 import pages.correspondencedetails.*
 import pages.licencespremises.*
-import pages.returnperiods.*
+import pages.returnperiods.{NonStandardNotLastReturnPeriodsYesNoPage, *}
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
@@ -242,6 +242,8 @@ class Navigator @Inject() () {
     // Return Periods
     case ChooseReturnPeriodsPage =>
       userAnswers => navigateChooseReturnPeriodsPage(userAnswers)
+    case NonStandardNotLastReturnPeriodsYesNoPage =>
+      userAnswers => navigateNonStandardNotLastReturnPeriodsYesNoPage(userAnswers)
     case NonStandardPeriodDate1Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(2, NormalMode)
     case NonStandardPeriodDate2Page =>
@@ -310,6 +312,12 @@ class Navigator @Inject() () {
         typeChangeRoutes(userAnswers).applyOrElse(page, combinedNormalRoutes(_)(userAnswers))
       case CheckMode =>
         combinedCheckRouteMap(page)(userAnswers)
+    }
+
+  private def navigateNonStandardNotLastReturnPeriodsYesNoPage(answers: UserAnswers): Call =
+    answers.get(NonStandardNotLastReturnPeriodsYesNoPage) match {
+      case Some(true) => controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(NormalMode)
+      case _          => controllers.routes.ChangeRegistrationDetailsController.onPageLoad()
     }
 
   private def navigateChooseReturnPeriodsPage(userAnswers: UserAnswers): Call =

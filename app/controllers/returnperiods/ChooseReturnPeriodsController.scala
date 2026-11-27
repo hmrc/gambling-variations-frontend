@@ -18,7 +18,7 @@ package controllers.returnperiods
 
 import controllers.actions.*
 import forms.returnperiods.ChooseReturnPeriodsFormProvider
-import models.{CheckMode, ChooseReturnPeriods, Mode, NormalMode, ReturnPeriodsVariant, StandardReturnPeriodsOptions, UserAnswers}
+import models.{CheckMode, ChooseReturnPeriods, Mode, NoReturnPeriodsSet, NormalMode, ReturnPeriodsVariant, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.Navigator
 import pages.returnperiods.*
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -109,6 +109,12 @@ class ChooseReturnPeriodsController @Inject() (
                 val hasChanged =
                   currentReturnPeriodsId.forall(_ != value.returnPeriodsId)
 
+                val returnPeriodsChanged =
+                  hasChanged ||
+                    request.userAnswers
+                      .get(ReturnPeriodsChangesPage)
+                      .contains(true)
+
                 val answers =
                   if (hasChanged) {
                     clearNstpDates(request.userAnswers)
@@ -132,6 +138,18 @@ class ChooseReturnPeriodsController @Inject() (
                             variant == ReturnPeriodsVariant.NonStandard
                           )
                         )
+                        .flatMap(
+                          _.set(
+                            ReturnPeriodsChangesPage,
+                            returnPeriodsChanged
+                          )
+                        )
+                        .flatMap(
+                          _.set(
+                            ReturnPeriodsSubmittedPage,
+                            true
+                          )
+                        )
                     )
 
                   _ <- sessionRepository.set(updatedAnswers)
@@ -152,6 +170,7 @@ class ChooseReturnPeriodsController @Inject() (
                     )
                   }
                 }
+
               }
             )
 
@@ -178,24 +197,41 @@ class ChooseReturnPeriodsController @Inject() (
   private def variantFrom(
     userAnswers: UserAnswers
   ): Option[ReturnPeriodsVariant] = {
-    userAnswers
-      .get(GamblingReturnPeriodsPage)
-      .flatMap(_.hasExistingNstpValues)
-      .map {
 
-        case true =>
-          ReturnPeriodsVariant.NonStandard
+    userAnswers.get(ReturnPeriodsChoicePage) match {
 
-        case false =>
-          userAnswers
-            .get(StandardReturnPeriodsPage) match {
+      case Some(NoReturnPeriodsSet.Standard) =>
+        Some(ReturnPeriodsVariant.Standard)
 
-            case Some(StandardReturnPeriodsOptions.SwitchToNonStandard) =>
-              ReturnPeriodsVariant.NonStandard
+      case Some(NoReturnPeriodsSet.Nonstandard) =>
+        Some(ReturnPeriodsVariant.NonStandard)
 
-            case _ =>
-              ReturnPeriodsVariant.Standard
+      case None =>
+        userAnswers
+          .get(GamblingReturnPeriodsPage)
+          .flatMap(_.hasExistingNstpValues)
+          .map {
+
+            case true =>
+              userAnswers.get(NonStandardNotLastReturnPeriodsYesNoPage) match {
+
+                case Some(true) =>
+                  ReturnPeriodsVariant.Standard
+
+                case _ =>
+                  ReturnPeriodsVariant.NonStandard
+              }
+
+            case false =>
+              userAnswers.get(StandardReturnPeriodsPage) match {
+
+                case Some(StandardReturnPeriodsOptions.SwitchToNonStandard) =>
+                  ReturnPeriodsVariant.NonStandard
+
+                case _ =>
+                  ReturnPeriodsVariant.Standard
+              }
           }
-      }
+    }
   }
 }

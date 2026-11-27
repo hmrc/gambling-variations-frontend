@@ -17,6 +17,7 @@
 package controllers.returnperiods
 
 import base.SpecBase
+import config.FrontendAppConfig
 import forms.returnperiods.{NoReturnPeriodsSetFormProvider, NonStandardLastReturnPeriodsFormProvider, NonStandardNotLastReturnPeriodsFormProvider, NonStandardNotSubmittedReturnPeriodsFormProvider, NonStandardReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
 import models.ChooseReturnPeriods.Jan
 import models.{GamblingReturnPeriods, NoReturnPeriodsSet, NonStandardNotSubmittedReturnPeriodsOptions, NonStandardReturnPeriodsOptions, NormalMode, StandardReturnPeriodsOptions, UserAnswers}
@@ -47,6 +48,13 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
     when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
     mockSessionRepository
   }
+
+  private def gamblingDutiesEnquiries(
+    application: play.api.Application
+  ): String =
+    application.injector
+      .instanceOf[FrontendAppConfig]
+      .gamblingDutiesEnquiries
 
   "ReturnPeriods Controller" - {
 
@@ -594,7 +602,10 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           val view = application.injector.instanceOf[NonStandardReturnPeriodsView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(nonStandardNotLastForm, viewModel.get, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(nonStandardNotLastForm, viewModel.get, NormalMode, gamblingDutiesEnquiries(application))(
+            request,
+            messages(application)
+          ).toString
         }
       }
 
@@ -615,7 +626,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(nonStandardNotLastForm.fill(true), viewModel.get, NormalMode)(
+          contentAsString(result) mustEqual view(nonStandardNotLastForm.fill(true), viewModel.get, NormalMode, gamblingDutiesEnquiries(application))(
             request,
             messages(application)
           ).toString
@@ -671,7 +682,9 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, viewModel.get, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, viewModel.get, NormalMode, gamblingDutiesEnquiries(application))(request,
+                                                                                                                             messages(application)
+                                                                                                                            ).toString
         }
       }
 
@@ -796,7 +809,10 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           val view = application.injector.instanceOf[NonStandardReturnPeriodsView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(nonStandardForm, viewModel.get, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(nonStandardForm, viewModel.get, NormalMode, gamblingDutiesEnquiries(application))(
+            request,
+            messages(application)
+          ).toString
         }
       }
 
@@ -817,7 +833,11 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(nonStandardForm.fill(NonStandardReturnPeriodsOptions.values.head), viewModel.get, NormalMode)(
+          contentAsString(result) mustEqual view(nonStandardForm.fill(NonStandardReturnPeriodsOptions.values.head),
+                                                 viewModel.get,
+                                                 NormalMode,
+                                                 gamblingDutiesEnquiries(application)
+                                                )(
             request,
             messages(application)
           ).toString
@@ -873,7 +893,9 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, viewModel.get, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, viewModel.get, NormalMode, gamblingDutiesEnquiries(application))(request,
+                                                                                                                             messages(application)
+                                                                                                                            ).toString
         }
       }
 
@@ -1004,12 +1026,44 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           .success
           .value
 
-      "must clear all non-standard dates when Standard is submitted" in {
+      val userAnswersPreviouslyNonStandard =
+        userAnswersWithNonStandardDates
+          .set(
+            ReturnPeriodsChoicePage,
+            NoReturnPeriodsSet.Nonstandard
+          )
+          .success
+          .value
+
+      "must clear all non-standard dates when changing from Nonstandard to Standard" in {
 
         val mockSessionRepository = mockedSessionRepository
 
+        val userAnswersPreviouslyNonStandard =
+          userAnswersWithNonStandardDates
+            .set(
+              ReturnPeriodsChoicePage,
+              NoReturnPeriodsSet.Nonstandard
+            )
+            .success
+            .value
+            .set(
+              ReturnPeriodsSubmittedPage,
+              true
+            )
+            .success
+            .value
+            .set(
+              ReturnPeriodsChangesPage,
+              true
+            )
+            .success
+            .value
+
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersWithNonStandardDates))
+          applicationBuilder(
+            userAnswers = Some(userAnswersPreviouslyNonStandard)
+          )
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -1017,6 +1071,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
             .build()
 
         running(application) {
+
           val request =
             FakeRequest(POST, returnPeriodsRoute)
               .withFormUrlEncodedBody(
@@ -1026,8 +1081,8 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           val expectedAnswers =
-            userAnswersWithNonStandardDates
-              .set(ReturnPeriodsChoicePage, NoReturnPeriodsSet.Standard)
+            userAnswersPreviouslyNonStandard
+              .remove(ChooseReturnPeriodsPage)
               .success
               .value
               .remove(NonStandardPeriodDate1Page)
@@ -1054,9 +1109,15 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
               .remove(NonStandardPeriodDate8Page)
               .success
               .value
+              .set(
+                ReturnPeriodsChoicePage,
+                NoReturnPeriodsSet.Standard
+              )
+              .success
+              .value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual onwardRoute.url
+
           verify(mockSessionRepository).set(expectedAnswers)
         }
       }
@@ -1084,7 +1145,22 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
           val expectedAnswers =
             userAnswersWithNonStandardDates
-              .set(ReturnPeriodsChoicePage, NoReturnPeriodsSet.Nonstandard)
+              .set(
+                ReturnPeriodsChoicePage,
+                NoReturnPeriodsSet.Nonstandard
+              )
+              .success
+              .value
+              .set(
+                ReturnPeriodsSubmittedPage,
+                true
+              )
+              .success
+              .value
+              .set(
+                ReturnPeriodsChangesPage,
+                false
+              )
               .success
               .value
 
@@ -1168,7 +1244,26 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
           val result = route(application, request).value
 
-          val expectedAnswers = userAnswersNoPeriodsSet.set(ReturnPeriodsChoicePage, validAnswer).success.value
+          val expectedAnswers =
+            userAnswersNoPeriodsSet
+              .set(
+                ReturnPeriodsChoicePage,
+                validAnswer
+              )
+              .success
+              .value
+              .set(
+                ReturnPeriodsSubmittedPage,
+                true
+              )
+              .success
+              .value
+              .set(
+                ReturnPeriodsChangesPage,
+                false
+              )
+              .success
+              .value
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
@@ -1397,7 +1492,10 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(nonStandardForm, viewModel.get, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(nonStandardForm, viewModel.get, NormalMode, gamblingDutiesEnquiries(application))(
+            request,
+            messages(application)
+          ).toString
         }
       }
 

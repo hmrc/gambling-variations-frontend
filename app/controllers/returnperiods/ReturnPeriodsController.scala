@@ -16,11 +16,12 @@
 
 package controllers.returnperiods
 
+import config.FrontendAppConfig
 import controllers.actions.*
 import controllers.routes
 import forms.returnperiods.{NoReturnPeriodsSetFormProvider, NonStandardLastReturnPeriodsFormProvider, NonStandardNotLastReturnPeriodsFormProvider, NonStandardNotSubmittedReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
 import models.requests.DataRequest
-import models.{Mode, NoReturnPeriodsSet, NonStandardNotSubmittedReturnPeriodsOptions, NonStandardReturnPeriodsOptions, StandardReturnPeriodsOptions, UserAnswers}
+import models.{CheckMode, Mode, NoReturnPeriodsSet, NonStandardNotSubmittedReturnPeriodsOptions, NonStandardReturnPeriodsOptions, NormalMode, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
 import pages.returnperiods.*
@@ -43,6 +44,7 @@ class ReturnPeriodsController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
+  appConfig: FrontendAppConfig,
   requireData: GamblingReturnPeriodsDataRequiredAction,
   nonStandardNonSubmittedPeriodFormProvider: NonStandardNotSubmittedReturnPeriodsFormProvider,
   nonStandardNotLastPeriodFormProvider: NonStandardLastReturnPeriodsFormProvider,
@@ -79,10 +81,18 @@ class ReturnPeriodsController @Inject() (
         Ok(standardReturnPeriodsView(prepare(standardForm, StandardReturnPeriodsPage), mode, returnPeriodsId))
 
       case Some(NonStandard(viewModel)) =>
-        Ok(nonStandardReturnPeriodsView(prepare(nonStandardLastForm, NonStandardReturnPeriodsPage), viewModel, mode))
+        Ok(
+          nonStandardReturnPeriodsView(prepare(nonStandardLastForm, NonStandardReturnPeriodsPage), viewModel, mode, appConfig.gamblingDutiesEnquiries)
+        )
 
       case Some(NonStandardNotLast(viewModel)) =>
-        Ok(nonStandardReturnPeriodsView(prepare(nonStandardNotLastForm, NonStandardNotLastReturnPeriodsYesNoPage), viewModel, mode))
+        Ok(
+          nonStandardReturnPeriodsView(prepare(nonStandardNotLastForm, NonStandardNotLastReturnPeriodsYesNoPage),
+                                       viewModel,
+                                       mode,
+                                       appConfig.gamblingDutiesEnquiries
+                                      )
+        )
 
       case Some(NonStandardNotSubmitted(viewModel)) =>
         Ok(nonStandardNotSubmittedReturnPeriodsView(prepare(nonStandardNotSubmittedForm, NonStandardNotSubmittedReturnPeriodsPage), viewModel, mode))
@@ -98,23 +108,79 @@ class ReturnPeriodsController @Inject() (
         noPeriodsSetForm
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(noReturnPeriodsSetView(formWithErrors, mode))),
-            value =>
+            formWithErrors =>
+              Future.successful(
+                BadRequest(
+                  noReturnPeriodsSetView(formWithErrors, mode)
+                )
+              ),
+            value => {
+              val previousChoice =
+                request.userAnswers.get(ReturnPeriodsChoicePage)
+
+              val hasChangedType =
+                previousChoice.exists(_ != value)
+
+              val returnPeriodsChanged =
+                hasChangedType ||
+                  request.userAnswers
+                    .get(ReturnPeriodsChangesPage)
+                    .contains(true)
+
+              val answersToUpdate =
+                if (hasChangedType) {
+                  clearReturnPeriodAnswers(request.userAnswers)
+                } else {
+                  scala.util.Success(request.userAnswers)
+                }
+
               for {
-                answersWithChoice <- Future.fromTry(
-                                       request.userAnswers.set(ReturnPeriodsChoicePage, value)
-                                     )
+                answersAfterClear <- Future.fromTry(answersToUpdate)
 
-                updatedAnswers <- value match {
-                                    case models.NoReturnPeriodsSet.Standard =>
-                                      Future.fromTry(clearNonStandardDates(answersWithChoice))
-
-                                    case models.NoReturnPeriodsSet.Nonstandard =>
-                                      Future.successful(answersWithChoice)
-                                  }
+                updatedAnswers <- Future.fromTry(
+                                    answersAfterClear
+                                      .set(
+                                        ReturnPeriodsChoicePage,
+                                        value
+                                      )
+                                      .flatMap(
+                                        _.set(
+                                          ReturnPeriodsSubmittedPage,
+                                          true
+                                        )
+                                      )
+                                      .flatMap(
+                                        _.set(
+                                          ReturnPeriodsChangesPage,
+                                          returnPeriodsChanged
+                                        )
+                                      )
+                                  )
 
                 _ <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(ReturnPeriodsChoicePage, mode, updatedAnswers))
+
+              } yield {
+                if (mode == CheckMode && !hasChangedType) {
+                  Redirect(
+                    controllers.returnperiods.routes.CheckReturnPeriodsController
+                      .onPageLoad()
+                  )
+                } else if (mode == CheckMode && hasChangedType) {
+                  Redirect(
+                    controllers.returnperiods.routes.ChooseReturnPeriodsController
+                      .onPageLoad(NormalMode)
+                  )
+                } else {
+                  Redirect(
+                    navigator.nextPage(
+                      ReturnPeriodsChoicePage,
+                      mode,
+                      updatedAnswers
+                    )
+                  )
+                }
+              }
+            }
           )
       case Some(LockedPeriods) =>
         Future.successful(Redirect(controllers.routes.ChangeRegistrationDetailsController.onPageLoad()))
@@ -123,11 +189,13 @@ class ReturnPeriodsController @Inject() (
         submit(standardForm, StandardReturnPeriodsPage, mode)(errors => standardReturnPeriodsView(errors, mode, returnPeriodsId))
 
       case Some(NonStandard(viewModel)) =>
-        submit(nonStandardLastForm, NonStandardReturnPeriodsPage, mode)(errors => nonStandardReturnPeriodsView(errors, viewModel, mode))
+        submit(nonStandardLastForm, NonStandardReturnPeriodsPage, mode)(errors =>
+          nonStandardReturnPeriodsView(errors, viewModel, mode, appConfig.gamblingDutiesEnquiries)
+        )
 
       case Some(NonStandardNotLast(viewModel)) =>
         submit(nonStandardNotLastForm, NonStandardNotLastReturnPeriodsYesNoPage, mode)(errors =>
-          nonStandardReturnPeriodsView(errors, viewModel, mode)
+          nonStandardReturnPeriodsView(errors, viewModel, mode, appConfig.gamblingDutiesEnquiries)
         )
 
       case Some(NonStandardNotSubmitted(viewModel)) =>
@@ -182,6 +250,13 @@ class ReturnPeriodsController @Inject() (
       .flatMap(_.remove(NonStandardPeriodDate6Page))
       .flatMap(_.remove(NonStandardPeriodDate7Page))
       .flatMap(_.remove(NonStandardPeriodDate8Page))
+
+  private def clearReturnPeriodAnswers(
+    userAnswers: UserAnswers
+  ): scala.util.Try[UserAnswers] =
+    userAnswers
+      .remove(ChooseReturnPeriodsPage)
+      .flatMap(clearNonStandardDates)
 
   private def submit[A: Writes](form: Form[A], page: QuestionPage[A], mode: Mode)(
     errorView: Form[A] => HtmlFormat.Appendable

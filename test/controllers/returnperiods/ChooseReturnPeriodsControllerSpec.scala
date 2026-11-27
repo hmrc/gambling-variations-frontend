@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, HasExistingNstpValuesPage}
+import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, HasExistingNstpValuesPage, ReturnPeriodsChangesPage, ReturnPeriodsSubmittedPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -532,6 +532,18 @@ class ChooseReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
             )
             .success
             .value
+            .set(
+              ReturnPeriodsSubmittedPage,
+              true
+            )
+            .success
+            .value
+            .set(
+              ReturnPeriodsChangesPage,
+              true
+            )
+            .success
+            .value
 
         verify(mockSessionRepository).set(expectedAnswers)
       }
@@ -591,6 +603,18 @@ class ChooseReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
             .value
             .set(
               HasExistingNstpValuesPage,
+              true
+            )
+            .success
+            .value
+            .set(
+              ReturnPeriodsSubmittedPage,
+              true
+            )
+            .success
+            .value
+            .set(
+              ReturnPeriodsChangesPage,
               true
             )
             .success
@@ -707,6 +731,18 @@ class ChooseReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
             .set(
               HasExistingNstpValuesPage,
               false
+            )
+            .success
+            .value
+            .set(
+              ReturnPeriodsSubmittedPage,
+              true
+            )
+            .success
+            .value
+            .set(
+              ReturnPeriodsChangesPage,
+              true
             )
             .success
             .value

@@ -22,6 +22,7 @@ import pages.*
 import pages.businessaddress.BusinessAddressChangesPage
 import pages.businessname.BusinessNameChangesPage
 import pages.contactdetails.ContactDetailsChangesPage
+import pages.returnperiods.ReturnPeriodsChangesPage
 import pages.correspondencedetails.CorrespondenceDetailsChangesPage
 import pages.licencespremises.LicencesPremisesDetailsChangesPage
 import pages.tradingdetails.TradingDetailsChangesPage
@@ -128,7 +129,7 @@ object ChangeRegistrationDetailsViewModel {
           RegistrationSectionRow(
             messages("changeRegistrationDetails.returnPeriod"),
             controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode).url,
-            NoDetailsChanged
+            status(ReturnPeriodsChangesPage)
           )
         )
       ).flatten
