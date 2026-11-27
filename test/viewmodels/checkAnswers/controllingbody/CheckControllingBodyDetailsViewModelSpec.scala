@@ -672,7 +672,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
           answers <- answers.set(ControllingBodyTradingNamePage, "")
           answers <- answers.set(
                        ControllingBodyCorrespondenceSectionPage,
-            ContactDetails(
+                       ContactDetails(
                          mgdRegNum,
                          None,
                          None,

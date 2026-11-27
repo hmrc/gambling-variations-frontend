@@ -19,7 +19,9 @@ package pages.cancellation
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object RegistrationCancellationDeclarationPage extends QuestionPage[Boolean] {
+import java.time.LocalDate
+
+case object RegistrationCancellationDeclarationPage extends QuestionPage[LocalDate] {
 
   override def path: JsPath = JsPath \ toString
 

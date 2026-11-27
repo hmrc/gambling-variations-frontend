@@ -130,19 +130,16 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
   "nonGroup" - {
 
     val userAnswersHmrcCancelledNonGroup = emptyUserAnswers.setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled).success.value
-    val userAnswersUserCancelledNonGroup = emptyUserAnswers.setOriginal(RegistrationCancellationDeclarationPage, true).success.value
+    val userAnswersUserCancelledNonGroup = emptyUserAnswers.setOriginal(RegistrationCancellationDeclarationPage, currentDate).success.value
     val userAnswersBothCancelledNonGroup = emptyUserAnswers
       .setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled)
       .success
       .value
-      .setOriginal(RegistrationCancellationDeclarationPage, true)
+      .setOriginal(RegistrationCancellationDeclarationPage, currentDate)
       .success
       .value
 
     val userAnswersNoCancelNonGroup = emptyUserAnswers
-      .setOriginal(RegistrationCancellationDeclarationPage, false)
-      .success
-      .value
       .setOriginal(RegistrationStatusPage, RegistrationStatus.Registered)
       .success
       .value
@@ -277,7 +274,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
           contentAsString(result) mustEqual
             view(
               form,
-              dateFormatter.format(dateOfCancellation),
+              dateFormatter.format(currentDate),
               nonGroupKeyWarning
             )(
               request,
@@ -439,19 +436,16 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
   "group" - {
 
     val userAnswersHmrcCancelledGroup = emptyUserAnswersGroup.setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled).success.value
-    val userAnswersUserCancelledGroup = emptyUserAnswersGroup.setOriginal(RegistrationCancellationDeclarationPage, true).success.value
+    val userAnswersUserCancelledGroup = emptyUserAnswersGroup.setOriginal(RegistrationCancellationDeclarationPage, currentDate).success.value
     val userAnswersBothCancelledGroup = emptyUserAnswersGroup
       .setOriginal(RegistrationStatusPage, RegistrationStatus.Cancelled)
       .success
       .value
-      .setOriginal(RegistrationCancellationDeclarationPage, true)
+      .setOriginal(RegistrationCancellationDeclarationPage, currentDate)
       .success
       .value
 
     val userAnswersNoCancelGroup = emptyUserAnswersGroup
-      .setOriginal(RegistrationCancellationDeclarationPage, false)
-      .success
-      .value
       .setOriginal(RegistrationStatusPage, RegistrationStatus.Registered)
       .success
       .value
@@ -586,7 +580,7 @@ class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
           contentAsString(result) mustEqual
             view(
               form,
-              dateFormatter.format(dateOfCancellation),
+              dateFormatter.format(currentDate),
               groupKeyWarning
             )(
               request,

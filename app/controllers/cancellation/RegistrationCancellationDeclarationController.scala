@@ -28,6 +28,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.cancellation.RegistrationCancellationDeclarationView
 
+import java.time.{Clock, LocalDate}
 import javax.inject.Inject
 import scala.concurrent.Future
 
@@ -38,6 +39,7 @@ class RegistrationCancellationDeclarationController @Inject() (
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessDetailsDataRequiredAction,
+  clock: Clock,
   val controllerComponents: MessagesControllerComponents,
   view: RegistrationCancellationDeclarationView
 ) extends FrontendBaseController
@@ -52,8 +54,10 @@ class RegistrationCancellationDeclarationController @Inject() (
 
   def onSubmit(): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
+      val currentDate = LocalDate.now(clock)
+
       for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(RegistrationCancellationDeclarationPage, true))
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(RegistrationCancellationDeclarationPage, currentDate))
         _              <- sessionRepository.set(updatedAnswers)
       } yield Redirect(navigator.nextPage(RegistrationCancellationDeclarationPage, NormalMode, updatedAnswers))
     }

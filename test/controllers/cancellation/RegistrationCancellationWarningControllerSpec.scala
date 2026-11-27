@@ -54,7 +54,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
     controllers.cancellation.routes.RegistrationCancellationWarningController.onPageLoadGroup().url
 
   override val emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId)
-    .setOriginal(RegistrationCancellationDeclarationPage, true)
+    .setOriginal(RegistrationCancellationDeclarationPage, currentDate)
     .success
     .value
     .setOriginal(DateOfRegistrationPage, currentDate)
@@ -104,8 +104,8 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
           }
         }
 
-        "must redirect to systemError when CancelRegistrationDate is not present" in {
-          val userAnswers = emptyUserAnswers.remove(CancelRegistrationDatePage).success.value
+        "must redirect when CancelRegistrationDate is not present" in {
+          val userAnswers = emptyUserAnswers.remove(RegistrationCancellationDeclarationPage).success.value
 
           val application = applicationBuilder(Some(userAnswers)).build()
 
@@ -114,7 +114,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
             status(result) mustEqual SEE_OTHER
             redirectLocation(result).value mustEqual
-              controllers.routes.SystemErrorController.onPageLoad().url
+              controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad().url
           }
         }
 
@@ -154,7 +154,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
         "must redirect when the registration cancellation value is false" in {
 
-          val userAnswers = emptyUserAnswers.set(RegistrationCancellationDeclarationPage, false).success.value
+          val userAnswers = emptyUserAnswers.remove(RegistrationCancellationDeclarationPage).success.value
 
           val application = applicationBuilder(Some(userAnswers)).build()
 
@@ -272,8 +272,8 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
           }
         }
 
-        "must redirect to systemError when CancelRegistrationDate is not present" in {
-          val userAnswers = emptyUserAnswersGroup.remove(CancelRegistrationDatePage).success.value
+        "must redirect when CancelRegistrationDate is not present" in {
+          val userAnswers = emptyUserAnswersGroup.remove(RegistrationCancellationDeclarationPage).success.value
 
           val application = applicationBuilder(Some(userAnswers)).build()
 
@@ -282,7 +282,7 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
 
             status(result) mustEqual SEE_OTHER
             redirectLocation(result).value mustEqual
-              controllers.routes.SystemErrorController.onPageLoad().url
+              controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup().url
           }
         }
 
@@ -308,21 +308,6 @@ class RegistrationCancellationWarningControllerSpec extends SpecBase with Mockit
         "must redirect when the registration cancellation value does not exist" in {
 
           val userAnswers = emptyUserAnswersGroup.remove(RegistrationCancellationDeclarationPage).success.value
-
-          val application = applicationBuilder(Some(userAnswers)).build()
-
-          running(application) {
-            val result = route(application, getRequestGroup()).value
-
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual
-              controllers.cancellation.routes.CancelRegistrationDateController.onPageLoadGroup().url
-          }
-        }
-
-        "must redirect when the registration cancellation value is false" in {
-
-          val userAnswers = emptyUserAnswersGroup.set(RegistrationCancellationDeclarationPage, false).success.value
 
           val application = applicationBuilder(Some(userAnswers)).build()
 
