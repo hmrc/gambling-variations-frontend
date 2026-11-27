@@ -111,7 +111,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
         .success
         .value
 
-    def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
+    def getRequest: FakeRequest[AnyContentAsEmpty.type] =
       FakeRequest(
         GET,
         cancelRegistrationDateRoute
@@ -198,7 +198,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val request =
-            getRequest()
+            getRequest
 
           val result =
             route(application, request).value
@@ -241,7 +241,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val request =
-            getRequest()
+            getRequest
 
           val result =
             route(application, request).value
@@ -278,7 +278,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val result =
-            route(application, getRequest()).value
+            route(application, getRequest).value
 
           status(result) mustEqual SEE_OTHER
 
@@ -298,7 +298,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val result =
-            route(application, getRequest()).value
+            route(application, getRequest).value
 
           status(result) mustEqual SEE_OTHER
 
