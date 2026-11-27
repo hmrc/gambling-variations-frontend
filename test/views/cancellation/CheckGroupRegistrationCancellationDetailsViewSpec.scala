@@ -23,7 +23,7 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{AnyContent, Request}
 import play.api.test.FakeRequest
 import viewmodels.checkAnswers.cancellation.CheckGroupRegistrationCancellationDetailsViewModel
-import views.html.cancellation.CheckGroupRegistrationCancellationDetailsView
+import views.html.cancellation.CheckRegistrationCancellationDetailsView
 
 import java.time.LocalDate
 
@@ -37,16 +37,16 @@ class CheckGroupRegistrationCancellationDetailsViewSpec extends SpecBase {
   private given messages: Messages =
     application.injector.instanceOf[MessagesApi].preferred(request)
 
-  private val view = application.injector.instanceOf[CheckGroupRegistrationCancellationDetailsView]
+  private val view = application.injector.instanceOf[CheckRegistrationCancellationDetailsView]
 
   private val userAnswers =
     emptyUserAnswers.set(CancelRegistrationDatePage, LocalDate.of(2026, 11, 20)).success.value
 
   private val document = org.jsoup.Jsoup.parse(
-    view(CheckGroupRegistrationCancellationDetailsViewModel.summaryList(userAnswers)).toString
+    view(CheckGroupRegistrationCancellationDetailsViewModel.summaryList(userAnswers), "checkGroupRegistrationCancellationDetails").toString
   )
 
-  "CheckGroupRegistrationCancellationDetailsView" - {
+  "CheckRegistrationCancellationDetailsView" - {
 
     "must display the correct page title" in {
       document.title() must include(messages(s"$msgKey.title"))
