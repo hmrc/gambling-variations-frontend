@@ -60,7 +60,7 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view("http://localhost:10400/manage-gambling-tax/manage-your-machine-games-duty/", messageKey)(request, messages(application)).toString
+            view("http://localhost:10400/manage-gambling-tax", messageKey)(request, messages(application)).toString
         }
       }
 
@@ -127,7 +127,8 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view("http://localhost:10400/manage-gambling-tax/manage-your-machine-games-duty/", messageKey)(request, messages(application)).toString
+            view("http://localhost:10400/manage-gambling-tax", messageKey)(request, messages(application)).toString
+
         }
       }
 
