@@ -56,7 +56,7 @@ trait CancellationEntrypointDecider {
       case _                            => false
     }
 
-    lazy val userHasCancelled = userAnswers.get(RegistrationCancellationDeclarationPage).contains(true)
+    lazy val userHasCancelled = userAnswers.get(RegistrationCancellationDeclarationPage).nonEmpty
 
     if (hmrcConfirmedCancellation) {
       CurrentScreen.Locked
