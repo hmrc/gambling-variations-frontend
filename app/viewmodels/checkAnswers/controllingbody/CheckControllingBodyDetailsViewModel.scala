@@ -60,13 +60,20 @@ case class CheckControllingBodyDetailsViewModel(
   addFaxNumber: Option[Boolean] = None,
   faxNumber: Option[String] = None,
   addEmailAddress: Option[Boolean] = None,
-  emailAddress: Option[String] = None
+  emailAddress: Option[String] = None,
+  hasBusinessPartnerNumber: Boolean = false,
+  hasContinued: Boolean = false
 ) {
 
   import CheckControllingBodyDetailsViewModel.*
 
   private val isSoleProprietor: Boolean = businessType.contains(Soleproprietor)
   private val isCorporateBody: Boolean = businessType.contains(Corporatebody)
+  private val isPartnership: Boolean = businessType.contains(Partnership)
+
+  private val isLocked: Boolean = hasBusinessPartnerNumber
+
+  private val isVrnLocked: Boolean = isPartnership && hasBusinessPartnerNumber
 
   // A corporate body is first asked whether it is incorporated in the UK. A limited liability partnership is not asked, since it is always
   // incorporated in the UK, so its incorporation details are shown whatever the loaded flag says
@@ -88,11 +95,16 @@ case class CheckControllingBodyDetailsViewModel(
   }
 
   private val dateOfBirthDetail: Option[MandatoryDetail] =
-    Option.when(isSoleProprietor)(MandatoryDetail.date("soleProprietorDOB", dateOfBirth, dateOfBirthUrl))
+    Option.when(isSoleProprietor)(MandatoryDetail.date("soleProprietorDOB", dateOfBirth, dateOfBirthUrl, locked = isLocked))
 
   private val isUkIncorporatedDetail: Option[MandatoryDetail] =
     Option.when(isCorporateBody) {
-      MandatoryDetail("isIncorporated", isUkIncorporated.map(answer => messages => Text(yesNo(answer)(messages))), isUkIncorporatedUrl)
+      MandatoryDetail(
+        "isIncorporated",
+        isUkIncorporated.map(answer => messages => Text(yesNo(answer)(messages))),
+        isUkIncorporatedUrl,
+        locked = isLocked
+      )
     }
 
   private val countryOfIncorporationDetail: Option[MandatoryDetail] =
@@ -102,14 +114,14 @@ case class CheckControllingBodyDetailsViewModel(
     Option.when(showNonUkIncorporation)(MandatoryDetail.text("foreignCorporateRef", foreignCorporateRef, foreignCorporateRefUrl))
 
   private val dateOfIncorporationDetail: Option[MandatoryDetail] =
-    Option.when(showUkIncorporation)(MandatoryDetail.date("dateOfInc", dateOfIncorporation, dateOfIncorporationUrl))
+    Option.when(showUkIncorporation)(MandatoryDetail.date("dateOfInc", dateOfIncorporation, dateOfIncorporationUrl, locked = isLocked))
 
   private val crnDetail: Option[MandatoryDetail] =
-    Option.when(showUkIncorporation)(MandatoryDetail.text("companyRegNumber", crn, crnUrl))
+    Option.when(showUkIncorporation)(MandatoryDetail.text("companyRegNumber", crn, crnUrl, locked = isLocked))
 
   // A partnership is not asked for a Unique Taxpayer Reference
   private val utrDetail: Option[MandatoryDetail] =
-    Option.when(!businessType.contains(Partnership))(MandatoryDetail.text("utr", utr, utrUrl))
+    Option.when(!isPartnership)(MandatoryDetail.text("utr", utr, utrUrl))
 
   private val addressDetail: MandatoryDetail =
     MandatoryDetail(
@@ -149,13 +161,13 @@ case class CheckControllingBodyDetailsViewModel(
   def businessDetails(implicit messages: Messages): SummaryList =
     SummaryListViewModel(
       rows = Seq(
-        Some(typeOfBusinessDetail.row),
+        Option.unless(hasContinued)(typeOfBusinessDetail.row),
         nameDetail.map(_.row),
         dateOfBirthDetail.map(_.row),
         screenerRow("addTradingName", addTradingName, addTradingNameUrl),
-        optionalRow("tradingName", addTradingName, tradingName, tradingNameUrl),
+        optionalRow("tradingName", addTradingName, tradingName, tradingNameUrl, Some(removeTradingNameUrl)),
         Option.when(isSoleProprietor)(screenerRow("addNino", addNino, addNinoUrl)).flatten,
-        Option.when(isSoleProprietor)(optionalRow("nino", addNino, nino, ninoUrl)).flatten,
+        Option.when(isSoleProprietor)(optionalRow("nino", addNino, nino, ninoUrl, locked = isLocked)).flatten,
         isUkIncorporatedDetail.map(_.row),
         countryOfIncorporationDetail.map(_.row),
         foreignCorporateRefDetail.map(_.row),
@@ -163,7 +175,7 @@ case class CheckControllingBodyDetailsViewModel(
         crnDetail.map(_.row),
         utrDetail.map(_.row),
         screenerRow("addVat", addVrn, addVrnUrl),
-        optionalRow("vat", addVrn, vrn, vrnUrl)
+        optionalRow("vat", addVrn, vrn, vrnUrl, Some(removeVrnUrl), locked = isVrnLocked)
       ).flatten
     )
 
@@ -181,9 +193,9 @@ case class CheckControllingBodyDetailsViewModel(
       rows = Seq(
         Some(contactNumbersDetail.row),
         screenerRow("addFaxNumber", addFaxNumber, addFaxNumberUrl),
-        optionalRow("faxNumber", addFaxNumber, faxNumber, faxNumberUrl),
+        optionalRow("faxNumber", addFaxNumber, faxNumber, faxNumberUrl, Some(removeFaxNumberUrl)),
         screenerRow("addEmailAddress", addEmailAddress, addEmailAddressUrl),
-        optionalRow("emailAddress", addEmailAddress, emailAddress, routes.ControllingBodyEmailAddressController.onPageLoad().url)
+        optionalRow("emailAddress", addEmailAddress, emailAddress, emailAddressUrl, Some(removeEmailAddressUrl))
       ).flatten
     )
 
@@ -191,12 +203,24 @@ case class CheckControllingBodyDetailsViewModel(
   private def screenerRow(key: String, answer: Option[Boolean], href: String)(implicit messages: Messages): Option[SummaryListRow] =
     answer.map(value => changeableRow(key, Text(yesNo(value)), href))
 
-  // An optional detail is hidden once its screener has been answered no, otherwise it is shown with "Not provided" in place of missing data
-  private def optionalRow(key: String, screenerAnswer: Option[Boolean], value: Option[String], href: String)(implicit
-    messages: Messages
-  ): Option[SummaryListRow] =
+  // An optional detail is hidden once its screener has been answered no, otherwise it is shown with "Not provided" in place of missing data.
+  private def optionalRow(
+    key: String,
+    screenerAnswer: Option[Boolean],
+    value: Option[String],
+    href: String,
+    removeHref: Option[String] = None,
+    locked: Boolean = false
+  )(implicit messages: Messages): Option[SummaryListRow] =
     Option.unless(screenerAnswer.contains(false)) {
-      changeableRow(key, Text(value.getOrElse(messages("site.notProvided"))), href)
+      value match {
+        case Some(answer) if locked =>
+          readOnlyRow(key, Text(answer))
+        case Some(answer) =>
+          changeableRow(key, Text(answer), href, removeHref)
+        case None =>
+          changeableRow(key, Text(messages("site.notProvided")), href)
+      }
     }
 
   private def contactNumbersContent(messages: Messages): Content = {
@@ -228,6 +252,7 @@ object CheckControllingBodyDetailsViewModel {
   private def addFaxNumberUrl: String = routes.ControllingBodyAddFaxNumberYesNoController.onPageLoad().url
   private def faxNumberUrl: String = routes.ControllingBodyFaxNumberController.onPageLoad().url
   private def addEmailAddressUrl: String = routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad().url
+  private def emailAddressUrl: String = routes.ControllingBodyEmailAddressController.onPageLoad().url
 
   // Screens that are not built yet, named by their codes in the specification
   private val ninoUrl = "#" // CB-NI
@@ -238,13 +263,21 @@ object CheckControllingBodyDetailsViewModel {
   private val additionalInfoUrl = "#" // CB-AI
   private val contactNumbersUrl = "#" // CB-CN
 
-  // A detail that must be provided before the controlling body can be submitted, shown as a link to add it while it is missing
-  private final case class MandatoryDetail(key: String, value: Option[Messages => Content], href: String) {
+  private val removeTradingNameUrl = "#"
+  private val removeVrnUrl = "#"
+  private val removeFaxNumberUrl = "#"
+  private val removeEmailAddressUrl = "#"
+
+  // A detail that must be provided before the controlling body can be submitted, shown as a link to add it while it is missing.
+  // A locked detail is shown without any actions once it holds data, so it cannot be changed.
+  private final case class MandatoryDetail(key: String, value: Option[Messages => Content], href: String, locked: Boolean = false) {
 
     val isMissing: Boolean = value.isEmpty
 
     def row(implicit messages: Messages): SummaryListRow =
       value match {
+        case Some(content) if locked =>
+          readOnlyRow(key, content(messages))
         case Some(content) =>
           changeableRow(key, content(messages), href)
         case None =>
@@ -254,18 +287,26 @@ object CheckControllingBodyDetailsViewModel {
 
   private object MandatoryDetail {
 
-    def text(key: String, value: Option[String], href: String): MandatoryDetail =
-      MandatoryDetail(key, value.map(text => _ => Text(text)), href)
+    def text(key: String, value: Option[String], href: String, locked: Boolean = false): MandatoryDetail =
+      MandatoryDetail(key, value.map(text => _ => Text(text)), href, locked)
 
-    def date(key: String, value: Option[LocalDate], href: String): MandatoryDetail =
-      MandatoryDetail(key, value.map(date => _ => Text(shortDateDisplay(date))), href)
+    def date(key: String, value: Option[LocalDate], href: String, locked: Boolean = false): MandatoryDetail =
+      MandatoryDetail(key, value.map(date => _ => Text(shortDateDisplay(date))), href, locked)
   }
 
-  private def changeableRow(key: String, content: Content, href: String)(implicit messages: Messages): SummaryListRow =
+  private def readOnlyRow(key: String, content: Content)(implicit messages: Messages): SummaryListRow =
+    SummaryListRowViewModel(key = s"$prefix.$key", value = ValueViewModel(content))
+
+  private def changeableRow(key: String, content: Content, href: String, removeHref: Option[String] = None)(implicit
+    messages: Messages
+  ): SummaryListRow =
     SummaryListRowViewModel(
-      key     = s"$prefix.$key",
-      value   = ValueViewModel(content),
-      actions = Seq(ActionItemViewModel("site.change", href).withVisuallyHiddenText(messages(s"$prefix.$key.hidden")))
+      key   = s"$prefix.$key",
+      value = ValueViewModel(content),
+      actions = Seq(
+        Some(ActionItemViewModel("site.change", href).withVisuallyHiddenText(messages(s"$prefix.$key.hidden"))),
+        removeHref.map(remove => ActionItemViewModel("site.remove", remove).withVisuallyHiddenText(messages(s"$prefix.$key.hidden")))
+      ).flatten
     )
 
   private def addLink(href: String, text: String): String =
@@ -295,22 +336,24 @@ object CheckControllingBodyDetailsViewModel {
         case "1" => true
         case "0" => false
       },
-      countryOfIncorporation = text(ControllingBodyCountryOfIncorporationPage),
-      foreignCorporateRef    = text(ControllingBodyForeignCorpRefPage),
-      dateOfIncorporation    = answers.get(ControllingBodyDateOfIncorporationPage),
-      crn                    = text(ControllingBodyCrnPage),
-      utr                    = text(ControllingBodyUtrPage),
-      addVrn                 = answers.get(ControllingBodyVATScreenerPage),
-      vrn                    = text(ControllingBodyVrnPage),
-      address                = answers.get(ControllingBodyAddressPage).filter(_.address1.trim.nonEmpty),
-      addAdditionalInfo      = answers.get(ControllingBodyAdditionalAddressInformationYesNoPage),
-      additionalInfo         = text(ControllingBodyAdditionalInfoPage),
-      phoneNumber            = contactNumber.flatMap(_.phoneNumber).map(_.trim).filter(_.nonEmpty),
-      mobilePhoneNumber      = contactNumber.flatMap(_.mobilePhoneNumber).map(_.trim).filter(_.nonEmpty),
-      addFaxNumber           = answers.get(ControllingBodyAddFaxNumberYesNoPage),
-      faxNumber              = text(ControllingBodyFaxNumberPage),
-      addEmailAddress        = answers.get(ControllingBodyAddEmailAddressYesNoPage),
-      emailAddress           = text(ControllingBodyEmailPage)
+      countryOfIncorporation   = text(ControllingBodyCountryOfIncorporationPage),
+      foreignCorporateRef      = text(ControllingBodyForeignCorpRefPage),
+      dateOfIncorporation      = answers.get(ControllingBodyDateOfIncorporationPage),
+      crn                      = text(ControllingBodyCrnPage),
+      utr                      = text(ControllingBodyUtrPage),
+      addVrn                   = answers.get(ControllingBodyVATScreenerPage),
+      vrn                      = text(ControllingBodyVrnPage),
+      address                  = answers.get(ControllingBodyAddressPage).filter(_.address1.trim.nonEmpty),
+      addAdditionalInfo        = answers.get(ControllingBodyAdditionalAddressInformationYesNoPage),
+      additionalInfo           = text(ControllingBodyAdditionalInfoPage),
+      phoneNumber              = contactNumber.flatMap(_.phoneNumber).map(_.trim).filter(_.nonEmpty),
+      mobilePhoneNumber        = contactNumber.flatMap(_.mobilePhoneNumber).map(_.trim).filter(_.nonEmpty),
+      addFaxNumber             = answers.get(ControllingBodyAddFaxNumberYesNoPage),
+      faxNumber                = text(ControllingBodyFaxNumberPage),
+      addEmailAddress          = answers.get(ControllingBodyAddEmailAddressYesNoPage),
+      emailAddress             = text(ControllingBodyEmailPage),
+      hasBusinessPartnerNumber = text(ControllingBodyBusinessPartnerNumberPage).isDefined,
+      hasContinued             = answers.get(ControllingBodyContinuePage).getOrElse(false)
     )
   }
 }
