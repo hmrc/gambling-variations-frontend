@@ -17,6 +17,7 @@
 package connectors
 
 import models.controllingbody.ControllingBodyDetails
+import models.groupmembers.GroupMembers
 import models.licencespremises.LicencesAndPremises
 import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, ClientListStatus, ContactDetails, EntityName, GamblingReturnPeriods, MgdCertificate, MgdTradeDetails, PartnersDetails}
 import play.api.Logging
@@ -314,6 +315,30 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
           case status =>
             throw UpstreamErrorResponse(
               s"Unexpected status while fetching Gambling Return Periods: $status",
+              status
+            )
+        }
+      }
+  }
+
+  def getGroupMembers(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[GroupMembers] = {
+    http
+      .get(url"$baseUrl/group-members/mgd/$mgdRegNumber")
+      .execute[HttpResponse]
+      .map { response =>
+        response.status match {
+
+          case OK =>
+            response.json
+              .validate[GroupMembers]
+              .fold(
+                errors => throw new RuntimeException(s"Invalid JSON Group Members: $errors"),
+                groupMembers => groupMembers
+              )
+
+          case status =>
+            throw UpstreamErrorResponse(
+              s"Unexpected status while fetching Group Members: $status",
               status
             )
         }
