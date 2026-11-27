@@ -26,8 +26,11 @@ import viewmodels.implicits.*
 
 case object HowToChangeBusinessAddressRow {
   def from(ua: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
+
     ua.get(BusinessChangeAddrScreenerPage) match {
       case Some(howToChange) =>
+        println("howToChange")
+        println(howToChange)
         Some(
           SummaryListRowViewModel(
             key = "checkBusinessAddress.question.howToChange",

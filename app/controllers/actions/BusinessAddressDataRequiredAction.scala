@@ -91,15 +91,15 @@ class BusinessAddressDataRequiredActionImpl @Inject() (
   private def copyBusinessAddressToUserAnswers(businessAddress: BusinessAddress, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Updating User Answers with Business Address")
     for {
-      updatedAnswers <- answers.set(BusinessAddressSectionPage, businessAddress.mgdRegNumber)
+      updatedAnswers <- answers.setOriginal(BusinessAddressSectionPage, businessAddress.mgdRegNumber)
       updatedAnswers <- {
         businessAddress.address.flatMap(_.postcode) match {
-          case Some(_) => updatedAnswers.setIfDefined(BusinessAddressUkPage, businessAddress.address)
-          case None    => updatedAnswers.setIfDefined(BusinessAddressNonUkPage, businessAddress.address)
+          case Some(_) => updatedAnswers.setOriginalIfDefined(BusinessAddressUkPage, businessAddress.address)
+          case None    => updatedAnswers.setOriginalIfDefined(BusinessAddressNonUkPage, businessAddress.address)
         }
       }
-      updatedAnswers <- updatedAnswers.setIfDefined(BusinessAddressAdditionalInformationPage, businessAddress.adi)
-      updatedAnswers <- updatedAnswers.setIfDefined(BusinessAddressIsleMOrChannelFlagPage, businessAddress.iomOrCiFlag)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(BusinessAddressAdditionalInformationPage, businessAddress.adi)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(BusinessAddressIsleMOrChannelFlagPage, businessAddress.iomOrCiFlag)
     } yield updatedAnswers
   }
 }

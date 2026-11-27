@@ -17,9 +17,11 @@
 package views.businessaddress
 
 import base.SpecBase
+import models.BusinessChangeAddrOption.ChangeToUkAddress
 import models.{Address, UserAnswers}
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
+import pages.businessaddress.*
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -129,12 +131,15 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("address4"),
               Some("postcode"),
               Some("country")
-            ),
-            "businessChangeAddrScreener" -> "changeToUkAddress",
-            "isInChangeFlow"             -> true
+            )
           )
         )
-      )
+      ).set(BusinessAddressChangeFlowPage, true)
+        .success
+        .value
+        .set(BusinessChangeAddrScreenerPage, ChangeToUkAddress)
+        .success
+        .value
 
       val html = view(ukAddressAnswers, false)(request, messages)
 
@@ -162,12 +167,15 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("address4"),
               Some("postcode"),
               Some("country")
-            ),
-            "businessUKAddrScreener" -> true,
-            "isInAddFlow"            -> true
+            )
           )
         )
-      )
+      ).set(BusinessAddressAddFlowPage, true)
+        .success
+        .value
+        .set(BusinessUKAddrScreenerPage, true)
+        .success
+        .value
 
       val html = view(ukAddressAnswers, false)(request, messages)
 
@@ -194,13 +202,18 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("address4"),
               Some("postcode"),
               Some("country")
-            ),
-            "businessUKAddrScreener"                  -> true,
-            "addBusinessAddressAdditionalInformation" -> false,
-            "isInAddFlow"                             -> true
+            )
           )
         )
-      )
+      ).set(BusinessAddressAddFlowPage, true)
+        .success
+        .value
+        .set(AddBusinessAddressAdditionalInformationPage, true)
+        .success
+        .value
+        .set(BusinessUKAddrScreenerPage, true)
+        .success
+        .value
 
       val html = view(ukAddressAnswers, false)(request, messages)
 
@@ -222,13 +235,18 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("address4"),
               Some("postcode"),
               Some("country")
-            ),
-            "businessUKAddrScreener"                  -> true,
-            "addBusinessAddressAdditionalInformation" -> false,
-            "isInAddFlow"                             -> true
+            )
           )
         )
-      )
+      ).set(BusinessAddressAddFlowPage, true)
+        .success
+        .value
+        .set(AddBusinessAddressAdditionalInformationPage, false)
+        .success
+        .value
+        .set(BusinessUKAddrScreenerPage, true)
+        .success
+        .value
 
       val html = view(ukAddressAnswers, false)(request, messages)
 

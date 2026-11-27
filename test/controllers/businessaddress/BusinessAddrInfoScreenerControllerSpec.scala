@@ -23,6 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.businessaddress.AddBusinessAddressAdditionalInformationPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -76,7 +77,7 @@ class BusinessAddrInfoScreenerControllerSpec extends SpecBase with MockitoSugar 
               "addBusinessAddressAdditionalInformation" -> true
             )
           )
-        )
+        ).set(AddBusinessAddressAdditionalInformationPage, true).success.value
       )
 
       val application = applicationBuilder(userAnswers = userAnswers).build()

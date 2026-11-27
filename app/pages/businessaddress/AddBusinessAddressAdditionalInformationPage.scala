@@ -17,14 +17,14 @@
 package pages.businessaddress
 
 import models.UserAnswers
-import pages.QuestionPage
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
 import scala.util.Try
 
-case object AddBusinessAddressAdditionalInformationPage extends QuestionPage[Boolean] {
+case object AddBusinessAddressAdditionalInformationPage extends FlagPage[Boolean] {
 
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
+  override def path: JsPath = BusinessAddressSection.path \ toString
 
   override def toString: String = "addBusinessAddressAdditionalInformation"
 

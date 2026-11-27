@@ -16,10 +16,10 @@
 
 package pages.businessaddress
 
-import pages.QuestionPage
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
-case object BusinessAddressChangeFlowPage extends QuestionPage[Boolean] {
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
+case object BusinessAddressChangeFlowPage extends FlagPage[Boolean] {
+  override def path: JsPath = BusinessAddressSection.path \ toString
   override def toString: String = "isInChangeFlow"
 }
