@@ -17,7 +17,6 @@
 package forms.businessaddress
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.businessaddress.BusinessAddrInfoScreenerFormProvider
 import play.api.data.FormError
 
 class BusinessAddrInfoScreenerFormProviderSpec extends BooleanFieldBehaviours {

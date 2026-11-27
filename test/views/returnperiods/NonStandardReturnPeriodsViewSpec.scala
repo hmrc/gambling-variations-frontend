@@ -20,7 +20,7 @@ import base.SpecBase
 import forms.returnperiods.NonStandardLastReturnPeriodsFormProvider
 import models.{GamblingReturnPeriods, NormalMode}
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.{Document, Element}
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
@@ -28,6 +28,7 @@ import viewmodels.checkAnswers.returnperiods.NonStandardReturnPeriodsViewModel
 import views.html.returnperiods.NonStandardReturnPeriodsView
 
 import java.time.LocalDate
+import scala.collection.mutable
 import scala.jdk.CollectionConverters.*
 
 class NonStandardReturnPeriodsViewSpec extends SpecBase {
@@ -52,29 +53,26 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
 
     private val form =
       formProvider()
-
-    private val date =
-      LocalDate.now()
-
     val gamblingDutiesEnquiries =
       "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/gambling-duties"
 
-    private val gamblingReturnPeriods =
-      GamblingReturnPeriods(
-        mgdRegNumber          = "mgd1",
-        returnPeriodsId       = Some(1),
-        nstpEndDate1          = Some(date.minusMonths(9)),
-        nstpEndDate2          = Some(date.minusMonths(6)),
-        nstpEndDate3          = Some(date.minusMonths(3)),
-        nstpEndDate4          = Some(date),
-        nstpEndDate5          = Some(date.plusMonths(3)),
-        nstpEndDate6          = Some(date.plusMonths(6)),
-        nstpEndDate7          = Some(date.plusMonths(9)),
-        nstpEndDate8          = Some(date.plusMonths(12)),
-        isInLastNstp          = Some(isInLastNstp),
-        finalPeriodWarning    = Some(false),
-        hasExistingNstpValues = Some(true)
-      )
+    val date: LocalDate = LocalDate.now()
+    def gamblingReturnPeriods: GamblingReturnPeriods = GamblingReturnPeriods(
+      mgdRegNumber          = "mgd1",
+      returnPeriodsId       = Some(1),
+      nstpEndDate1          = Some(date.minusMonths(9)),
+      nstpEndDate2          = Some(date.minusMonths(6)),
+      nstpEndDate3          = Some(date.minusMonths(3)),
+      nstpEndDate4          = Some(date),
+      nstpEndDate5          = Some(date.plusMonths(3)),
+      nstpEndDate6          = Some(date.plusMonths(6)),
+      nstpEndDate7          = Some(date.plusMonths(9)),
+      nstpEndDate8          = Some(date.plusMonths(12)),
+      isInLastNstp          = Some(isInLastNstp),
+      finalPeriodWarning    = Some(false),
+      hasExistingNstpValues = Some(true)
+    )
+    private val viewModel = NonStandardReturnPeriodsViewModel.from(gamblingReturnPeriods).get
 
     private val viewModel =
       NonStandardReturnPeriodsViewModel
@@ -237,10 +235,14 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
             "returnPeriods.nonStandard.upcomingTable.caption"
           )
 
-        doc.select(".govuk-table__caption").get(1).text() mustBe
-          messages(
-            "returnPeriods.nonStandard.pastTable.caption"
-          )
+        doc.select(".govuk-body").text() mustBe Seq(
+          messages("returnPeriods.nonStandard.notLastPeriod.p1"),
+          messages("returnPeriods.nonStandard.notLastPeriod.p2"),
+          messages("returnPeriods.nonStandard.notLastPeriod.p3")
+        ).mkString(" ")
+
+        doc.select(".govuk-table__caption").get(0).text() mustBe messages("returnPeriods.nonStandard.upcomingTable.caption")
+        doc.select(".govuk-table__caption").get(1).text() mustBe messages("returnPeriods.nonStandard.pastTable.caption")
 
         val tables =
           doc.select("table.govuk-table").asScala
@@ -280,6 +282,59 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
           upcomingTable.get.select("tbody tr").size() > 0,
           "Standard table should contain rows"
         )
+
+        doc.select("button.govuk-button").text() mustBe
+          messages("site.continue")
+      }
+
+      "must render non-standard page correctly - expired" in new Setup(false) {
+
+        override def gamblingReturnPeriods = GamblingReturnPeriods(
+          mgdRegNumber          = "mgd1",
+          returnPeriodsId       = Some(1),
+          nstpEndDate1          = Some(date.minusMonths(24)),
+          nstpEndDate2          = Some(date.minusMonths(21)),
+          nstpEndDate3          = Some(date.minusMonths(18)),
+          nstpEndDate4          = Some(date.minusMonths(15)),
+          nstpEndDate5          = Some(date.minusMonths(12)),
+          nstpEndDate6          = Some(date.minusMonths(9)),
+          nstpEndDate7          = Some(date.minusMonths(6)),
+          nstpEndDate8          = Some(date.minusMonths(3)),
+          isInLastNstp          = Some(false),
+          finalPeriodWarning    = Some(false),
+          hasExistingNstpValues = Some(true)
+        )
+
+        doc.title must include(
+          messages("returnPeriods.nonStandard.title")
+        )
+
+        doc.select(".govuk-caption-l").text() mustBe
+          messages("changeRegistrationDetails.caption")
+
+        doc.select("h1.govuk-heading-l").text() mustBe
+          messages("returnPeriods.nonStandard.heading")
+
+        doc.select(".govuk-fieldset__legend").text() mustBe
+          messages("returnPeriods.noUpcomingPeriods.caption")
+
+        doc.select(".govuk-body").text() mustBe Seq(
+          messages("returnPeriods.noUpcomingPeriods.p1"),
+          messages("returnPeriods.nonStandard.notLastPeriod.p1"),
+          messages("returnPeriods.nonStandard.notLastPeriod.p2"),
+          messages("returnPeriods.nonStandard.notLastPeriod.p4")
+        ).mkString(" ")
+
+        doc.select(".govuk-table__caption").get(0).text() mustBe messages("returnPeriods.nonStandard.pastTable.caption")
+
+        val tables: mutable.Seq[Element] = doc.select("table.govuk-table").asScala
+
+        val pastTable: Option[Element] = tables
+          .find(_.select("caption").text().trim == messages("returnPeriods.nonStandard.pastTable.caption"))
+
+        assert(pastTable.isDefined, "Non-standard return periods table should exist")
+
+        assert(pastTable.get.select("tbody tr").size() > 0, "Non-standard table should contain rows")
 
         doc.select("button.govuk-button").text() mustBe
           messages("site.continue")

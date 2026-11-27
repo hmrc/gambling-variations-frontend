@@ -17,7 +17,6 @@
 package forms.businessname
 
 import forms.behaviours.StringFieldBehaviours
-import forms.businessname.BusinessTradingNameFormProvider
 import org.scalacheck.Gen
 import play.api.data.FormError
 

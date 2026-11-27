@@ -24,7 +24,6 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import viewmodels.tradingdetails.AssociatedRegNumberViewModel
 
 class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
 

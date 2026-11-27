@@ -26,7 +26,6 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
-import viewmodels.licencespremises.LicencesPremisesSummary
 
 class LicencesPremisesSummarySpec extends SpecBase {
 

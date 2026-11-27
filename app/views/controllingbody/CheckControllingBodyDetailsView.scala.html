@@ -23,6 +23,7 @@
         caption: Caption,
         paragraph: Paragraph,
         h2: H2,
+        formHelper: FormWithCSRF,
         govukSummaryList: GovukSummaryList,
         govukButton: GovukButton
 )
@@ -53,8 +54,10 @@
 
     @govukSummaryList(viewModel.contactDetails)
 
+    @formHelper(action = controllers.controllingbody.routes.CheckControllingBodyDetailsController.onSubmit()) {
     @govukButton(
         ButtonViewModel(messages("site.continue"))
             .asLink(viewModel.continueUrl)
     )
+  }
 }

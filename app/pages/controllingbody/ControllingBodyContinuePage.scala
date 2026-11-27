@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package pages.cancellation
+package pages.controllingbody
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-import java.time.LocalDate
-
-case object RegistrationCancellationDatePage extends QuestionPage[LocalDate] {
-
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "registrationCancellationDate"
+case object ControllingBodyContinuePage extends QuestionPage[Boolean] {
+  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
+  override def toString: String = "Continue"
 }

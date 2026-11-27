@@ -31,7 +31,8 @@ class CancelRegistrationDateFormProvider @Inject() extends Mappings {
 
   def apply(
     registrationDate: LocalDate,
-    maximumValidDate: LocalDate
+    maximumValidDate: LocalDate,
+    messageKey: String
   )(implicit messages: Messages): Form[LocalDate] = {
 
     val firstInvalidDate =
@@ -39,21 +40,21 @@ class CancelRegistrationDateFormProvider @Inject() extends Mappings {
 
     Form(
       "value" -> localDate(
-        invalidKey     = "cancelRegistrationDate.error.invalid",
-        allRequiredKey = "cancelRegistrationDate.error.required.all",
-        twoRequiredKey = "cancelRegistrationDate.error.required.two",
-        requiredKey    = "cancelRegistrationDate.error.required"
+        invalidKey     = s"$messageKey.error.invalid",
+        allRequiredKey = s"$messageKey.error.required.all",
+        twoRequiredKey = s"$messageKey.error.required.two",
+        requiredKey    = s"$messageKey.error.required"
       ).verifying(
         firstError(
           minDate(
             registrationDate,
-            "cancelRegistrationDate.error.outsideBoundaries",
+            s"$messageKey.error.outsideBoundaries",
             registrationDate.format(dateFormatter),
             firstInvalidDate.format(dateFormatter)
           ),
           maxDate(
             maximumValidDate,
-            "cancelRegistrationDate.error.outsideBoundaries",
+            s"$messageKey.error.outsideBoundaries",
             registrationDate.format(dateFormatter),
             firstInvalidDate.format(dateFormatter)
           )

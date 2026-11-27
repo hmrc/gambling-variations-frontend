@@ -18,7 +18,6 @@ package views.cancellation
 
 import base.SpecBase
 import forms.cancellation.ChangeGroupRegistrationNumberFormProvider
-import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
@@ -48,7 +47,7 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
 
     "must render page correctly" in new Setup {
 
-      val html = view(form, NormalMode)(request, messages)
+      val html = view(form)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
 
       doc.title must include(
@@ -81,7 +80,7 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
       val boundForm =
         form.bind(Map("changeGroupRegistrationNumber" -> ""))
 
-      val html = view(boundForm, NormalMode)(request, messages)
+      val html = view(boundForm)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
 
       doc
@@ -100,7 +99,7 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
       val boundForm =
         form.bind(Map("changeGroupRegistrationNumber" -> "X!M00000000640"))
 
-      val html = view(boundForm, NormalMode)(request, messages)
+      val html = view(boundForm)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
 
       doc
@@ -119,7 +118,7 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
       val boundForm =
         form.bind(Map("changeGroupRegistrationNumber" -> "PEM00000000640"))
 
-      val html = view(boundForm, NormalMode)(request, messages)
+      val html = view(boundForm)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
 
       doc
@@ -138,7 +137,7 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
       val boundForm =
         form.bind(Map("changeGroupRegistrationNumber" -> "XEM00000000641"))
 
-      val html = view(boundForm, NormalMode)(request, messages)
+      val html = view(boundForm)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
 
       doc

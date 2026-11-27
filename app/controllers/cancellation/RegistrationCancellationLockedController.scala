@@ -18,7 +18,6 @@ package controllers.cancellation
 
 import config.FrontendAppConfig
 import controllers.actions.*
-import models.Mode
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -38,7 +37,14 @@ class RegistrationCancellationLockedController @Inject() (
     with CancellationEntrypointDecider
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    checkScreen(request.userAnswers, CurrentScreen.Locked)(Ok(view(mode, appConfig.gamblingManagementHomeUrl)))
+  private val groupKey = "groupRegistrationCancellationLocked"
+  private val nonGroupKey = "registrationCancellationLocked"
+
+  def onPageLoad(): Action[AnyContent] = show(messageKey = nonGroupKey, isGroup = false)
+
+  def onPageLoadGroup(): Action[AnyContent] = show(messageKey = groupKey, isGroup = true)
+
+  private def show(messageKey: String, isGroup: Boolean): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    checkScreen(request.userAnswers, CurrentScreen.Locked, isGroup)(Ok(view(appConfig.gamblingManagementHomeUrl, messageKey)))
   }
 }

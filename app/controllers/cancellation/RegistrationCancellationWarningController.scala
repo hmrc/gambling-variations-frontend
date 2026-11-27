@@ -19,9 +19,9 @@ package controllers.cancellation
 import controllers.actions.{AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import controllers.routes
 import forms.cancellation.RegistrationCancellationWarningFormProvider
-import models.Mode
+import models.NormalMode
 import navigation.Navigator
-import pages.cancellation.{RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
+import pages.cancellation.{RegistrationCancellationCancelAgainYesNoPage, RegistrationCancellationDeclarationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -47,34 +47,37 @@ class RegistrationCancellationWarningController @Inject() (
     with CancellationEntrypointDecider
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    checkScreen(request.userAnswers, CurrentScreen.Warning) {
+  private val groupKey = "cancelGroupRegistrationWarning"
+  private val nonGroupKey = "cancelRegistrationWarning"
+
+  def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    checkScreen(request.userAnswers, CurrentScreen.Warning, false) {
       request.userAnswers
-        .get(RegistrationCancellationDatePage)
+        .get(RegistrationCancellationDeclarationPage)
         .fold(Redirect(routes.SystemErrorController.onPageLoad())) { cancellationDate =>
           val form = request.userAnswers
             .get(RegistrationCancellationCancelAgainYesNoPage)
             .fold(formProvider())(formProvider().fill)
 
-          Ok(view(form, dateFormatter.format(cancellationDate), mode))
+          Ok(view(form, dateFormatter.format(cancellationDate), nonGroupKey))
         }
     }
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = {
+  def onSubmit(): Action[AnyContent] = {
     (authorise andThen getData andThen requireData).async { implicit request =>
       val form = formProvider()
-      val cancellationDate = request.userAnswers.get(RegistrationCancellationDatePage)
 
-      cancellationDate
-        .map(systemDate =>
+      request.userAnswers
+        .get(RegistrationCancellationDeclarationPage)
+        .fold(Future.successful(Redirect(routes.SystemErrorController.onPageLoad().url))) { cancellationDate =>
           form
             .bindFromRequest()
             .fold(
               formWithErrors =>
                 Future.successful(
                   BadRequest(
-                    view(formWithErrors, dateFormatter.format(systemDate), mode)
+                    view(formWithErrors, dateFormatter.format(cancellationDate), nonGroupKey)
                   )
                 ),
               value =>
@@ -84,15 +87,62 @@ class RegistrationCancellationWarningController @Inject() (
                                     )
 
                   updatedAnswers <- Future.fromTry(
-                                      request.userAnswers.set(RegistrationCancellationDeclarationPage, false)
+                                      request.userAnswers.remove(RegistrationCancellationDeclarationPage)
                                     )
                   _ <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(
-                  navigator.nextPage(RegistrationCancellationDeclarationPage, mode, updatedAnswers)
+                  navigator.nextPage(RegistrationCancellationDeclarationPage, NormalMode, updatedAnswers)
                 )
             )
-        )
-        .getOrElse(Future.successful(Redirect(routes.SystemErrorController.onPageLoad().url)))
+        }
+    }
+  }
+
+  def onPageLoadGroup(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    checkScreen(request.userAnswers, CurrentScreen.Warning, true) {
+      request.userAnswers
+        .get(RegistrationCancellationDeclarationPage)
+        .fold(Redirect(routes.SystemErrorController.onPageLoad())) { cancellationDate =>
+          val form = request.userAnswers
+            .get(RegistrationCancellationCancelAgainYesNoPage)
+            .fold(formProvider())(formProvider().fill)
+
+          Ok(view(form, dateFormatter.format(cancellationDate), groupKey))
+        }
+    }
+  }
+
+  def onSubmitGroup(): Action[AnyContent] = {
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      val form = formProvider()
+
+      request.userAnswers
+        .get(RegistrationCancellationDeclarationPage)
+        .fold(Future.successful(Redirect(routes.SystemErrorController.onPageLoad().url))) { cancellationDate =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors =>
+                Future.successful(
+                  BadRequest(
+                    view(formWithErrors, dateFormatter.format(cancellationDate), groupKey)
+                  )
+                ),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(
+                                      request.userAnswers.set(RegistrationCancellationCancelAgainYesNoPage, value)
+                                    )
+
+                  updatedAnswers <- Future.fromTry(
+                                      request.userAnswers.remove(RegistrationCancellationDeclarationPage)
+                                    )
+                  _ <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(
+                  navigator.nextPage(RegistrationCancellationDeclarationPage, NormalMode, updatedAnswers)
+                )
+            )
+        }
     }
   }
 

@@ -88,6 +88,8 @@ GET        /unique-taxpayer-reference                        controllers.control
 POST       /unique-taxpayer-reference                        controllers.controllingbody.ControllingBodyUTRController.onSubmit(mode: Mode = NormalMode)
 
 GET        /check                            controllers.controllingbody.CheckControllingBodyDetailsController.onPageLoad()
+GET        /check                            controllers.controllingbody.CheckControllingBodyDetailsController.onSubmit()
+
 
 GET        /foreign-corporate-reference     controllers.controllingbody.ControllingBodyForeignCorpRefController.onPageLoad(mode: Mode = NormalMode)
 POST       /foreign-corporate-reference     controllers.controllingbody.ControllingBodyForeignCorpRefController.onSubmit(mode: Mode = NormalMode)

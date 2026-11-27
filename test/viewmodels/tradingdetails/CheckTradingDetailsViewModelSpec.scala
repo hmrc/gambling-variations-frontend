@@ -23,7 +23,6 @@ import pages.tradingdetails.{BusinessTradeClassPage, OtherTradeClassPage}
 import play.api.Application
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import viewmodels.tradingdetails.CheckTradingDetailsViewModel
 
 class CheckTradingDetailsViewModelSpec extends SpecBase {
 

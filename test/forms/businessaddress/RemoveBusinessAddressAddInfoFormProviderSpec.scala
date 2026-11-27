@@ -17,7 +17,6 @@
 package forms.businessaddress
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.businessaddress.RemoveBusinessAddressAddInfoFormProvider
 import play.api.data.FormError
 
 class RemoveBusinessAddressAddInfoFormProviderSpec extends BooleanFieldBehaviours {

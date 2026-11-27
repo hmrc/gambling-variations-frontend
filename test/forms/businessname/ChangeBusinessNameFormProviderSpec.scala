@@ -17,9 +17,8 @@
 package forms.businessname
 
 import forms.behaviours.StringFieldBehaviours
-import forms.businessname.ChangeBusinessNameFormProvider
 import models.BusinessType
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 
 class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
 
@@ -31,8 +30,8 @@ class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
   val invalidKey = "changeBusinessName.error.invalid.corporatebody"
   val lengthKey = "changeBusinessName.error.length.corporatebody"
 
-  val formProvider = new ChangeBusinessNameFormProvider()
-  val form = formProvider(businessType)
+  val formProvider: ChangeBusinessNameFormProvider = new ChangeBusinessNameFormProvider()
+  val form: Form[String] = formProvider(businessType)
 
   ".value" - {
 

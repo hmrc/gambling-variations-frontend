@@ -17,13 +17,14 @@
 package controllers.cancellation
 
 import base.SpecBase
-import models.{BusinessType, NormalMode}
+import models.BusinessType
 import models.cancellation.ReasonForCancellation
-import pages.{BusinessTypePage, GroupMemberPage}
 import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage}
+import pages.{BusinessTypePage, GroupMemberPage}
+import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import viewmodels.checkAnswers.cancellation.CheckRegistrationCancellationDetailsViewModel
+import viewmodels.checkAnswers.cancellation.{CheckGroupRegistrationCancellationDetailsViewModel, CheckRegistrationCancellationDetailsViewModel}
 import views.html.cancellation.CheckRegistrationCancellationDetailsView
 
 import java.time.LocalDate
@@ -32,61 +33,125 @@ class CheckRegistrationCancellationDetailsControllerSpec extends SpecBase {
 
   "CheckRegistrationCancellationDetailsController" - {
 
-    "must return OK and the correct view for a GET" in {
+    "nonGroup" - {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(BusinessTypePage, BusinessType.Partnership)
-          .success
-          .value
-          .set(GroupMemberPage, false)
-          .success
-          .value
-          .set(CancelRegistrationDatePage, LocalDate.of(2026, 2, 2))
-          .success
-          .value
-          .set(
-            ReasonForCancellationPage,
-            ReasonForCancellation.BusinessIsPartOfTheGroup
-          )
-          .success
-          .value
-          .set(
-            ChangeGroupRegistrationNumberPage,
-            "XWM000000001770"
-          )
-          .success
-          .value
+      "must return OK and the correct view for a GET" in {
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val userAnswers =
+          emptyUserAnswers
+            .set(GroupMemberPage, false)
+            .success
+            .value
+            .set(BusinessTypePage, BusinessType.Partnership)
+            .success
+            .value
+            .set(CancelRegistrationDatePage, LocalDate.of(2026, 2, 2))
+            .success
+            .value
+            .set(
+              ReasonForCancellationPage,
+              ReasonForCancellation.BusinessIsPartOfTheGroup
+            )
+            .success
+            .value
+            .set(
+              ChangeGroupRegistrationNumberPage,
+              "XWM000000001770"
+            )
+            .success
+            .value
 
-      running(application) {
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request =
-          FakeRequest(
-            GET,
-            controllers.cancellation.routes.CheckRegistrationCancellationDetailsController
-              .onPageLoad()
-              .url
-          )
+        running(application) {
 
-        val result = route(application, request).value
+          val request =
+            FakeRequest(
+              GET,
+              controllers.cancellation.routes.CheckRegistrationCancellationDetailsController
+                .onPageLoad()
+                .url
+            )
 
-        val view =
-          application.injector
-            .instanceOf[CheckRegistrationCancellationDetailsView]
+          val result = route(application, request).value
 
-        implicit val msgs = messages(application)
+          val view =
+            application.injector
+              .instanceOf[CheckRegistrationCancellationDetailsView]
 
-        val expectedSummaryList =
-          CheckRegistrationCancellationDetailsViewModel.summaryList(userAnswers)
+          implicit val msgs: Messages = messages(application)
 
-        status(result) mustEqual OK
+          val expectedSummaryList =
+            CheckRegistrationCancellationDetailsViewModel.summaryList(userAnswers)
 
-        contentAsString(result) mustEqual
-          view(NormalMode, expectedSummaryList)(request, msgs).toString
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(expectedSummaryList)(request, msgs).toString
+        }
       }
     }
+
+    "group" - {
+
+      "must return OK and the correct view for a GET" in {
+
+        val userAnswers =
+          emptyUserAnswers
+            .set(GroupMemberPage, true)
+            .success
+            .value
+            .set(BusinessTypePage, BusinessType.Partnership)
+            .success
+            .value
+            .set(CancelRegistrationDatePage, LocalDate.of(2026, 2, 2))
+            .success
+            .value
+            .set(
+              ReasonForCancellationPage,
+              ReasonForCancellation.BusinessIsPartOfTheGroup
+            )
+            .success
+            .value
+            .set(
+              ChangeGroupRegistrationNumberPage,
+              "XWM000000001770"
+            )
+            .success
+            .value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+
+          val request =
+            FakeRequest(
+              GET,
+              controllers.cancellation.routes.CheckRegistrationCancellationDetailsController
+                .onPageLoadGroup()
+                .url
+            )
+
+          val result = route(application, request).value
+
+          val view =
+            application.injector
+              .instanceOf[CheckRegistrationCancellationDetailsView]
+
+          implicit val msgs: Messages = messages(application)
+
+          val expectedSummaryList =
+            CheckGroupRegistrationCancellationDetailsViewModel.summaryList(userAnswers)
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(expectedSummaryList)(request, msgs).toString
+        }
+      }
+    }
+
   }
 }

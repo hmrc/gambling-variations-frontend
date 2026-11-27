@@ -29,11 +29,12 @@
   govukDateInput: GovukDateInput,
   govukButton: GovukButton,
   caption: Caption,
+  p: Paragraph,
   mainErrorSummary: MainErrorSummary
  )
 
 
- @(form: Form[_], mode: Mode, registrationDate: LocalDate, maximumDate: LocalDate, middleOfDateRange: LocalDate)(implicit request: Request[_], messages: Messages)
+ @(form: Form[LocalDate], registrationDate: LocalDate, maximumDate: LocalDate, middleOfDateRange: LocalDate, messageKey: String, isGroup: Boolean)(implicit request: Request[_], messages: Messages)
 
  @fullDate(date: LocalDate) = @{
   date.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))
@@ -43,9 +44,9 @@
   date.format(DateTimeFormatter.ofPattern("d M yyyy"))
  }
 
- @layout(pageTitle = title(form, messages("cancelRegistrationDate.title"), Some(messages("cancelRegistrationDate.caption")))) {
+ @layout(pageTitle = title(form, messages(s"$messageKey.title"), Some(messages(s"$messageKey.caption")))) {
 
- @formHelper(action = controllers.cancellation.routes.CancelRegistrationDateController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+ @formHelper(action = controllers.cancellation.routes.CancelRegistrationDateController.onSubmit(), Symbol("autoComplete") -> "off") {
 
   @mainErrorSummary(
        form.copy(errors = form.errors.filter(_.key == "value")),
@@ -58,23 +59,62 @@
         )
   )
 
- @caption(messages("cancelRegistrationDate.caption"))
 
- @govukDateInput(
-  DateViewModel(
-    field = form("value"),
-    legend = LegendViewModel(messages("cancelRegistrationDate.heading")).asPageHeading(Large)
-    ).withHint(
-      HintViewModel(messages("cancelRegistrationDate.hint",
-       fullDate(registrationDate),
-       fullDate(maximumDate),
-       numericDate(middleOfDateRange))
+<form method="POST" novalidate="" action="/gambling-variations/cancel-registration/no-longer-liable" autocomplete="off">
+  <input type="hidden" name="csrfToken"
+          value="ea530cbe9904d8628ae10d96117b36c01a1180ba-1795521727881-7cbd5f1646f880d8fb6afeb0">
+   @caption(messages(s"$messageKey.caption"))
+   <div class="govuk-form-group">
+    <fieldset class="govuk-fieldset" role="group" aria-describedby="value-hint">
+     <legend class="govuk-fieldset__legend  govuk-fieldset__legend--l">
+      <h1 class="govuk-fieldset__heading">
+       @messages(s"$messageKey.title")
+      </h1>
+     </legend>
+     <div id="value-hint" class="govuk-hint">
+      @messages(s"$messageKey.hint", fullDate(registrationDate), fullDate(maximumDate), numericDate(middleOfDateRange))
+     </div>
+     @if(isGroup) {
+      <p class="govuk-body">
+        @messages(s"$messageKey.p1", fullDate(registrationDate), fullDate(maximumDate), numericDate(middleOfDateRange))
+       </p>
+     }
+     <div class="govuk-date-input" id="value">
+      <div class="govuk-date-input__item">
+       <div class="govuk-form-group">
+        <label class="govuk-label govuk-date-input__label" for="value.day">
+          @messages("date.day")
+        </label>
+        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="value.day"
+               name="value.day" type="text" inputmode="numeric" value="@form.data.get("value.day").getOrElse("")">
+       </div>
+      </div>
+      <div class="govuk-date-input__item">
+       <div class="govuk-form-group">
+        <label class="govuk-label govuk-date-input__label" for="value.month">
+         @messages("date.month")
+        </label>
+        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="value.month"
+               name="value.month" type="text" inputmode="numeric" value="@form.data.get("value.month").getOrElse("")" >
+       </div>
+      </div>
+      <div class="govuk-date-input__item">
+       <div class="govuk-form-group">
+        <label class="govuk-label govuk-date-input__label" for="value.year">
+         @messages("date.year")
+        </label>
+        <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="value.year"
+               name="value.year" type="text" inputmode="numeric" value="@form.data.get("value.year").getOrElse("")" >
+       </div>
+      </div>
+     </div>
+    </fieldset>
+   </div>
+   @govukButton(
+     ButtonViewModel(messages("site.continue"))
    )
-  )
- )
+</form>
 
- @govukButton(
-  ButtonViewModel(messages("site.continue"))
- )
+
 }
 }

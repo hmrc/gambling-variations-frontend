@@ -18,13 +18,14 @@ package controllers.cancellation
 
 import base.SpecBase
 import forms.cancellation.ChangeGroupRegistrationNumberFormProvider
-import models.{BusinessType, NormalMode, UserAnswers}
+import models.{BusinessType, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.cancellation.ChangeGroupRegistrationNumberPage
 import pages.{BusinessTypePage, GroupMemberPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -38,10 +39,9 @@ class ChangeGroupRegistrationNumberControllerSpec extends SpecBase with MockitoS
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ChangeGroupRegistrationNumberFormProvider()
-  val form = formProvider()
+  val form: Form[String] = (new ChangeGroupRegistrationNumberFormProvider())()
 
-  lazy val changeGroupRegistrationNumberRoute = routes.ChangeGroupRegistrationNumberController.onPageLoad(NormalMode).url
+  lazy val changeGroupRegistrationNumberRoute: String = routes.ChangeGroupRegistrationNumberController.onPageLoad().url
   override val emptyUserAnswers: UserAnswers =
     super.emptyUserAnswers
       .set(BusinessTypePage, BusinessType.Partnership)
@@ -65,7 +65,7 @@ class ChangeGroupRegistrationNumberControllerSpec extends SpecBase with MockitoS
         val view = application.injector.instanceOf[ChangeGroupRegistrationNumberView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form)(request, messages(application)).toString
       }
     }
 
@@ -83,7 +83,7 @@ class ChangeGroupRegistrationNumberControllerSpec extends SpecBase with MockitoS
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill("answer"))(request, messages(application)).toString
       }
     }
 
@@ -129,7 +129,7 @@ class ChangeGroupRegistrationNumberControllerSpec extends SpecBase with MockitoS
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm)(request, messages(application)).toString
       }
     }
 
