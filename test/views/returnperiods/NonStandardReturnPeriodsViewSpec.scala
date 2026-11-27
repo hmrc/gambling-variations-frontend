@@ -74,11 +74,6 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
     )
     private val viewModel = NonStandardReturnPeriodsViewModel.from(gamblingReturnPeriods).get
 
-    private val viewModel =
-      NonStandardReturnPeriodsViewModel
-        .from(gamblingReturnPeriods)
-        .get
-
     private val html =
       view(
         form,
