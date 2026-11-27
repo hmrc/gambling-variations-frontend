@@ -60,7 +60,7 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual
-            view("http://localhost:10400/manage-gambling-tax/manage-your-machine-games-duty/", messageKey)(request, messages(application)).toString
+            view("http://localhost:10400/manage-gambling-tax", messageKey)(request, messages(application)).toString
         }
       }
 
@@ -125,10 +125,12 @@ class RegistrationCancellationLockedControllerSpec extends SpecBase {
 
           val view = application.injector.instanceOf[RegistrationCancellationLockedView]
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(NormalMode, "http://localhost:10400/manage-gambling-tax/")(request, messages(application)).toString
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual
+            view("http://localhost:10400/manage-gambling-tax", messageKey)(request, messages(application)).toString
+
+        }
       }
-    }
 
       "must redirect and show correct view for a GET when RegistrationStatus is not cancelled" in {
 

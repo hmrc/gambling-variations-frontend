@@ -35,7 +35,7 @@ import java.time.{Clock, Instant, LocalDate, ZoneOffset}
 
 class CancellationEntrypointDeciderSpec extends SpecBase with MockitoSugar {
 
-  private val gamblingUrl = "http://localhost:10400/manage-gambling-tax/"
+  private val gamblingUrl = "http://localhost:10400/manage-gambling-tax"
 
   private val dateFormatter =
     DateTimeFormatter.ofPattern("d MMMM yyyy")
