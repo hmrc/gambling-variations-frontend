@@ -16,6 +16,7 @@
 
 package controllers.returnperiods
 
+import config.FrontendAppConfig
 import controllers.actions.*
 import controllers.routes
 import forms.returnperiods.{NoReturnPeriodsSetFormProvider, NonStandardLastReturnPeriodsFormProvider, NonStandardNotLastReturnPeriodsFormProvider, NonStandardNotSubmittedReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
@@ -43,6 +44,7 @@ class ReturnPeriodsController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
+  appConfig: FrontendAppConfig,
   requireData: GamblingReturnPeriodsDataRequiredAction,
   nonStandardNonSubmittedPeriodFormProvider: NonStandardNotSubmittedReturnPeriodsFormProvider,
   nonStandardNotLastPeriodFormProvider: NonStandardLastReturnPeriodsFormProvider,
@@ -79,10 +81,18 @@ class ReturnPeriodsController @Inject() (
         Ok(standardReturnPeriodsView(prepare(standardForm, StandardReturnPeriodsPage), mode, returnPeriodsId))
 
       case Some(NonStandard(viewModel)) =>
-        Ok(nonStandardReturnPeriodsView(prepare(nonStandardLastForm, NonStandardReturnPeriodsPage), viewModel, mode))
+        Ok(
+          nonStandardReturnPeriodsView(prepare(nonStandardLastForm, NonStandardReturnPeriodsPage), viewModel, mode, appConfig.gamblingDutiesEnquiries)
+        )
 
       case Some(NonStandardNotLast(viewModel)) =>
-        Ok(nonStandardReturnPeriodsView(prepare(nonStandardNotLastForm, NonStandardNotLastReturnPeriodsYesNoPage), viewModel, mode))
+        Ok(
+          nonStandardReturnPeriodsView(prepare(nonStandardNotLastForm, NonStandardNotLastReturnPeriodsYesNoPage),
+                                       viewModel,
+                                       mode,
+                                       appConfig.gamblingDutiesEnquiries
+                                      )
+        )
 
       case Some(NonStandardNotSubmitted(viewModel)) =>
         Ok(nonStandardNotSubmittedReturnPeriodsView(prepare(nonStandardNotSubmittedForm, NonStandardNotSubmittedReturnPeriodsPage), viewModel, mode))
@@ -179,11 +189,13 @@ class ReturnPeriodsController @Inject() (
         submit(standardForm, StandardReturnPeriodsPage, mode)(errors => standardReturnPeriodsView(errors, mode, returnPeriodsId))
 
       case Some(NonStandard(viewModel)) =>
-        submit(nonStandardLastForm, NonStandardReturnPeriodsPage, mode)(errors => nonStandardReturnPeriodsView(errors, viewModel, mode))
+        submit(nonStandardLastForm, NonStandardReturnPeriodsPage, mode)(errors =>
+          nonStandardReturnPeriodsView(errors, viewModel, mode, appConfig.gamblingDutiesEnquiries)
+        )
 
       case Some(NonStandardNotLast(viewModel)) =>
         submit(nonStandardNotLastForm, NonStandardNotLastReturnPeriodsYesNoPage, mode)(errors =>
-          nonStandardReturnPeriodsView(errors, viewModel, mode)
+          nonStandardReturnPeriodsView(errors, viewModel, mode, appConfig.gamblingDutiesEnquiries)
         )
 
       case Some(NonStandardNotSubmitted(viewModel)) =>

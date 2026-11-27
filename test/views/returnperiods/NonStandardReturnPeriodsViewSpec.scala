@@ -39,39 +39,71 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
     private val view =
       app.injector.instanceOf[NonStandardReturnPeriodsView]
 
-    implicit private val request: play.api.mvc.Request[?] = FakeRequest()
+    implicit private val request: play.api.mvc.Request[?] =
+      FakeRequest()
 
     implicit val messages: Messages =
-      app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
+      app.injector
+        .instanceOf[play.api.i18n.MessagesApi]
+        .preferred(request)
 
-    private val formProvider = new NonStandardLastReturnPeriodsFormProvider()
-    private val form = formProvider()
+    private val formProvider =
+      new NonStandardLastReturnPeriodsFormProvider()
 
-    private val date = LocalDate.now()
-    private val gamblingReturnPeriods = GamblingReturnPeriods(
-      mgdRegNumber          = "mgd1",
-      returnPeriodsId       = Some(1),
-      nstpEndDate1          = Some(date.minusMonths(9)),
-      nstpEndDate2          = Some(date.minusMonths(6)),
-      nstpEndDate3          = Some(date.minusMonths(3)),
-      nstpEndDate4          = Some(date),
-      nstpEndDate5          = Some(date.plusMonths(3)),
-      nstpEndDate6          = Some(date.plusMonths(6)),
-      nstpEndDate7          = Some(date.plusMonths(9)),
-      nstpEndDate8          = Some(date.plusMonths(12)),
-      isInLastNstp          = Some(isInLastNstp),
-      finalPeriodWarning    = Some(false),
-      hasExistingNstpValues = Some(true)
-    )
-    private val viewModel = NonStandardReturnPeriodsViewModel.from(gamblingReturnPeriods).get
+    private val form =
+      formProvider()
 
-    private val html = view(form, viewModel, NormalMode)(request, messages)
+    private val date =
+      LocalDate.now()
 
-    val doc: Document = Jsoup.parse(html.body)
+    val gamblingDutiesEnquiries =
+      "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/gambling-duties"
+
+    private val gamblingReturnPeriods =
+      GamblingReturnPeriods(
+        mgdRegNumber          = "mgd1",
+        returnPeriodsId       = Some(1),
+        nstpEndDate1          = Some(date.minusMonths(9)),
+        nstpEndDate2          = Some(date.minusMonths(6)),
+        nstpEndDate3          = Some(date.minusMonths(3)),
+        nstpEndDate4          = Some(date),
+        nstpEndDate5          = Some(date.plusMonths(3)),
+        nstpEndDate6          = Some(date.plusMonths(6)),
+        nstpEndDate7          = Some(date.plusMonths(9)),
+        nstpEndDate8          = Some(date.plusMonths(12)),
+        isInLastNstp          = Some(isInLastNstp),
+        finalPeriodWarning    = Some(false),
+        hasExistingNstpValues = Some(true)
+      )
+
+    private val viewModel =
+      NonStandardReturnPeriodsViewModel
+        .from(gamblingReturnPeriods)
+        .get
+
+    private val html =
+      view(
+        form,
+        viewModel,
+        NormalMode,
+        gamblingDutiesEnquiries
+      )(request, messages)
+
+    val doc: Document =
+      Jsoup.parse(html.body)
 
     def renderWithErrors: Document = {
-      val formWithErrors = formProvider().bind(Map("value" -> ""))
-      Jsoup.parse(view(formWithErrors, viewModel, NormalMode)(request, messages).body)
+      val formWithErrors =
+        formProvider().bind(Map("value" -> ""))
+
+      Jsoup.parse(
+        view(
+          formWithErrors,
+          viewModel,
+          NormalMode,
+          gamblingDutiesEnquiries
+        )(request, messages).body
+      )
     }
   }
 
@@ -94,23 +126,46 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
         doc.select(".govuk-fieldset__legend").text() mustBe
           messages("returnPeriods.nonStandard.option.legend")
 
-        doc.select(".govuk-table__caption").get(0).text() mustBe messages("returnPeriods.nonStandard.upcomingTable.caption")
-        doc.select(".govuk-table__caption").get(1).text() mustBe messages("returnPeriods.nonStandard.pastTable.caption")
+        doc.select(".govuk-table__caption").get(0).text() mustBe
+          messages("returnPeriods.nonStandard.upcomingTable.caption")
 
-        val tables = doc.select("table.govuk-table").asScala
+        doc.select(".govuk-table__caption").get(1).text() mustBe
+          messages("returnPeriods.nonStandard.pastTable.caption")
 
-        val pastTable = tables
-          .find(_.select("caption").text().trim == messages("returnPeriods.nonStandard.upcomingTable.caption"))
+        val tables =
+          doc.select("table.govuk-table").asScala
 
-        val upcomingTable = tables
-          .find(_.select("caption").text().trim == messages("returnPeriods.nonStandard.pastTable.caption"))
+        val pastTable =
+          tables.find(
+            _.select("caption").text().trim ==
+              messages("returnPeriods.nonStandard.upcomingTable.caption")
+          )
 
-        assert(pastTable.isDefined, "Non-standard return periods table should exist")
-        assert(upcomingTable.isDefined, "Standard return periods table should exist")
+        val upcomingTable =
+          tables.find(
+            _.select("caption").text().trim ==
+              messages("returnPeriods.nonStandard.pastTable.caption")
+          )
 
-        assert(pastTable.get.select("tbody tr").size() > 0, "Non-standard table should contain rows")
+        assert(
+          pastTable.isDefined,
+          "Non-standard return periods table should exist"
+        )
 
-        assert(upcomingTable.get.select("tbody tr").size() > 0, "Standard table should contain rows")
+        assert(
+          upcomingTable.isDefined,
+          "Standard return periods table should exist"
+        )
+
+        assert(
+          pastTable.get.select("tbody tr").size() > 0,
+          "Non-standard table should contain rows"
+        )
+
+        assert(
+          upcomingTable.get.select("tbody tr").size() > 0,
+          "Standard table should contain rows"
+        )
 
         doc.select("button.govuk-button").text() mustBe
           messages("site.continue")
@@ -118,14 +173,19 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
 
       "must render the radio options" in new Setup(true) {
 
-        val radioOptions = doc.select(".govuk-radios__item label").eachText()
+        val radioOptions =
+          doc
+            .select(".govuk-radios__item label")
+            .eachText()
 
         radioOptions must contain(
           messages("returnPeriods.nonStandard.switchToStandard")
         )
 
         radioOptions must contain(
-          messages("returnPeriods.nonStandard.keepNonStandardAndChangeDates")
+          messages(
+            "returnPeriods.nonStandard.keepNonStandardAndChangeDates"
+          )
         )
 
         radioOptions must contain(
@@ -135,7 +195,13 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
         doc.select("input[type=radio]").size mustBe 3
 
         doc.select("#value_0-item-hint").text() mustBe
-          messages("returnPeriods.nonStandard.switchToStandard.hint", "January", "April", "July", "October")
+          messages(
+            "returnPeriods.nonStandard.switchToStandard.hint",
+            "January",
+            "April",
+            "July",
+            "October"
+          )
       }
 
       "must render an error summary when the form has errors" in new Setup(true) {
@@ -162,25 +228,58 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
           messages("returnPeriods.nonStandard.heading")
 
         doc.select(".govuk-fieldset__legend").text() mustBe
-          messages("returnPeriods.nonStandard.switchToStandard.caption")
+          messages(
+            "returnPeriods.nonStandard.switchToStandard.caption"
+          )
 
-        doc.select(".govuk-table__caption").get(0).text() mustBe messages("returnPeriods.nonStandard.upcomingTable.caption")
-        doc.select(".govuk-table__caption").get(1).text() mustBe messages("returnPeriods.nonStandard.pastTable.caption")
+        doc.select(".govuk-table__caption").get(0).text() mustBe
+          messages(
+            "returnPeriods.nonStandard.upcomingTable.caption"
+          )
 
-        val tables = doc.select("table.govuk-table").asScala
+        doc.select(".govuk-table__caption").get(1).text() mustBe
+          messages(
+            "returnPeriods.nonStandard.pastTable.caption"
+          )
 
-        val pastTable = tables
-          .find(_.select("caption").text().trim == messages("returnPeriods.nonStandard.upcomingTable.caption"))
+        val tables =
+          doc.select("table.govuk-table").asScala
 
-        val upcomingTable = tables
-          .find(_.select("caption").text().trim == messages("returnPeriods.nonStandard.pastTable.caption"))
+        val pastTable =
+          tables.find(
+            _.select("caption").text().trim ==
+              messages(
+                "returnPeriods.nonStandard.upcomingTable.caption"
+              )
+          )
 
-        assert(pastTable.isDefined, "Non-standard return periods table should exist")
-        assert(upcomingTable.isDefined, "Standard return periods table should exist")
+        val upcomingTable =
+          tables.find(
+            _.select("caption").text().trim ==
+              messages(
+                "returnPeriods.nonStandard.pastTable.caption"
+              )
+          )
 
-        assert(pastTable.get.select("tbody tr").size() > 0, "Non-standard table should contain rows")
+        assert(
+          pastTable.isDefined,
+          "Non-standard return periods table should exist"
+        )
 
-        assert(upcomingTable.get.select("tbody tr").size() > 0, "Standard table should contain rows")
+        assert(
+          upcomingTable.isDefined,
+          "Standard return periods table should exist"
+        )
+
+        assert(
+          pastTable.get.select("tbody tr").size() > 0,
+          "Non-standard table should contain rows"
+        )
+
+        assert(
+          upcomingTable.get.select("tbody tr").size() > 0,
+          "Standard table should contain rows"
+        )
 
         doc.select("button.govuk-button").text() mustBe
           messages("site.continue")
@@ -188,17 +287,46 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
 
       "must render the radio options" in new Setup(false) {
 
-        val radioOptions = doc.select(".govuk-radios__item label").asScala.map(_.text()).toSeq
+        val radioOptions =
+          doc
+            .select(".govuk-radios__item label")
+            .asScala
+            .map(_.text())
+            .toSeq
 
-        radioOptions mustEqual Seq(messages("site.yes"), messages("site.no"))
+        radioOptions mustEqual Seq(
+          messages("site.yes"),
+          messages("site.no")
+        )
 
         doc.select("input[type=radio]").size mustBe 2
 
         doc.select("#value-hint").text() mustBe
-          messages("returnPeriods.nonStandard.switchToStandard.hint", "January", "April", "July", "October")
+          messages(
+            "returnPeriods.nonStandard.switchToStandard.hint",
+            "January",
+            "April",
+            "July",
+            "October"
+          )
+      }
+
+      "must render gambling duties enquiries link" in new Setup(false) {
+
+        val link =
+          doc.select(s"""a[href="$gamblingDutiesEnquiries"]""")
+
+        link.size() mustBe 1
+
+        link.attr("href") mustBe
+          gamblingDutiesEnquiries
+
+        link.attr("target") mustBe
+          "_blank"
       }
 
       "must render an error summary when the form has errors" in new Setup(false) {
+
         renderWithErrors
           .select(".govuk-error-summary")
           .size mustBe 1
@@ -206,5 +334,4 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
 
     }
   }
-
 }
